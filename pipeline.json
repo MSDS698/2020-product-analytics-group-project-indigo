@@ -1,6 +1,6 @@
 {
     "pipeline": {
-        "name": "ProductAnalytics_Pipeline",
+        "name": "indigo_pipeline",
         "version": 1,
         "roleArn": "arn:aws:iam::058016034418:role/service-role/AWSCodePipelineServiceRole-us-west-2-603-test-pipeline",
         "artifactStore": {
@@ -27,10 +27,10 @@
                         ],
                         "runOrder": 1,
                         "configuration": {
-                            "Owner": "jgoffin",
-                            "Repo": "msds603goffinweek1",
+                            "Owner": "MSDS698",
+                            "Repo": "2020-product-analytics-group-project-indigo",
                             "PollForSourceChanges": "true",
-                            "Branch": "master",
+                            "Branch": "application1hw_jacob",
                             "OAuthToken": "c3c27dad9a70943050115e3332912ac4a4de1cc5"
                         }
                     }
@@ -57,8 +57,8 @@
 
                         ],
                   "configuration": {
-                    "ApplicationName": "IndigoApp",
-                    "EnvironmentName": "indigo-app"
+                    "ApplicationName": "Indigo",
+                    "EnvironmentName": "indigo-webserver"
                   },
                   "runOrder": 2
                 }
