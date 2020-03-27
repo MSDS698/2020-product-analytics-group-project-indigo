@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Auto Generated Code Documentation &#8212; Indigo 0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Welcome to Indigo’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-application">
+<span id="auto-generated-code-documentation"></span><h1>Auto Generated Code Documentation<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="application.RegistrationForm">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">RegistrationForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=None</em>, <em class="sig-param">obj=None</em>, <em class="sig-param">prefix=''</em>, <em class="sig-param">data=None</em>, <em class="sig-param">meta=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#application.RegistrationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for register a new user.</p>
+<dl class="attribute">
+<dt id="application.RegistrationForm.accept_tos">
+<code class="sig-name descname">accept_tos</code><em class="property"> = &lt;UnboundField(BooleanField, ('I accept the TOS', [&lt;wtforms.validators.DataRequired object&gt;]), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.accept_tos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.RegistrationForm.confirm">
+<code class="sig-name descname">confirm</code><em class="property"> = &lt;UnboundField(PasswordField, ('Repeat Password',), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.confirm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.RegistrationForm.email">
+<code class="sig-name descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email Address', [&lt;wtforms.validators.Length object&gt;]), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.RegistrationForm.password">
+<code class="sig-name descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('New Password', [&lt;wtforms.validators.DataRequired object&gt;, &lt;wtforms.validators.EqualTo object&gt;]), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.RegistrationForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Submit',), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.RegistrationForm.username">
+<code class="sig-name descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username', [&lt;wtforms.validators.Length object&gt;]), {})&gt;</em><a class="headerlink" href="#application.RegistrationForm.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.UploadFileForm">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">UploadFileForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#application.UploadFileForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for uploading file when submitted</p>
+<dl class="attribute">
+<dt id="application.UploadFileForm.file_selector">
+<code class="sig-name descname">file_selector</code><em class="property"> = &lt;UnboundField(FileField, ('File',), {'validators': [&lt;flask_wtf.file.FileRequired object&gt;]})&gt;</em><a class="headerlink" href="#application.UploadFileForm.file_selector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.UploadFileForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Submit',), {})&gt;</em><a class="headerlink" href="#application.UploadFileForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="application.index">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#application.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index Page : Renders index.html with author names.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.register">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#application.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new user. Save the username, password and email.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.upload">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#application.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>upload a file from a client machine.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Indigo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Auto Generated Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Indigo’s documentation!</a></li>
+      <li>Next: <a href="introduction.html" title="next chapter">Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Alan, Ash, Hannah, Jacob, Kirsten, Lori, Rushil.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
