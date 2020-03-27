@@ -41,15 +41,15 @@
       <div class="divR">
         <div id="rnn" style="display:none">
           <button type="button" id="rnnsample">Create Sample Via Melody RNN</button>
-          <label for="rnn_steps">Number of Steps:</label>
+          <label for="rnn_steps">Number of Steps/Beats:</label>
           <input type="number" id="rnn_steps" max="1000" min="0" value="40" step="1">
-          <label for="rnn_temp">RNN Temperature:</label>
+          <label for="rnn_temp">RNN Temperature (Higher = More Random):</label>
           <input type="number" id="rnn_temp" max="5.0" min="0.0" value="1.5" step=0.01>
         </div>
         <br>
         <div id="vae" style="display:none">
           <button type="button" id="vaesample">Create Sample Via Music VAE</button>
-          <label for="vae_temp">VAE Temperature:</label>
+          <label for="vae_temp">VAE Temperature (Higher = More Random):</label>
           <input type="number" id="vae_temp" max="5.0" min="0.0" value="1.5" step=0.01>
         </div>
       </div>
