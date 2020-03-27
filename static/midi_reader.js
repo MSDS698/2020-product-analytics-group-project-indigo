@@ -30,7 +30,7 @@ function replace_notes_in_sequence(sequence, obj){
 // Format element to be appended
 function format_track(sequence, index, array){
   $("#tracks").append("<h3>"+sequence['instrument']+"</h3>");
-  $("#tracks").append("<input type='image' src='playbutton.png' height='30px' width='30px' onclick='player.start(separated_sequences["+index+"][\"trimmed_sequence\"])'/>")
+  $("#tracks").append("<input type='image' src='static/playbutton.png' height='30px' width='30px' onclick='player.start(separated_sequences["+index+"][\"trimmed_sequence\"])'/>")
 }
 
 // Create UI for separate tracks
