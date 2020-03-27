@@ -1,2 +1,0 @@
-FLASK_RUN_PORT=443
-FLASK_APP=application.py
