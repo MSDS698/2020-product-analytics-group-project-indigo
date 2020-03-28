@@ -56,7 +56,6 @@ def register():
     return render_template('register.html', form=form)
 
 
-
 @application.route('/upload', methods=['GET', 'POST'])
 def upload():
     """upload a file from a client machine."""
@@ -73,9 +72,14 @@ def upload():
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
 
+
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
+
+@application.route('/music', methods=['GET', 'POST'])
+def music():
+    return render_template('music.html')
 
 
 if __name__ == '__main__':
