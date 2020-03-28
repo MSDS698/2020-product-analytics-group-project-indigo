@@ -73,6 +73,10 @@ def upload():
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
 
+@application.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
