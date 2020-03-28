@@ -2,7 +2,8 @@
     "pipeline": {
         "name": "indigo_pipeline",
         "version": 1,
-        "roleArn": "arn:aws:iam::058016034418:role/service-role/AWSCodePipelineServiceRole-us-west-2-603-test-pipeline",
+        //"roleArn": "arn:aws:iam::058016034418:role/service-role/AWSCodePipelineServiceRole-us-west-2-603-test-pipeline",
+        "roleArn":"arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west2-MSDS603_Week1",
         "artifactStore": {
             "type": "S3",
             "location": "artifact-store-603"
@@ -30,7 +31,7 @@
                             "Owner": "MSDS698",
                             "Repo": "2020-product-analytics-group-project-indigo",
                             "PollForSourceChanges": "true",
-                            "Branch": "application1hw_jacob",
+                            "Branch": "master",
                             "OAuthToken": "c3c27dad9a70943050115e3332912ac4a4de1cc5"
                         }
                     }
