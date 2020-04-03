@@ -7,6 +7,7 @@ import csv
 import os
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
+from classes import * 
 
 
 # Initialization
