@@ -6,8 +6,6 @@ from wtforms import SubmitField, PasswordField, StringField, BooleanField, valid
 import csv
 import os
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from classes import * 
 
 
 # Initialization
@@ -17,9 +15,9 @@ application.secret_key = os.urandom(24)
 
 application.config.from_object(Config)
 
-db = SQLAlchemy(application)
-db.create_all()
-db.session.commit()
+#db = SQLAlchemy(application)
+#db.create_all()
+#db.session.commit()
 
 
 class UploadFileForm(FlaskForm):
