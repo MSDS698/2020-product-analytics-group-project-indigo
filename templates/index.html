@@ -1,40 +1,114 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
+<!-- <html>
+    <h1> Hello World using render_template() by {{ author }}</h1>
+</html> -->
 
-    <title>INDIGO</title>
+<head>
+  <link rel="stylesheet" href="static/index.css">
+</head>
 
-    <link rel="shortcut icon" type="image/jpg" href="static/favicon.png"/>
+<h1>Team Indigo</h1>
 
-    <link rel="stylesheet" href="static/style/style.css">
+<h4> Project Overview </h4>
+<p>Google has an open-source project named Magenta that enables users to generate new music through machine learning models. We want to leverage this project to build a platform for artists and music enthusiasts to create a new form of music.</p>
 
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+<p>Our web application will have a user interface that allows users to specify the style of music they want to create, or even input their own note sequence directly. The app will then use Magenta platform to output a new slice of music in a similar style. For a single layer/sample we could provide controls around the type of instrument used (drum vs piano e.g.)</p>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<p>It’s important to note we aren’t creating completely new songs. We are providing a tool for musicians to experiment with creating new layers/snippets of music (8 or 16 bars e.g.) So it augments their current creative process, and doesn’t replace it. </p>
 
+<p>Another example of use could be a solo guitar player who wants to add some drum beats to his music. Instead of having to learn guitar or find a bandmate, he could input his music to our web app and have a drum beat for the song returned.
+</p>
 
-  </head>
-  <body>
+<div class="column">
+<div class="card">
+  <img src="static/_Jacob.jpeg" alt="Jacob" style="height:50%">
+  <div class="container">
+    <h2>Jacob Goffin</h2>
+    <p class="title">Product Manager</p>
+    <p>Delegation of tasks and supporting team members</p>
+    <p>jgoffin@usfca.edu</p>
+    <p><button class="button">Contact</button></p>
+  </div>
+</div>
+</div>
 
-    <div class="container">
-
-      <h1>INDIGO</h1>
-
-      <div class="nav">
-
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <img src="static/_Ash.jpeg" alt="Ash" style="height:50%">
+      <div class="container">
+        <h2>Ash Jha</h2>
+        <p class="title">Full Stack Engineer</p>
+        <p>Building the pipeline between our application and the Magenta APIs</p>
+        <p>akjha@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
       </div>
-
-      <div class="">
-        <button type="button" name="button" onclick="location.href='music';" id="upload">GET STARTED</button>
-      </div>
-
-      <div class="filler"></div>
-
-      <img src="static/icon_color_crop.png" alt="keyboard" width=50% id="keyboard">
-
     </div>
+  </div>
 
+  <div class="column">
+    <div class="card">
+      <img src="static/_Kirsten.jpeg" alt="Kirsten" style="height:50%">
+      <div class="container">
+        <h2>Kirsten Tsai</h2>
+        <p class="title">Backend Engineer / Assistant to the Full Stack Engineer</p>
+        <p>Responsible for backend servers.</p>
+        <p>mtsai@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
 
-  </body>
-</html>
+  <div class="column">
+    <div class="card">
+      <img src="static/_Alan.jpeg" alt="Alan" style="height:50%">
+      <div class="container">
+        <h2>Alan Flint</h2>
+        <p class="title">Data Scientist</p>
+        <p>Data science tasks and analytics for the product</p>
+        <p>aflint@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="static/_Hannah.jpeg" alt="Hannah" style="height:50%">
+      <div class="container">
+        <h2>Hannah Lyon</h2>
+        <p class="title">Front End Engineer</p>
+        <p>Responsible for front end user interface of the product Javascript integration.</p>
+        <p>hlyon@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="static/_Lori.png" alt="Lori" style="height:50%">
+      <div class="container">
+        <h2>Lori Sheng</h2>
+        <p class="title">Backend Engineer</p>
+        <p>Developing our backend infrastructure, handling database management, data engineering, and AWS</p>
+        <p>lsheng@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="static/_Rushil.png" alt="Rushil" style="height:50%">
+      <div class="container">
+        <h2>Rushil Sheth</h2>
+        <p class="title">Full Stack Engineer</p>
+        <p>Building the pipeline between our application and the Magenta APIs</p>
+        <p>rsheth@usfca.edu</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>HTML code inspired by: https://www.w3schools.com/howto/howto_css_team.asp</p>
