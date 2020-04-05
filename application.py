@@ -5,12 +5,19 @@ from flask_wtf.file import FileField, FileRequired
 from wtforms import SubmitField, PasswordField, StringField, BooleanField, validators, Form
 import csv
 import os
+from config import Config
 
 
 # Initialization
 # Create an application instance (an object of class Flask)  which handles all requests.
 application = Flask(__name__)
 application.secret_key = os.urandom(24)
+
+application.config.from_object(Config)
+
+#db = SQLAlchemy(application)
+#db.create_all()
+#db.session.commit()
 
 
 class UploadFileForm(FlaskForm):
@@ -43,18 +50,31 @@ def register():
     """
     Register a new user. Save the username, password and email.
     """
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        # user = User(form.username.data, form.email.data,
-        #             form.password.data)
-        with open('users.csv', mode='w+', newline='') as accounts_file:
-            accounts_writer = csv.writer(accounts_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            accounts_writer.writerow([form.username.data, form.email.data, form.password.data])
-        # db_session.add(user)
-        flash('Thanks for registering')
-        return redirect(url_for('index'))
-    return render_template('register.html', form=form)
-
+#    form = RegistrationForm(request.form)
+#    if request.method == 'POST' and form.validate():
+#        # user = User(form.username.data, form.email.data,
+#        #             form.password.data)
+#        with open('users.csv', mode='w+', newline='') as accounts_file:
+#            accounts_writer = csv.writer(accounts_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+#            accounts_writer.writerow([form.username.data, form.email.data, form.password.data])
+#        # db_session.add(user)
+#        flash('Thanks for registering')
+#        return redirect(url_for('index'))
+#    return render_template('register.html', form=form)
+    registration_form = classes.RegistrationForm()
+    if registration_form.validate_on_submit():
+        username = registration_form.username.data
+        password = registration_form.password.data
+        email = registration_form.email.data
+        user_cnt = User.query.filter_by(username=username).count() + User.query.filter_by(email=email).count()
+        if user_cnt == 0:
+            user = User(username, email, password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('music'))
+        else:
+            return '<p> Error- Existing User </p>'
+    return render_template(register.html, form=regration_form )
 
 
 @application.route('/upload', methods=['GET', 'POST'])
@@ -78,6 +98,14 @@ def upload():
 def demo():
     """ Load demo page showing Magenta """
     return render_template('demo.html')
+
+@application.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
+
+@application.route('/music', methods=['GET', 'POST'])
+def music():
+    return render_template('music.html')
 
 
 if __name__ == '__main__':
