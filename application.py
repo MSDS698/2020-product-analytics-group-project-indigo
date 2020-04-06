@@ -5,12 +5,19 @@ from flask_wtf.file import FileField, FileRequired
 from wtforms import SubmitField, PasswordField, StringField, BooleanField, validators, Form
 import csv
 import os
+from config import Config
 
 
 # Initialization
 # Create an application instance (an object of class Flask)  which handles all requests.
 application = Flask(__name__)
 application.secret_key = os.urandom(24)
+
+application.config.from_object(Config)
+
+#db = SQLAlchemy(application)
+#db.create_all()
+#db.session.commit()
 
 
 class UploadFileForm(FlaskForm):
