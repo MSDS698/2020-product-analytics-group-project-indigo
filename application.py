@@ -3,7 +3,7 @@ import os
 
 from config import Config
 from flask import render_template, redirect, url_for, request, flash, Flask
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
@@ -20,13 +20,13 @@ application = Flask(__name__)
 application.secret_key = os.urandom(24)
 application.config.from_object(Config)
 
-# db = SQLAlchemy(application)
-# db.create_all()
-# db.session.commit()
+db = SQLAlchemy(application)
+db.create_all()
+db.session.commit()
 
-# # login_manager needs to be initiated before running the app
-# login_manager = LoginManager()
-# login_manager.init_app(application)
+# login_manager needs to be initiated before running the app
+login_manager = LoginManager()
+login_manager.init_app(application)
 
 
 class UploadFileForm(FlaskForm):
@@ -35,7 +35,7 @@ class UploadFileForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class RegistrationForm(FlaskForm):
+class RegistrationForm(Form):
     """Class for register a new user."""
     username = StringField('Username', [validators.Length(min=4, max=25)])
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
@@ -69,6 +69,9 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+db.create_all()
+db.session.commit()
+
 
 # user_loader :
 # This callback is used to reload the user object
@@ -96,14 +99,20 @@ def register():
     """
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        # user = User(form.username.data, form.email.data,
-        #             form.password.data)
-        with open('users.csv', mode='w+', newline='') as accounts_file:
-            accounts_writer = csv.writer(accounts_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            accounts_writer.writerow([form.username.data, form.email.data, form.password.data])
-        # db_session.add(user)
-        flash('Thanks for registering')
-        return redirect(url_for('index'))
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+
+        user_count = User.query.filter_by(username=username).count() \
+                     + User.query.filter_by(email=email).count()
+        if (user_count > 0):
+            return '<h1>Error - Existing user : ' + username \
+                   + ' OR ' + email + '</h1>'
+        else:
+            user = User(username, email, password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
 
@@ -140,11 +149,16 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('register_project'))
+            return redirect(url_for('index'))
 
     return render_template('login.html', form=login_form)
 
 
+@application.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @application.route('/upload', methods=['GET', 'POST'])
