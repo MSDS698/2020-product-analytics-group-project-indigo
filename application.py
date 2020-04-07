@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 
 from config import Config
 from flask import render_template, redirect, url_for, request, flash, Flask
@@ -35,7 +36,7 @@ class UploadFileForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class RegistrationForm(Form):
+class RegistrationForm(FlaskForm):
     """Class for register a new user."""
     username = StringField('Username', [validators.Length(min=4, max=25)])
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
@@ -92,16 +93,13 @@ def index():
     return (render_template('index.html'))
 
 
-@application.route('/register', methods=['GET', 'POST'])
+@application.route('/register',  methods=['GET', 'POST'])
 def register():
-    """
-    Register a new user. Save the username, password and email.
-    """
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
+    registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+        username = registration_form.username.data
+        password = registration_form.password.data
+        email = registration_form.email.data
 
         user_count = User.query.filter_by(username=username).count() \
                      + User.query.filter_by(email=email).count()
@@ -113,28 +111,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('index'))
-    return render_template('register.html', form=form)
-
-
-# @application.route('/register',  methods=('GET', 'POST'))
-# def register():
-#     registration_form = RegistrationForm()
-#     if registration_form.validate_on_submit():
-#         username = registration_form.username.data
-#         password = registration_form.password.data
-#         email = registration_form.email.data
-
-#         user_count = User.query.filter_by(username=username).count() \
-#                      + User.query.filter_by(email=email).count()
-#         if (user_count > 0):
-#             return '<h1>Error - Existing user : ' + username \
-#                    + ' OR ' + email + '</h1>'
-#         else:
-#             user = User(username, email, password)
-#             db.session.add(user)
-#             db.session.commit()
-#             return redirect(url_for('index'))
-#     return render_template('register.html', form=registration_form)
+    return render_template('register.html', form=registration_form)
 
 
 @application.route('/login', methods=['GET', 'POST'])
