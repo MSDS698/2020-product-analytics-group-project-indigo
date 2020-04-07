@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>MIDI Reader</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    
+    <!-- <link rel="stylesheet" type="text/css" href="static/midi_reader.css"> -->
+    <link rel="stylesheet" type="text/css" href="static/style/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+      .container {
+        display: flex;
+      }
+      .divL, .divR {
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      .divL {
+        /* OPTIONAL WIDTH
+        width: 40% */
+      }
+      .divR {
+        /* OPTIONAL WIDTH
+        width: 60% */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="buttons">
+      <button type="button" id="loadmidi">Load Sample Midi File!</button>
+      <button type="button" id="playbutton" style="display:none">Play Me Some Billy Joel!</button>
+      <button type="button" id="stopbutton" style="display:none">Stop Music</button>
+      <br>
+      <br>
+    </div>
+    <div class="container">
+      <div class="divL">
+        <div id="tracks">
+        </div>
+      </div>
+      <div class="divR">
+        <div id="rnn" style="display:none">
+          <button type="button" id="rnnsample">Create Sample Via Melody RNN</button>
+          <label for="rnn_steps">Number of Steps/Beats:</label>
+          <input type="number" id="rnn_steps" max="1000" min="0" value="40" step="1">
+          <br>
+          <label for="rnn_temp">RNN Temperature (Higher = More Random):</label>
+          <input type="number" id="rnn_temp" max="5.0" min="0.0" value="1.2" step=0.01>
+        </div>
+        <br>
+        <div id="vae" style="display:none">
+          <button type="button" id="vaesample">Create Sample Via Music VAE</button>
+          <label for="vae_temp">VAE Temperature (Higher = More Random):</label>
+          <input type="number" id="vae_temp" max="5.0" min="0.0" value="1.2" step=0.01>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="static/mappings.js"></script>
+    <script type="text/javascript" src="static/midi_reader.js"></script>
+  </body>
+
+</html>

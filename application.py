@@ -87,6 +87,19 @@ def upload():
     return render_template('upload.html', form=file)
 
 
+@application.route('/demo', methods=['GET', 'POST'])
+def demo():
+    """ Load demo page showing Magenta """
+    return render_template('demo.html')
+
+@application.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
+
+@application.route('/music', methods=['GET', 'POST'])
+def music():
+    return render_template('music.html')
+
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
     application.config['TEMPLATES_AUTO_RELOAD'] = True
