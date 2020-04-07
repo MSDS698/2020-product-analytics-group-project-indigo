@@ -1,0 +1,16 @@
+<html>
+<h1>Login</h1>
+
+<div class="container">
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.username.label}} {{form.username()}} <br/>
+        {{ form.password.label}} {{form.password()}}<br/>
+        {{ form.submit()}}
+
+    </form>
+
+</br>
+</div> <!-- /container -->
+
+</html>

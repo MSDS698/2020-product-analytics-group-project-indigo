@@ -1,11 +1,20 @@
-{% from "_formhelpers.html" import render_field %}
-<form method=post>
-  <dl>
-    {{ render_field(form.username) }}
-    {{ render_field(form.email) }}
-    {{ render_field(form.password) }}
-    {{ render_field(form.confirm) }}
-    {{ render_field(form.accept_tos) }}
-  </dl>
-  <p><input type=submit value=Register>
-</form>
+<html>
+<div class="container">
+
+    <form method="POST"> <!-- post : handle submission -->
+        <h2>Sign Up </h2>
+        {{ form.csrf_token }}
+        {{ form.username.label}} {{form.username()}} <br/>
+        {{ form.email.label}} {{form.email()}}<br/>
+        {{ form.password.label}} {{form.password()}}<br/>
+        {{ form.confirm.label}} {{form.confirm()}}<br/>
+        {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
+        {{ form.submit()}}
+
+    </form>
+    <br/>
+    <p>Already have an account? </p> <a href="login">Log in.</a>
+
+
+</div> <!-- /container -->
+</html>
