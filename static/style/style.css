@@ -92,12 +92,16 @@ input[type=button], input[type=text], input[type=password] {
   height: 20px;
   display: inline;
   float: right;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   vertical-align: top;
   font-family: 'Montserrat', sans-serif;
-
 }
 
+.formArea {
+  margin: auto;
+  display: block;
+  width: 500px;
+}
 
 dl {
   color: white;
@@ -108,34 +112,12 @@ dl {
   line-height: 30px;
 }
 
-.formArea {
-  margin: auto;
-  display: block;
-  width: 500px;
-}
-
 dt {
-/*  color: white;
-  font-family: 'Montserrat', sans-serif;
-  margin: auto;
-  display: block;
-  width: 500px;
   display: inline;
-  text-align: right;
-*/
-  display: inline;
+
 }
 
 dd {
-/*  color: white;
-  font-family: 'Montserrat', sans-serif;
-  margin: auto;
-  display: block;
-  width: 500px;
-  display: inline;
-  left: 100px;
-  text-align: right;
-*/
   display: inline;
   width: 0px;
   margin: 0px;
@@ -148,7 +130,7 @@ label {
   clear: left;
   width: 250px;
   text-align: right;
-  line-height: 30px;
+  line-height: 40px;
   vertical-align: top;
 }
 
