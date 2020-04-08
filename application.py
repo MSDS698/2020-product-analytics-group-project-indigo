@@ -152,6 +152,8 @@ def upload():
             flash('Incorrect File Type')
             return redirect(url_for('upload'))
         file_dir_path = os.path.join(application.instance_path, 'files')
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
         file_path = os.path.join(file_dir_path, filename)
 
         # s3 = boto3.client('s3')
@@ -168,6 +170,9 @@ def upload():
         #s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
         dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
 
+        #if os.path.exists(dir):
+        #   os.rmdir(dir)
+            
         return('<h1>file uploaded to s3</h1>')
 
         return redirect(url_for('index'))  # Redirect to / (/index) page.
