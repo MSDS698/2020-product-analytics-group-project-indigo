@@ -1,16 +1,30 @@
-<html>
-<h1>Login</h1>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>INDIGO- Login</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-<div class="container">
-    <form method="POST">
-        {{ form.csrf_token }}
-        {{ form.username.label}} {{form.username()}} <br/>
-        {{ form.password.label}} {{form.password()}}<br/>
-        {{ form.submit()}}
+    <link rel="stylesheet" href="../static/style/style.css">
 
-    </form>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
-</br>
-</div> <!-- /container -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
 
-</html>
+  <body>
+    <div class="container">
+      <h1>INDIGO</h1>
+      <div class="formArea">
+      <form method="POST">
+          {{ form.csrf_token }}
+          {{ form.username.label}} {{form.username()}} <br/>
+          {{ form.password.label}} {{form.password()}}<br/>
+          <div class="filler"></div>
+          {{ form.submit()}}
+      </form>
+      </div>
+    </div>
+
+  </body>
+  </html>
