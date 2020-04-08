@@ -2,11 +2,11 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Indigo- Make Music</title>
+    <title>INDIGO- Make Music</title>
 
-    <link rel="shortcut icon" type="image/jpg" href="static/favicon.png"/>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="../static/style/audio_style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
@@ -17,7 +17,36 @@
 
     <div class="container">
 
+      <div class="topPage">
 
+        <div class="filler"></div>
+
+        <input type="file" id="UploadMIDI" name="midifile" style="display: none;" />
+        <label for="UploadMIDI" id="upload">
+            UPLOAD MIDI FILE
+        </label>
+
+      </div>
+
+      <!-- Code from https://codepen.io/alexdevp/pen/RNELPV -->
+
+      <div class="player">
+  	    <canvas></canvas>
+  		  <div class="song">
+    			<div class="artist">Kavinsky</div>
+    			<div class="name">Odd Look ft. The Weeknd</div>
+		    </div>
+  		  <div class="playarea">
+    			<div class="prevSong"></div>
+    			<div class="play"></div>
+    			<div class="pause"></div>
+    			<div class="nextSong"></div>
+  		  </div>
+  		  <div class="soundControl"></div>
+  		  <div class="time">00:00</div>
+	  </div>
+
+    <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
     </div>
 

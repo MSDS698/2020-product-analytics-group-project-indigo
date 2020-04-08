@@ -1,20 +1,54 @@
-<html>
-<div class="container">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>INDIGO- Sign Up</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-    <form method="POST"> <!-- post : handle submission -->
-        <h2>Sign Up </h2>
-        {{ form.csrf_token }}
-        {{ form.username.label}} {{form.username()}} <br/>
-        {{ form.email.label}} {{form.email()}}<br/>
-        {{ form.password.label}} {{form.password()}}<br/>
-        {{ form.confirm.label}} {{form.confirm()}}<br/>
-        {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
-        {{ form.submit()}}
+    <link rel="stylesheet" href="../static/style/style.css">
 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+  <div class="container">
+
+    <h1>INDIGO</h1>
+    <div class="formArea">
+      <form method="POST"> <!-- post : handle submission -->
+          {{ form.csrf_token }}
+          {{ form.username.label}} {{form.username()}} <br/>
+          {{ form.email.label}} {{form.email()}}<br/>
+          {{ form.password.label}} {{form.password()}}<br/>
+          {{ form.confirm.label}} {{form.confirm()}}<br/>
+          {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
+          {{ form.submit()}}
+      </form>
+
+    </div>
+
+    <!--
+    {% from "_formhelpers.html" import render_field %}
+    <form method=post>
+      <dl id='formBody'>
+        {{ render_field(form.username) }}
+        <br>
+        {{ render_field(form.email) }}
+        <br>
+        {{ render_field(form.password) }}
+        <br>
+        {{ render_field(form.confirm) }}
+        <br>
+        {{ render_field(form.accept_tos) }}
+      </dl>
+      <p><input id='register' type=submit value=Register>
     </form>
-    <br/>
-    <p>Already have an account? </p> <a href="login">Log in.</a>
+  -->
 
+    </div>
 
-</div> <!-- /container -->
+    <p>Already have an account? <a href="login">Log in.</a> </p>
+
+  </body>
 </html>

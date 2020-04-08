@@ -12,7 +12,7 @@ h1 {
   font-size: 81px;
 }
 
-h3 {
+h3, h2, p {
   font-family: 'Montserrat', sans-serif;
   color: white;
   text-align: center;
@@ -79,9 +79,101 @@ audio, source {
 }
 
 .flex-container {
-
   display: flex;
   flex-wrap: wrap;
+}
+
+input[type=button], input[type=text], input[type=password] {
+  background-color: rgb(73,73,118);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 70%;
+  height: 20px;
+  display: inline;
+  float: right;
+  margin-bottom: 20px;
+  vertical-align: top;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.formArea {
+  margin: auto;
+  display: block;
+  width: 500px;
+}
+
+dl {
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  margin: auto;
+  display: block;
+  width: 500px;
+  line-height: 30px;
+}
+
+dt {
+  display: inline;
+
+}
+
+dd {
+  display: inline;
+  width: 0px;
+  margin: 0px;
+}
+
+
+label {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  clear: left;
+  width: 250px;
+  text-align: right;
+  line-height: 40px;
+  vertical-align: top;
+}
+
+#register {
+  background-color: rgb(73,73,118);
+  border-width: 0px;
+  width: 200px;
+  height: 66px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+  margin: auto;
+  display: block;
+  margin-top: 100px;
+}
+
+#register:hover {
+  background-color: rgb(93,177,149);
+}
+
+#formBody {
+  margin: auto;
+  display: block;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+#submit {
+  background-color: rgb(73,73,118);
+  border-width: 0px;
+  width: 200px;
+  height: 66px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+  margin: auto;
+  display: block;
+}
+
+#submit:hover {
+  background-color: rgb(93,177,149);
 }
 
 ::-webkit-scrollbar {
