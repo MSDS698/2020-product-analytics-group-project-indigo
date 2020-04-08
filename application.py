@@ -151,24 +151,27 @@ def upload():
         if not allowed_file(filename):
             flash('Incorrect File Type')
             return redirect(url_for('upload'))
+
+        # make directory and save files there
         file_dir_path = os.path.join(application.instance_path, 'files')
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
+            
         file_path = os.path.join(file_dir_path, filename)
 
-        # s3 = boto3.client('s3')
+        #s3 = boto3.client('s3')
         # #with open(filename, "rb") as rush:
         # s3.upload_file(Key = filename, bucket = "midi-file-upload")
         f.save(file_path) # Save file to file_path (instance/ + 'files’ + filename)
 
-        session = boto3.Session(profile_name='msds603')
+        #session = boto3.Session(profile_name='msds603')
         # Any clients created from this session will use credentials
         # from the [dev] section of ~/.aws/credentials.
-        dev_s3_client = session.resource('s3')
+        #dev_s3_client = session.resource('s3')
 
-        #s3 = boto3.resource('s3')
-        #s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
-        dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+        s3 = boto3.resource('s3')
+        s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+        #dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
 
         #if os.path.exists(dir):
         #   os.rmdir(dir)
