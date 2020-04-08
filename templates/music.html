@@ -6,7 +6,7 @@
 
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="../static/style/audio_style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
@@ -17,7 +17,9 @@
 
     <div class="container">
 
-      <div class="">
+      <div class="topPage">
+
+        <div class="filler"></div>
 
         <input type="file" id="UploadMIDI" name="midifile" style="display: none;" />
         <label for="UploadMIDI" id="upload">
@@ -25,6 +27,26 @@
         </label>
 
       </div>
+
+      <!-- Code from https://codepen.io/alexdevp/pen/RNELPV -->
+
+      <div class="player">
+  	    <canvas></canvas>
+  		  <div class="song">
+    			<div class="artist">Kavinsky</div>
+    			<div class="name">Odd Look ft. The Weeknd</div>
+		    </div>
+  		  <div class="playarea">
+    			<div class="prevSong"></div>
+    			<div class="play"></div>
+    			<div class="pause"></div>
+    			<div class="nextSong"></div>
+  		  </div>
+  		  <div class="soundControl"></div>
+  		  <div class="time">00:00</div>
+	  </div>
+
+    <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
     </div>
 
