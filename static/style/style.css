@@ -133,6 +133,14 @@ label {
   vertical-align: top;
 }
 
+#file_selector {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  border-width: 0px;
+  margin: auto;
+  display: block;
+}
+
 #register {
   background-color: rgb(73,73,118);
   border-width: 0px;
