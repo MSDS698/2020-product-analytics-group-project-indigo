@@ -180,12 +180,13 @@ def upload():
 
         #if os.path.exists(dir):
         #   os.rmdir(dir)
-        user = current_user.username
-        message = """<h1>{user} file uploaded to s3</h1>"""
-        
+        #user = current_user.username
+        #message = """<h1>{user} file uploaded to s3</h1>"""
+        #new_message = message.format(URL=user)
 
-        new_message = message.format(URL=user)
-        return new_message
+        return('<h1>{user} file uploaded to s3</h1>')
+
+        #return new_message
 
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
