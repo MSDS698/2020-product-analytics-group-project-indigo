@@ -153,7 +153,12 @@ def upload():
             return redirect(url_for('upload'))
 
         # make directory and save files there
-        file_dir_path = os.path.join(application.instance_path, 'files')
+        cwd = os.getcwd()
+        
+        file_dir_path = os.path.join(cwd, 'files')
+        
+        #file_dir_path = os.path.join(application.instance_path, 'files')
+
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
             
