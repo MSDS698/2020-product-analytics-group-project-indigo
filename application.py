@@ -12,6 +12,8 @@ from wtforms import BooleanField, DateField, IntegerField, SelectField, SubmitFi
 from wtforms.validators import DataRequired
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import boto3
+
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
 
@@ -147,10 +149,26 @@ def upload():
         filename = f.filename
         # filename : filename of FileField
         if not allowed_file(filename):
-            return ("<h1> Incorrect File Type </h1>")
+            flash('Incorrect File Type')
+            return redirect(url_for('upload'))
         file_dir_path = os.path.join(application.instance_path, 'files')
         file_path = os.path.join(file_dir_path, filename)
+
+        # s3 = boto3.client('s3')
+        # #with open(filename, "rb") as rush:
+        # s3.upload_file(Key = filename, bucket = "midi-file-upload")
         f.save(file_path) # Save file to file_path (instance/ + 'files’ + filename)
+
+        session = boto3.Session(profile_name='msds603')
+        # Any clients created from this session will use credentials
+        # from the [dev] section of ~/.aws/credentials.
+        dev_s3_client = session.resource('s3')
+
+        #s3 = boto3.resource('s3')
+        #s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+        dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+
+        return('<h1>file uploaded to s3</h1>')
 
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
