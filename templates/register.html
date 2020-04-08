@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -16,17 +15,18 @@
   <div class="container">
 
     <h1>INDIGO</h1>
+    <div class="formArea">
+      <form method="POST"> <!-- post : handle submission -->
+          {{ form.csrf_token }}
+          {{ form.username.label}} {{form.username()}} <br/>
+          {{ form.email.label}} {{form.email()}}<br/>
+          {{ form.password.label}} {{form.password()}}<br/>
+          {{ form.confirm.label}} {{form.confirm()}}<br/>
+          {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
+          {{ form.submit()}}
+      </form>
 
-    <form method="POST"> <!-- post : handle submission -->
-        <h2>Sign Up </h2>
-        {{ form.csrf_token }}
-        {{ form.username.label}} {{form.username()}} <br/>
-        {{ form.email.label}} {{form.email()}}<br/>
-        {{ form.password.label}} {{form.password()}}<br/>
-        {{ form.confirm.label}} {{form.confirm()}}<br/>
-        {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
-        {{ form.submit()}}
-    </form>
+    </div>
 
     <!--
     {% from "_formhelpers.html" import render_field %}
@@ -48,7 +48,7 @@
 
     </div>
 
-    <p>Already have an account? </p> <a href="login">Log in.</a>
+    <p>Already have an account? <a href="login">Log in.</a> </p>
 
   </body>
 </html>

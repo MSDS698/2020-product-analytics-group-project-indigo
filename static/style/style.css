@@ -12,7 +12,7 @@ h1 {
   font-size: 81px;
 }
 
-h3 {
+h3, h2, p {
   font-family: 'Montserrat', sans-serif;
   color: white;
   text-align: center;
@@ -83,7 +83,6 @@ audio, source {
   flex-wrap: wrap;
 }
 
-<<<<<<< HEAD
 input[type=button], input[type=text], input[type=password] {
   background-color: rgb(73,73,118);
   border: none;
@@ -93,7 +92,7 @@ input[type=button], input[type=text], input[type=password] {
   height: 20px;
   display: inline;
   float: right;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   vertical-align: top;
   font-family: 'Montserrat', sans-serif;
 
@@ -107,6 +106,12 @@ dl {
   display: block;
   width: 500px;
   line-height: 30px;
+}
+
+.formArea {
+  margin: auto;
+  display: block;
+  width: 500px;
 }
 
 dt {
@@ -170,7 +175,25 @@ label {
   display: block;
   margin-top: 100px;
   margin-bottom: 100px;
-=======
+}
+
+#submit {
+  background-color: rgb(73,73,118);
+  border-width: 0px;
+  width: 200px;
+  height: 66px;
+  font-family: 'Montserrat', sans-serif;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+  margin: auto;
+  display: block;
+}
+
+#submit:hover {
+  background-color: rgb(93,177,149);
+}
+
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
@@ -181,5 +204,4 @@ label {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
->>>>>>> bb9151bd9777a5b6328f0416fb5a2a709d8df311
 }

@@ -12,7 +12,7 @@ h1 {
   font-size: 81px;
 }
 
-h3 {
+h2, h3, p {
   font-family: 'Montserrat', sans-serif;
   color: white;
   text-align: center;
