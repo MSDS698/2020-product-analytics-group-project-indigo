@@ -245,8 +245,8 @@ def about():
 @application.route('/music', methods=['GET', 'POST'])
 @login_required
 def music():
-    uploads = Files.query.filter_by(username=current_user.username).all()
-    return render_template('music.html', uploads=uploads)
+    #uploads = Files.query.filter_by(username=current_user.username).all()
+    return render_template('music.html')#, uploads=uploads)
 
 
 if __name__ == '__main__':
