@@ -226,8 +226,8 @@ def upload():
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
 
-        return(f'<h1>{user_name} file uploaded to s3</h1>')
-        return redirect(url_for('index'))  # Redirect to / (/index) page.
+        #return(f'<h1>{user_name} file uploaded to s3</h1>')
+        return redirect(url_for('music'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
 
 
