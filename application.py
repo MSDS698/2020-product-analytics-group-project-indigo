@@ -155,7 +155,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('index'))
+            return redirect(url_for('upload'))
 
     return render_template('login.html', form=login_form)
 
