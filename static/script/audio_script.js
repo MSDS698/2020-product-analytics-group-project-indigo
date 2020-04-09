@@ -523,7 +523,7 @@ var Framer = {
             {
                 artist: "",
                 song: "",
-                url: "http://katiebaca.com/tutorial/odd-look.mp3"
+                url: "http://"+"katiebaca.com/tutorial/odd-look.mp3"
             }
         ],
 

@@ -54,6 +54,11 @@ class LogInForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired()])
     password = PasswordField('Password:', validators=[DataRequired()])
     submit = SubmitField('Login')
+    
+class Playback(FlaskForm):
+    # uploads = get all songs from s3 bucket
+    #song = SelectField('Select from your songs:', choices=(u for u in uploads), validators=[DataRequired()])
+    submit = SubmitField('Select')
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -186,7 +191,7 @@ def upload():
         #new_message = message.format(URL=user)
 
         #return('<h1>{user} file uploaded to s3</h1>')
-        return redirect(url_for('music',  filename=filename))
+        return redirect(url_for('music'))
 
         #return new_message
 
@@ -203,10 +208,15 @@ def demo():
 def about():
     return render_template('about.html')
 
-@application.route('/music/<filename>', methods=['GET', 'POST'])
+@application.route('/music', methods=['GET', 'POST'])
 @login_required
 def music(filename):
-    return render_template('music.html', user=current_user.username, filename=filename)
+    song_form = Playback()
+    if song_form.validate_on_submit():
+        song = song_form.song.data
+    # get song from s3 as url
+    # pass url to page template
+    return render_template('music.html', user=current_user.username, filename=song)
 
 
 if __name__ == '__main__':
