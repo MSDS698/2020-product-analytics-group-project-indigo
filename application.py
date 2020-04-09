@@ -184,7 +184,8 @@ def upload():
         #message = """<h1>{user} file uploaded to s3</h1>"""
         #new_message = message.format(URL=user)
 
-        return('<h1>{user} file uploaded to s3</h1>')
+        #return('<h1>{user} file uploaded to s3</h1>')
+        return redirect(url_for('music', filename=filename))
 
         #return new_message
 
@@ -201,9 +202,10 @@ def demo():
 def about():
     return render_template('about.html')
 
-@application.route('/music', methods=['GET', 'POST'])
-def music():
-    return render_template('music.html')
+@application.route('/music/<filename>', methods=['GET', 'POST'])
+def music(filename):
+    return render_template('music.html', filename=filename)
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
