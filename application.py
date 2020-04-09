@@ -206,9 +206,6 @@ def upload():
         # comment outnext two lines when not on local and not beanstalk
         s3 = boto3.resource('s3')
 
-        if os.path.exists(file_dir_path):
-            os.system(f"rm -rf {file_dir_path}")
-
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
         file_type = filename.rsplit('.', 1)[1]
@@ -226,6 +223,8 @@ def upload():
 
         s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
 
+        if os.path.exists(file_dir_path):
+            os.system(f"rm -rf {file_dir_path}")
 
         return(f'<h1>{user_name} file uploaded to s3</h1>')
         return redirect(url_for('index'))  # Redirect to / (/index) page.
