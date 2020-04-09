@@ -205,7 +205,6 @@ def upload():
 
         # comment outnext two lines when not on local and not beanstalk
         s3 = boto3.resource('s3')
-        s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
@@ -224,6 +223,9 @@ def upload():
                      model_used, our_filename, file_upload_timestamp)
         db.session.add(file)
         db.session.commit()
+
+        s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+
 
         return(f'<h1>{user_name} file uploaded to s3</h1>')
         return redirect(url_for('index'))  # Redirect to / (/index) page.
