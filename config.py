@@ -9,6 +9,7 @@ Created on Thu Apr  2 17:21:35 2020
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'indigo.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = True
