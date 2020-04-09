@@ -41,6 +41,11 @@ button:hover {
   background-color: rgb(93,177,149);
 }
 
+label {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+}
+
 
 .filler {
   height: 75px;
@@ -76,7 +81,7 @@ button:hover {
     opacity: 0.85;
     vertical-align: middle;
     margin: 0 26px;
-    border: 3px solid #FE4365;
+    border: 3px solid rgb(93,177,149);
     border-radius: 120px;
     width: 120px;
     height: 120px;
@@ -90,7 +95,7 @@ button:hover {
     opacity: 0.85;
     vertical-align: middle;
     margin: 0 26px;
-    border: 3px solid #FE4365;
+    border: 3px solid rgb(93,177,149);
     border-radius: 120px;
     width: 120px;
     height: 120px;
@@ -126,7 +131,7 @@ button:hover {
 
 .player .song {
     font-family: 'Montserrat', sans-serif;
-    color: #FE4365;
+    color: rgb(93,177,149);
     position: absolute;
     top: 225px;
     left: 0;
@@ -163,7 +168,7 @@ button:hover {
 .player .time {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
-    color: #FE4365;
+    color: rgb(93,177,149);
     position: absolute;
     left: 50%;
     margin-left: -22px;

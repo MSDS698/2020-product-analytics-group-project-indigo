@@ -58,6 +58,11 @@ class LogInForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired()])
     password = PasswordField('Password:', validators=[DataRequired()])
     submit = SubmitField('Login')
+    
+
+class SelectSong(FlaskForm):
+    song = SelectField('Choose from your uploads:', choices=(u for u in uploads))
+    submit = SubmitField('Select)
 
 
 class User(db.Model, UserMixin):
@@ -242,9 +247,10 @@ def about():
     return render_template('about.html')
 
 
-@application.route('/music/<filename>', methods=['GET', 'POST'])
-def music(filename):
-    return render_template('music.html', filename=filename)
+@application.route('/music', methods=['GET', 'POST'])
+def music():
+    uploads = Files.query.filter_by(username=username).all()
+    return render_template('music.html', uploads=uploads)
 
 
 if __name__ == '__main__':
