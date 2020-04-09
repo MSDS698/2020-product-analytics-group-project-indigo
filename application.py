@@ -1,6 +1,7 @@
 import csv
 import os
 import sys
+from datetime import datetime
 
 from config import Config
 from flask import render_template, redirect, url_for, request, flash, Flask
@@ -77,6 +78,26 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+class Files(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(80), nullable=False)
+    orig_filename = db.Column(db.String(120), nullable=False)
+    file_type = db.Column(db.String(120), nullable=False)  # mid or mp3 etc
+    # gan, user_upload, rnn, vae, etc
+    model_used = db.Column(db.String(120), nullable=False)
+    our_filename = db.Column(db.String(80), unique=True, nullable=False)
+    file_upload_timestamp = db.Column(db.String(120), nullable=False)
+
+    def __init__(self, user_name, orig_filename, file_type, model_used,
+                 our_filename, file_upload_timestamp):
+        self.user_name = user_name
+        self.orig_filename = orig_filename
+        self.file_type = file_type
+        self.model_used = model_used
+        self.our_filename = our_filename
+        self.file_upload_timestamp = file_upload_timestamp
+
+
 db.create_all()
 db.session.commit()
 
@@ -147,6 +168,7 @@ def logout():
 
 
 @application.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload():
     """upload a file from a client machine."""
     file = UploadFileForm()  # file : UploadFileForm class instance
@@ -164,40 +186,46 @@ def upload():
 
         file_dir_path = os.path.join(cwd, 'files')
 
-        # file_dir_path = os.path.join(application.instance_path, 'files')
-
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
 
         file_path = os.path.join(file_dir_path, filename)
 
-        # s3 = boto3.client('s3')
-        # #with open(filename, "rb") as rush:
-        # s3.upload_file(Key = filename, bucket = "midi-file-upload")
-        # Save file to file_path (instance/ + 'files’ + filename)
         f.save(file_path)
+
+        # USE FOR REMOTE - msds603 is my alias in ./aws file using
+        # secret key from iam on jacobs account
 
         # session = boto3.Session(profile_name='msds603')
         # Any clients created from this session will use credentials
         # from the [dev] section of ~/.aws/credentials.
         # dev_s3_client = session.resource('s3')
-
-        s3 = boto3.resource('s3')
-        s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
         # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
         # filename)
 
-        # if os.path.exists(dir):
-        #   os.rmdir(dir)
-        # user = current_user.username
-        # message = """<h1>{user} file uploaded to s3</h1>"""
-        # new_message = message.format(URL=user)
+        # comment outnext two lines when not on local and not beanstalk
+        s3 = boto3.resource('s3')
+        s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
 
-        # return('<h1>{user} file uploaded to s3</h1>')
-        return redirect(url_for('music', filename=filename))
+        if os.path.exists(file_dir_path):
+            os.system(f"rm -rf {file_dir_path}")
 
-        # return new_message
+        user_name = current_user.username
+        orig_filename = filename.rsplit('.', 1)[0]
+        file_type = filename.rsplit('.', 1)[1]
+        model_used = 'user_upload'
 
+        # get num of files user has uploaded thus far
+        num_user_files = Files.query.filter_by(user_name=user_name).count()
+        our_filename = f'{user_name}_{num_user_files}'
+        file_upload_timestamp = datetime.now()
+
+        file = Files(user_name, orig_filename, file_type,
+                     model_used, our_filename, file_upload_timestamp)
+        db.session.add(file)
+        db.session.commit()
+
+        return(f'<h1>{user_name} file uploaded to s3</h1>')
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
 
