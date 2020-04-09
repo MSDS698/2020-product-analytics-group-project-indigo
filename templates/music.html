@@ -19,22 +19,33 @@
 
       <div class="topPage">
 
-        <div class="filler"></div>
+        <div class="songSelection">
 
-        <input type="file" id="UploadMIDI" name="midifile" style="display: none;" />
+          <!-- drop down menu to select song from user's uploads and play -->
+
+          <label for="uploads">Select from uploads:</label>
+            <select id="uploads" onchange="playMusic(this);">
+              {% for song in uploads %}
+                <option value="{{song}}">{{song}}</option>
+                <option value="{{song2}}">{{song2}}</option>
+              {% endfor %}
+            </select>
+
+        </div>
+
+        <!-- <input type="file" id="UploadMIDI" name="midifile" style="display: none;" />
         <label for="UploadMIDI" id="upload">
             UPLOAD MIDI FILE
         </label>
-
-      </div>
+      -->
 
       <!-- Code from https://codepen.io/alexdevp/pen/RNELPV -->
 
       <div class="player">
   	    <canvas></canvas>
   		  <div class="song">
-    			<div class="artist">Kavinsky</div>
-    			<div class="name">Odd Look ft. The Weeknd</div>
+    			<div class="artist"><!--artist --></div>
+    			<div class="name"><!-- song title --></div>
 		    </div>
   		  <div class="playarea">
     			<div class="prevSong"></div>
