@@ -4,11 +4,13 @@ import sys
 
 from config import Config
 from flask import render_template, redirect, url_for, request, flash, Flask
-from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_user, \
+    login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
-from wtforms import BooleanField, DateField, IntegerField, SelectField, SubmitField, PasswordField, StringField, validators, Form
+from wtforms import BooleanField, DateField, IntegerField, SelectField, \
+    SubmitField, PasswordField, StringField, validators, Form
 from wtforms.validators import DataRequired
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -18,7 +20,7 @@ ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
 
 # Initialization
-# Create an application instance (an object of class Flask)  which handles all requests.
+# Create an application instance which handles all requests.
 application = Flask(__name__)
 application.secret_key = os.urandom(24)
 application.config.from_object(Config)
@@ -50,10 +52,12 @@ class RegistrationForm(FlaskForm):
     accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
     submit = SubmitField('Submit')
 
+
 class LogInForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired()])
     password = PasswordField('Password:', validators=[DataRequired()])
     submit = SubmitField('Login')
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,6 +76,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 db.create_all()
 db.session.commit()
 
@@ -82,6 +87,7 @@ db.session.commit()
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -104,8 +110,8 @@ def register():
         email = registration_form.email.data
 
         user_count = User.query.filter_by(username=username).count() \
-                     + User.query.filter_by(email=email).count()
-        if (user_count > 0):
+            + User.query.filter_by(email=email).count()
+        if user_count > 0:
             return '<h1>Error - Existing user : ' + username \
                    + ' OR ' + email + '</h1>'
         else:
@@ -144,7 +150,8 @@ def logout():
 def upload():
     """upload a file from a client machine."""
     file = UploadFileForm()  # file : UploadFileForm class instance
-    if file.validate_on_submit():  # Check if it is a POST request and if it is valid.
+    # Check if it is a POST request and if it is valid.
+    if file.validate_on_submit():
         f = file.file_selector.data  # f : Data of FileField
         filename = f.filename
         # filename : filename of FileField
@@ -154,40 +161,42 @@ def upload():
 
         # make directory and save files there
         cwd = os.getcwd()
-        
+
         file_dir_path = os.path.join(cwd, 'files')
-        
-        #file_dir_path = os.path.join(application.instance_path, 'files')
+
+        # file_dir_path = os.path.join(application.instance_path, 'files')
 
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
-            
+
         file_path = os.path.join(file_dir_path, filename)
 
-        #s3 = boto3.client('s3')
+        # s3 = boto3.client('s3')
         # #with open(filename, "rb") as rush:
         # s3.upload_file(Key = filename, bucket = "midi-file-upload")
-        f.save(file_path) # Save file to file_path (instance/ + 'files’ + filename)
+        # Save file to file_path (instance/ + 'files’ + filename)
+        f.save(file_path)
 
-        #session = boto3.Session(profile_name='msds603')
+        # session = boto3.Session(profile_name='msds603')
         # Any clients created from this session will use credentials
         # from the [dev] section of ~/.aws/credentials.
-        #dev_s3_client = session.resource('s3')
+        # dev_s3_client = session.resource('s3')
 
         s3 = boto3.resource('s3')
         s3.meta.client.upload_file(file_path, 'midi-file-upload', filename)
-        #dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
+        # filename)
 
-        #if os.path.exists(dir):
+        # if os.path.exists(dir):
         #   os.rmdir(dir)
-        #user = current_user.username
-        #message = """<h1>{user} file uploaded to s3</h1>"""
-        #new_message = message.format(URL=user)
+        # user = current_user.username
+        # message = """<h1>{user} file uploaded to s3</h1>"""
+        # new_message = message.format(URL=user)
 
-        #return('<h1>{user} file uploaded to s3</h1>')
+        # return('<h1>{user} file uploaded to s3</h1>')
         return redirect(url_for('music', filename=filename))
 
-        #return new_message
+        # return new_message
 
         return redirect(url_for('index'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
@@ -198,9 +207,11 @@ def demo():
     """ Load demo page showing Magenta """
     return render_template('demo.html')
 
+
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
+
 
 @application.route('/music/<filename>', methods=['GET', 'POST'])
 def music(filename):
