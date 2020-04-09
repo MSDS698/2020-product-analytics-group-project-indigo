@@ -141,6 +141,7 @@ def logout():
 
 
 @application.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload():
     """upload a file from a client machine."""
     file = UploadFileForm()  # file : UploadFileForm class instance
@@ -185,7 +186,7 @@ def upload():
         #new_message = message.format(URL=user)
 
         #return('<h1>{user} file uploaded to s3</h1>')
-        return redirect(url_for('music', filename=filename))
+        return redirect(url_for('music',  filename=filename))
 
         #return new_message
 
@@ -203,8 +204,9 @@ def about():
     return render_template('about.html')
 
 @application.route('/music/<filename>', methods=['GET', 'POST'])
+@login_required
 def music(filename):
-    return render_template('music.html', filename=filename)
+    return render_template('music.html', user=current_user.username, filename=filename)
 
 
 if __name__ == '__main__':

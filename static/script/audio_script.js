@@ -521,8 +521,8 @@ var Framer = {
 
         tracks: [
             {
-                artist: "Kavinsky",
-                song: "Odd Look ft. The Weeknd",
+                artist: "",
+                song: "",
                 url: "http://katiebaca.com/tutorial/odd-look.mp3"
             }
         ],
