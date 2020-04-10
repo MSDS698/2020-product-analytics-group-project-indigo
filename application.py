@@ -263,9 +263,6 @@ def about():
 def music():
     uploads = Files.query.filter_by(user_name=current_user.username).all()
     
-    session = boto3.Session(profile_name='msds603')
-    dev_s3_client = session.resource('s3')
-    
     return render_template('music.html', uploads=uploads)
 
 
