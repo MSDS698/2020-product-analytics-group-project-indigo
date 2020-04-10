@@ -181,11 +181,11 @@ function format_track(sequence, index, array){
   $("#tracks").append("<input type='image' src='static/playbutton.png' height='30px' width='30px' onclick='main_player.start(separated_sequences["+index+"][\"trimmed_sequence\"])'/>");
   $("#tracks").append("<input type='image' src='static/stopbutton.png' height='30px' width='30px' onclick='main_player.stop()'/>");
   // SVG element holds the visualized note image
-  $("#tracks").append("<div style='overflow:scroll; width:800px'><svg id='noteCanvas"+index+"'></svg></div>");
+  $("#tracks").append("<div style='overflow:scroll;'><svg id='noteCanvas"+index+"'></svg></div>");
 
   noteCanvases.push(new mm.PianoRollSVGVisualizer(
     separated_sequences[index]['trimmed_sequence'], document.getElementById('noteCanvas'+index),
-    {noteRGB:'35,70,90', activeNoteRGB:'157, 229, 184', noteHeight:5}));
+    {noteRGB:'223,66,98', activeNoteRGB:'157, 229, 184', noteHeight:5}));
 
 }
 
