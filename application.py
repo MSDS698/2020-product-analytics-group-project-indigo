@@ -163,7 +163,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('upload'))
+            return redirect(url_for('start'))
 
     return render_template('login.html', form=login_form)
 
@@ -174,6 +174,11 @@ def logout():
     """Logout user"""
     logout_user()
     return redirect(url_for('index'))
+
+@application.route('/start')
+@login_required
+def start():
+    return render_template('start.html')
 
 
 @application.route('/upload', methods=['GET', 'POST'])
