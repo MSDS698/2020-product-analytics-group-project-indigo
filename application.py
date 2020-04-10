@@ -79,6 +79,8 @@ class User(db.Model, UserMixin):
 
 
 class Files(db.Model, UserMixin):
+    """File class with file and user properties for database"""
+
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(80), nullable=False)
     orig_filename = db.Column(db.String(120), nullable=False)
@@ -170,7 +172,10 @@ def logout():
 @application.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-    """upload a file from a client machine."""
+    """
+    Upload a file from a client machine to
+    s3 and file properties to Database
+    """
     file = UploadFileForm()  # file : UploadFileForm class instance
     # Check if it is a POST request and if it is valid.
     if file.validate_on_submit():
@@ -203,9 +208,6 @@ def upload():
         # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
         # filename)
 
-        # comment outnext two lines when not on local and not beanstalk
-        s3 = boto3.resource('s3')
-
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
         file_type = filename.rsplit('.', 1)[1]
@@ -221,12 +223,13 @@ def upload():
         db.session.add(file)
         db.session.commit()
 
+        # comment outnext two lines when not on local and not beanstalk
+        s3 = boto3.resource('s3')
         s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
 
-        #return(f'<h1>{user_name} file uploaded to s3</h1>')
         return redirect(url_for('music'))  # Redirect to / (/index) page.
     return render_template('upload.html', form=file)
 
@@ -245,8 +248,8 @@ def about():
 @application.route('/music', methods=['GET', 'POST'])
 @login_required
 def music():
-    #uploads = Files.query.filter_by(username=current_user.username).all()
-    return render_template('music.html')#, uploads=uploads)
+    # uploads = Files.query.filter_by(username=current_user.username).all()
+    return render_template('music.html')  #, uploads=uploads)
 
 
 if __name__ == '__main__':
