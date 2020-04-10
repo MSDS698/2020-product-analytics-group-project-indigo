@@ -242,12 +242,6 @@ def demo():
     return render_template('demo.html')
 
 
-@application.route('/demodev', methods=['GET', 'POST'])
-def demo():
-    """ Load demo page showing Magenta """
-    return render_template('demo_dev.html')
-
-
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
