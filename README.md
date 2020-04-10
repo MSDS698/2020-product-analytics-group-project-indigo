@@ -24,6 +24,6 @@ https://msds698.github.io/2020-product-analytics-group-project-indigo/
 5. Run the application locally -- $ python application.py
 
 
-### Authors of Indigo
+### Authors of Indigo: 
 Alan Flint, Ash Jha, Hannah Lyon, Jacob Goffin, Kirsten Tsai, Lori Sheng, and Rushil Sheth
 
