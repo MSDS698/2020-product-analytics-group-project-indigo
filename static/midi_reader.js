@@ -4,7 +4,7 @@ let noteCanvases = [];
 let players = [];
 
 // Original Complete Midi File
-const main_player = initialize_player();
+const main_player = initialize_player;
 
 //note sequences
 let note_seq;
@@ -18,6 +18,128 @@ let program_notes;
 // models
 let music_rnn;
 let music_vae;
+
+///////////////////////////////////
+
+var Player = {
+
+    buffer: null,
+
+    duration: 0,
+
+    tracks: [
+        {
+            artist: "",
+            song: "",
+            url: "http://"+"katiebaca.com/tutorial/odd-look.mp3"
+        }
+    ],
+
+    init: function () {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.context = new AudioContext();
+        this.context.suspend && this.context.suspend();
+        this.firstLaunch = true;
+        try {
+            this.javascriptNode = this.context.createScriptProcessor(2048, 1, 1);
+            this.javascriptNode.connect(this.context.destination);
+            this.analyser = this.context.createAnalyser();
+            this.analyser.connect(this.javascriptNode);
+            this.analyser.smoothingTimeConstant = 0.6;
+            this.analyser.fftSize = 2048;
+            this.source = this.context.createBufferSource();
+            this.destination = this.context.destination;
+            this.loadTrack(0);
+
+            this.gainNode = this.context.createGain();
+            this.source.connect(this.gainNode);
+            this.gainNode.connect(this.analyser);
+            this.gainNode.connect(this.destination);
+
+            this.initHandlers();
+        } catch (e) {
+            Framer.setLoadingPercent(1);
+        }
+        Framer.setLoadingPercent(1);
+        Scene.init();
+    },
+
+    loadTrack: function (index) {
+        var that = this;
+        var request = new XMLHttpRequest();
+        var track = this.tracks[index];
+        document.querySelector('.song .artist').textContent = track.artist;
+        document.querySelector('.song .name').textContent = track.song;
+        this.currentSongIndex = index;
+
+        request.open('GET', track.url, true);
+        request.responseType = 'arraybuffer';
+
+        request.onload = function() {
+            that.context.decodeAudioData(request.response, function(buffer) {
+                that.source.buffer = buffer;
+            });
+        };
+
+        request.send();
+    },
+
+    nextTrack: function () {
+        return;
+        ++this.currentSongIndex;
+        if (this.currentSongIndex == this.tracks.length) {
+            this.currentSongIndex = 0;
+        }
+
+        this.loadTrack(this.currentSongIndex);
+    },
+
+    prevTrack: function () {
+        return;
+        --this.currentSongIndex;
+        if (this.currentSongIndex == -1) {
+            this.currentSongIndex = this.tracks.length - 1;
+        }
+
+        this.loadTrack(this.currentSongIndex);
+    },
+
+    play: function () {
+        this.context.resume && this.context.resume();
+        if (this.firstLaunch) {
+            this.source.start();
+            this.firstLaunch = false;
+        }
+    },
+
+    stop: function () {
+        this.context.currentTime = 0;
+        this.context.suspend();
+    },
+
+    pause: function () {
+        this.context.suspend();
+    },
+
+    mute: function () {
+        this.gainNode.gain.value = 0;
+    },
+
+    unmute: function () {
+        this.gainNode.gain.value = 1;
+    },
+
+    initHandlers: function () {
+        var that = this;
+
+        this.javascriptNode.onaudioprocess = function() {
+            Framer.frequencyData = new Uint8Array(that.analyser.frequencyBinCount);
+            that.analyser.getByteFrequencyData(Framer.frequencyData);
+        };
+    }
+};
+
+///////////////
 
 function initialize_player(){
   // Use soundfount to be able to play different instruments (not just piano)
@@ -48,7 +170,7 @@ function replace_notes_in_sequence(sequence, obj){
   seq_clone = mm.sequences.clone(sequence)
   seq_clone['notes'] = obj["notes"]
   trim_seq = mm.sequences.trim(seq_clone, obj['min_step'], obj['max_step'])
-  return {"sequence":seq_clone, "trimmed_sequence":trim_seq, "program":obj["program"], "instrument":instrument_mappings[obj["program"]]} 
+  return {"sequence":seq_clone, "trimmed_sequence":trim_seq, "program":obj["program"], "instrument":instrument_mappings[obj["program"]]}
 }
 
 // Format element to be appended
@@ -62,7 +184,7 @@ function format_track(sequence, index, array){
   $("#tracks").append("<div style='overflow:scroll; width:800px'><svg id='noteCanvas"+index+"'></svg></div>");
 
   noteCanvases.push(new mm.PianoRollSVGVisualizer(
-    separated_sequences[index]['trimmed_sequence'], document.getElementById('noteCanvas'+index), 
+    separated_sequences[index]['trimmed_sequence'], document.getElementById('noteCanvas'+index),
     {noteRGB:'35,70,90', activeNoteRGB:'157, 229, 184', noteHeight:5}));
 
 }
@@ -92,7 +214,7 @@ function load_midi_sample(){
             .then(function(){
               // call function to load UI showing each track separately
               add_tracks(separated_sequences);
-            })          
+            })
 
   // Load models
   music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn');
@@ -130,10 +252,8 @@ $("#rnnsample").click(function(){
 
 $("#vaesample").click(function(){
   let vae_temperature = parseInt($("#vae_temp").val())
-  
+
   let trim_note_seq = mm.sequences.trim(quant_note_seq, 0, 300);
   music_vae.sample(1, vae_temperature)
     .then(sample => main_player.start(sample[0]));
 });
-
-
