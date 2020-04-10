@@ -640,8 +640,8 @@ function playMusic(obj)
         // get song from s3
         // change song in player
         // change label on player
-        var songNameText = document.getElementById('name');
-        songNameText.innerHTML = selectedValue;
+        // var songNameText = document.getElementById('name');
+        // songNameText.innerHTML = selectedValue;
 
         // Player.tracks.url =
         alert(selectedValue);

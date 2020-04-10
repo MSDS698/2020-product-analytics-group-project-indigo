@@ -12,6 +12,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script src="javascript/midi.min.js"></script>
+
   </head>
   <body>
 
@@ -22,6 +24,8 @@
         <div class="songSelection">
 
           <!-- drop down menu to select song from user's uploads and play -->
+
+          <h1>{{ourfiles}}</h1>
 
           <label for="uploads">Select from uploads:</label>
             <select id="uploads" onchange="playMusic(this);">
@@ -55,6 +59,10 @@
   		  <div class="soundControl"></div>
   		  <div class="time">00:00</div>
 	  </div>
+
+    <!-- Code from  https://codepen.io/iansimon/pen/Bxgbgz/
+    <button id="download">Save as MIDI</button>
+    -->
 
     <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
