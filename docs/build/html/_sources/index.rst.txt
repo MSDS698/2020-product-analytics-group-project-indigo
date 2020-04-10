@@ -10,11 +10,11 @@ Welcome to Indigo's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   api
    introduction
-   authors
-   requirements
    tutorial
+   api
+   requirements
+   authors
 
 
 
