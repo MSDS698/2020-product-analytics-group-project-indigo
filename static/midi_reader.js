@@ -4,7 +4,7 @@ let noteCanvases = [];
 let players = [];
 
 // Original Complete Midi File
-const main_player = initialize_player;
+const main_player = initialize_player();
 
 //note sequences
 let note_seq;
