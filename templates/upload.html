@@ -1,10 +1,41 @@
-<div class="container">
-    <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
-        <h2>File Upload</h2>
-        {{ form.csrf_token }} <!--  render the form's CSRF field like normal. -->
-        {{ form.file_selector }}
-        <br/>
-        {{ form.submit }}
-    </form>
-</div> <!-- /container -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>INDIGO- Upload</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
+    <link rel="stylesheet" href="../static/style/style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+         <ul class="flashes">
+            {% for message in messages %}
+             <div class="message_flash">{{ message }}</div>
+            {% endfor %}
+        </ul>
+      {% endif %}
+     {% endwith %}
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
+          <h1>INDIGO</h1>
+            <h3>File Upload</h3>
+            <div class="formArea">
+            {{ form.csrf_token }} <!--  render the form's CSRF field like normal. -->
+
+            {{ form.file_selector }}
+            <div class="filler"></div>
+            <br/>
+            {{ form.submit }}
+          </div>
+        </form>
+    </div> <!-- /container -->
+
+  </body>
+</html>

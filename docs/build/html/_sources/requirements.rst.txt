@@ -1,101 +1,72 @@
 Requirements
 ============
-attrs==19.3.0
-
-awscli==1.18.29
-
-awsebcli==3.17.1
-
-bcrypt==3.1.7
-
-blessed==1.17.4
-
-botocore==1.14.17
-
-cached-property==1.5.1
-
-cement==2.8.2
-
-certifi==2019.11.28
-
-cffi==1.14.0
-
-chardet==3.0.4
-
-click==7.1.1
-
-colorama==0.3.9
-
-cryptography==2.8
-
-docker==4.2.0
-
-docker-compose==1.25.4
-
-dockerpty==0.4.1
-
-docopt==0.6.2
-
-docutils==0.15.2
-
-Flask==1.1.1
-
-future==0.16.0
-
-idna==2.7
-
-importlib-metadata==1.5.1
-
-itsdangerous==1.1.0
-
-Jinja2==2.11.1
-
-jmespath==0.9.5
-
-jsonschema==3.2.0
-
-MarkupSafe==1.1.1
-
-paramiko==2.7.1
-
-pathspec==0.5.9
-
-pyasn1==0.4.8
-
-pycparser==2.20
-
-PyNaCl==1.3.0
-
-pyrsistent==0.16.0
-
-python-dateutil==2.8.0
-
-PyYAML==5.2
-
-requests==2.20.1
-
-rsa==3.4.2
-
-s3transfer==0.3.3
-
-semantic-version==2.5.0
-
-six==1.11.0
-
-termcolor==1.1.0
-
-texttable==1.6.2
-
-urllib3==1.24.3
-
-wcwidth==0.1.9
-
-websocket-client==0.57.0
-
-Werkzeug==1.0.0
-
-zipp==3.1.0
-
-Flask-WTF==0.14.3
-
-sphinx==2.4.4
+| alabaster==0.7.12
+| attrs==19.3.0
+| awscli==1.18.29
+| awsebcli==3.17.1
+| Babel==2.8.0
+| bcrypt==3.1.7
+| blessed==1.17.4
+| botocore==1.14.17
+| boto3==1.12.23
+| cached-property==1.5.1
+| cement==2.8.2
+| certifi==2019.11.28
+| cffi==1.14.0
+| chardet==3.0.4
+| click==7.1.1
+| colorama==0.3.9
+| cryptography==2.8
+| docker==4.2.0
+| docker-compose==1.25.4
+| dockerpty==0.4.1
+| docopt==0.6.2
+| docutils==0.15.2
+| Flask==1.1.1
+| Flask-Login==0.5.0
+| Flask-SQLAlchemy==2.4.1
+| Flask-WTF==0.14.3
+| future==0.16.0
+| idna==2.7
+| imagesize==1.2.0
+| importlib-metadata==1.5.1
+| itsdangerous==1.1.0
+| Jinja2==2.11.1
+| jmespath==0.9.5
+| jsonschema==3.2.0
+| MarkupSafe==1.1.1
+| packaging==20.3
+| paramiko==2.7.1
+| pathspec==0.5.9
+| pyasn1==0.4.8
+| pycparser==2.20
+| Pygments==2.6.1
+| PyNaCl==1.3.0
+| pyparsing==2.4.6
+| pyrsistent==0.16.0
+| python-dateutil==2.8.0
+| pytz==2019.3
+| PyYAML==5.2
+| requests==2.20.1
+| rsa==3.4.2
+| s3transfer==0.3.3
+| semantic-version==2.5.0
+| six==1.11.0
+| snowballstemmer==2.0.0
+| Sphinx==2.4.4
+| sphinxcontrib-applehelp==1.0.2
+| sphinxcontrib-devhelp==1.0.2
+| sphinxcontrib-htmlhelp==1.0.3
+| sphinxcontrib-jsmath==1.0.1
+| sphinxcontrib-qthelp==1.0.3
+| sphinxcontrib-serializinghtml==1.1.4
+| sphinx_rtd_theme==0.4.3
+| SQLAlchemy==1.3.9
+| termcolor==1.1.0
+| texttable==1.6.2
+| urllib3==1.24.3
+| wcwidth==0.1.9
+| websocket-client==0.57.0
+| Werkzeug==1.0.0
+| WTForms==2.2.1
+| zipp==3.1.0
