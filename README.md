@@ -12,6 +12,10 @@ Our web application will have a user interface that allows users to dictate the 
 
 http://indigo-webserver.eba-mxse8mrw.us-west-2.elasticbeanstalk.com/
 
+### Code Documentation:
+
+https://msds698.github.io/2020-product-analytics-group-project-indigo/
+
 ### Steps to Try Indigo Yourself:
 1. Clone this github respository -- $ git clone https://github.com/MSDS698/2020-product-analytics-group-project-indigo.git
 2. Create a virtual environment -- $ python -m venv ENV_NAME
