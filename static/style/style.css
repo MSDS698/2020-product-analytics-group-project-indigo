@@ -96,6 +96,11 @@ input[type=button], input[type=text], input[type=password] {
   vertical-align: top;
   font-family: 'Montserrat', sans-serif;
 }
+.btns{
+  margin: auto;
+  display: block;
+  width: 500px;
+}
 
 .formArea {
   margin: auto;

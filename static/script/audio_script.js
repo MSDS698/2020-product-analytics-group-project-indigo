@@ -639,6 +639,13 @@ function playMusic(obj)
         var selectedValue = obj.options[obj.selectedIndex].value;
         // get song from s3
         // change song in player
-        // Player.tracks.url = 
+        // change label on player
+        // var songNameText = document.getElementById('name');
+        // songNameText.innerHTML = selectedValue;
+
+        // Player.tracks.url =
         alert(selectedValue);
     }
+
+
+// code to download midi file https://codepen.io/iansimon/pen/Bxgbgz/
