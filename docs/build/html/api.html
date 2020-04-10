@@ -1,42 +1,223 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>Auto Generated Code Documentation &#8212; Indigo 0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; Indigo 1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="introduction.html" />
-    <link rel="prev" title="Welcome to Indigo’s documentation!" href="index.html" />
+    <link rel="next" title="Requirements" href="requirements.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="index.html" class="icon icon-home"> Indigo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Indigo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="module-application">
-<span id="auto-generated-code-documentation"></span><h1>Auto Generated Code Documentation<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
+<span id="api"></span><h1>API<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="application.Files">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">Files</code><span class="sig-paren">(</span><em class="sig-param">user_name</em>, <em class="sig-param">orig_filename</em>, <em class="sig-param">file_type</em>, <em class="sig-param">model_used</em>, <em class="sig-param">our_filename</em>, <em class="sig-param">file_upload_timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#Files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.Files" title="Permalink to this definition">¶</a></dt>
+<dd><p>File class with file and user properties for database</p>
+<dl class="attribute">
+<dt id="application.Files.file_type">
+<code class="sig-name descname">file_type</code><a class="headerlink" href="#application.Files.file_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.file_upload_timestamp">
+<code class="sig-name descname">file_upload_timestamp</code><a class="headerlink" href="#application.Files.file_upload_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#application.Files.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.model_used">
+<code class="sig-name descname">model_used</code><a class="headerlink" href="#application.Files.model_used" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.orig_filename">
+<code class="sig-name descname">orig_filename</code><a class="headerlink" href="#application.Files.orig_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.our_filename">
+<code class="sig-name descname">our_filename</code><a class="headerlink" href="#application.Files.our_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Files.user_name">
+<code class="sig-name descname">user_name</code><a class="headerlink" href="#application.Files.user_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="application.LogInForm">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">LogInForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#LogInForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.LogInForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for login form</p>
+<dl class="attribute">
+<dt id="application.LogInForm.password">
+<code class="sig-name descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('Password:',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#application.LogInForm.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.LogInForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Login',), {})&gt;</em><a class="headerlink" href="#application.LogInForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.LogInForm.username">
+<code class="sig-name descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username:',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#application.LogInForm.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="application.RegistrationForm">
-<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">RegistrationForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=None</em>, <em class="sig-param">obj=None</em>, <em class="sig-param">prefix=''</em>, <em class="sig-param">data=None</em>, <em class="sig-param">meta=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#RegistrationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.RegistrationForm" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">RegistrationForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#RegistrationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.RegistrationForm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for register a new user.</p>
 <dl class="attribute">
 <dt id="application.RegistrationForm.accept_tos">
@@ -86,6 +267,60 @@
 
 </dd></dl>
 
+<dl class="class">
+<dt id="application.User">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">email</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for user object</p>
+<dl class="method">
+<dt id="application.User.check_password">
+<code class="sig-name descname">check_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User.check_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User.check_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.User.email">
+<code class="sig-name descname">email</code><a class="headerlink" href="#application.User.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.User.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#application.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.User.password_hash">
+<code class="sig-name descname">password_hash</code><a class="headerlink" href="#application.User.password_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="application.User.set_password">
+<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User.set_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User.set_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.User.username">
+<code class="sig-name descname">username</code><a class="headerlink" href="#application.User.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="application.about">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.about" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load About page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.allowed_file">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">allowed_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#allowed_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.allowed_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if file is of allowed type</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.demo">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">demo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#demo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.demo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load demo page showing Magenta</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="application.index">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.index" title="Permalink to this definition">¶</a></dt>
@@ -93,90 +328,132 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="application.load_user">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">load_user</code><span class="sig-paren">(</span><em class="sig-param">id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#load_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.load_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>This callback is used to reload the user object
+from the user ID stored in the session.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.login">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login function that takes in username and password.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.logout">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logout user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.music">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">music</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#music"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.music" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load music page</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="application.register">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register a new user. Save the username, password and email.</p>
+<dd><p>Register function that writes new user to SQLite DB</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="application.upload">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.upload" title="Permalink to this definition">¶</a></dt>
-<dd><p>upload a file from a client machine.</p>
+<dd><p>Upload a file from a client machine to
+s3 and file properties to Database</p>
 </dd></dl>
 
+<span class="target" id="module-pytest.test_login"></span><dl class="function">
+<dt id="pytest.test_login.UserFromDB">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">UserFromDB</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#UserFromDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.UserFromDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that returns the user with given username from the database</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_create_two_users">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_create_two_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_create_two_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_create_two_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that creates two users and checks that indivdual user details can
+be correctly returned from the database</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_create_user">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_create_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_create_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that creates a user and checks that the username, email, and
+password have been stored correctly in the database</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_login_incorrect_password">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_incorrect_password</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_incorrect_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_incorrect_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_login_incorrect_username">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_incorrect_username</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_incorrect_username"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_incorrect_username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_login_success">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pytest.test_login.test_login_unregistered">
+<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_unregistered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_unregistered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_unregistered" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
+           </div>
+           
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Indigo</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Auto Generated Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Indigo’s documentation!</a></li>
-      <li>Next: <a href="introduction.html" title="next chapter">Introduction</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="requirements.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  
 
+  <hr/>
 
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Project Indigo
 
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-
-
-
+</footer>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2020, Alan, Ash, Hannah, Jacob, Kirsten, Lori, Rushil.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/api.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
+    </section>
 
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-  </body>
+   
+
+</body>
 </html>
