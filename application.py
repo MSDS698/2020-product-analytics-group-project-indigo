@@ -55,12 +55,14 @@ class RegistrationForm(FlaskForm):
 
 
 class LogInForm(FlaskForm):
+    """Class for login form"""
     username = StringField('Username:', validators=[DataRequired()])
     password = PasswordField('Password:', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 
 class User(db.Model, UserMixin):
+    """Class for user object"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
@@ -104,15 +106,17 @@ db.create_all()
 db.session.commit()
 
 
-# user_loader :
-# This callback is used to reload the user object
-# from the user ID stored in the session.
 @login_manager.user_loader
 def load_user(id):
+    """
+    This callback is used to reload the user object
+    from the user ID stored in the session.
+    """
     return User.query.get(int(id))
 
 
 def allowed_file(filename):
+    """Checks if file is of allowed type"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -126,6 +130,7 @@ def index():
 
 @application.route('/register',  methods=['GET', 'POST'])
 def register():
+    """Register function that writes new user to SQLite DB"""
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
         username = registration_form.username.data
@@ -147,6 +152,7 @@ def register():
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
+    """Login function that takes in username and password."""
     login_form = LogInForm()
     if login_form.validate_on_submit():
         username = login_form.username.data
@@ -165,6 +171,7 @@ def login():
 @application.route('/logout')
 @login_required
 def logout():
+    """Logout user"""
     logout_user()
     return redirect(url_for('index'))
 
@@ -247,26 +254,16 @@ def demo():
 
 @application.route('/about', methods=['GET', 'POST'])
 def about():
+    """Load About page"""
     return render_template('about.html')
 
 
 @application.route('/music', methods=['GET', 'POST'])
 @login_required
 def music():
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
-    session = boto3.Session(profile_name='msds603')
-    dev_s3_client = session.resource('s3')
-    
-    our_files = []
-    for u in uploads:
-#        obj = dev_s3_client.Object('midi-file-upload', 'hannah_0')
-#        body = obj.get()['Body'].read()
-#        our_files.append(body)
-        our_files.append(u)
-    
-    return render_template('music.html', uploads=uploads, ourfiles=our_files)
-
+    """Load music page"""
+    # uploads = Files.query.filter_by(username=current_user.username).all()
+    return render_template('music.html')  #, uploads=uploads)
 
 
 if __name__ == '__main__':
