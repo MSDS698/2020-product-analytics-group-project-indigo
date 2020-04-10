@@ -646,3 +646,6 @@ function playMusic(obj)
         // Player.tracks.url =
         alert(selectedValue);
     }
+
+
+// code to download midi file https://codepen.io/iansimon/pen/Bxgbgz/
