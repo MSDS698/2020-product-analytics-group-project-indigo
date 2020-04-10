@@ -26,8 +26,7 @@
           <label for="uploads">Select from uploads:</label>
             <select id="uploads" onchange="playMusic(this);">
               {% for song in uploads %}
-                <option value="{{song}}">{{song}}</option>
-                <option value="{{song2}}">{{song2}}</option>
+                <option value="{{song}}">{{song.orig_filename}}</option>
               {% endfor %}
             </select>
 

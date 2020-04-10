@@ -155,7 +155,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('upload'))
+            return redirect(url_for('start'))
 
     return render_template('login.html', form=login_form)
 
@@ -165,6 +165,11 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@application.route('/start')
+@login_required
+def start():
+    return render_template('start.html')
 
 
 @application.route('/upload', methods=['GET', 'POST'])
@@ -237,6 +242,12 @@ def demo():
     return render_template('demo.html')
 
 
+@application.route('/demodev', methods=['GET', 'POST'])
+def demo():
+    """ Load demo page showing Magenta """
+    return render_template('demo_dev.html')
+
+
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
@@ -245,8 +256,18 @@ def about():
 @application.route('/music', methods=['GET', 'POST'])
 @login_required
 def music():
-    #uploads = Files.query.filter_by(username=current_user.username).all()
-    return render_template('music.html')#, uploads=uploads)
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+    
+    session = boto3.Session(profile_name='msds603')
+    dev_s3_client = session.resource('s3')
+    
+#    our_files = []
+#    for u in uploads:
+#        obj = dev_s3_client.Object('midi-file-upload', u.our_filename)
+#        body = obj.get()['Body'].read()
+#        our_files.append(body)
+    
+    return render_template('music.html', uploads=uploads)
 
 
 if __name__ == '__main__':
