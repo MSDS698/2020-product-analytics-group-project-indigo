@@ -14,7 +14,7 @@
 <script>
     console.log('{{midi_file}}');
 
-    mm.urlToNoteSequence('/static/{{midi_file}}')
+    mm.urlToNoteSequence('/static/tmp/{{midi_file}}')
         .then(ns_val => note_seq = ns_val);
 
     const main_player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
