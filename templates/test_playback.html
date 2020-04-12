@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <button type="button" id="playbutton">Play Sample Midi File</button>
+    <button type="button" id="stopbutton" style="display:none">Stop Music</button>
+</body>
+<script>
+    console.log('{{midi_file}}');
+
+    mm.urlToNoteSequence('/static/{{midi_file}}')
+        .then(ns_val => note_seq = ns_val);
+
+    const main_player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+
+    $("#playbutton").click(function(){
+        main_player.start(note_seq);
+        $("#stopbutton").show()
+    });
+
+    $("#stopbutton").click(function(){
+        main_player.stop()
+    });
+</script>
+</html>
