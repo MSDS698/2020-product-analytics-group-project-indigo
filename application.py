@@ -243,6 +243,7 @@ def upload():
             os.system(f"rm -rf {file_dir_path}")
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
+
     return render_template('upload.html', form=file)
 
 
@@ -264,6 +265,24 @@ def music():
     uploads = Files.query.filter_by(user_name=current_user.username).all()
     
     return render_template('music.html', uploads=uploads)
+
+
+@application.route('/test_playback/<filename>', methods=['GET', 'POST'])
+def test_playback(filename):
+    s3 = boto3.resource('s3')
+    object = s3.Object('midi-file-upload', filename)
+    #binary_body = object.get()['Body'].read()
+    #return render_template('test_playback.html', midi_binary=binary_body)
+
+    # make directory and save files there
+    file_dir_path = './static/tmp'
+
+    if not os.path.exists(file_dir_path):
+        os.mkdir(file_dir_path)
+
+    object.download_file(f'./static/tmp/{filename}.mid')
+
+    return render_template('test_playback.html', midi_file=filename+'.mid')
 
 
 if __name__ == '__main__':
