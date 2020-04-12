@@ -647,5 +647,9 @@ function playMusic(obj)
         alert(selectedValue);
     }
 
+function redirectToMusic(obj){
+    var selectedValue = obj.options[obj.selectedIndex].value;
+    window.location  = '/test_playback/'+selectedValue;
+}
 
 // code to download midi file https://codepen.io/iansimon/pen/Bxgbgz/
