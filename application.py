@@ -273,7 +273,14 @@ def test_playback(filename):
     object = s3.Object('midi-file-upload', filename)
     #binary_body = object.get()['Body'].read()
     #return render_template('test_playback.html', midi_binary=binary_body)
-    object.download_file(f'./static/{filename}.mid')
+
+    # make directory and save files there
+    file_dir_path = './static/tmp'
+
+    if not os.path.exists(file_dir_path):
+        os.mkdir(file_dir_path)
+
+    object.download_file(f'./static/tmp/{filename}.mid')
 
     return render_template('test_playback.html', midi_file=filename+'.mid')
 
