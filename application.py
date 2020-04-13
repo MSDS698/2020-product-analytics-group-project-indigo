@@ -210,6 +210,16 @@ def upload():
 
         f.save(file_path)
 
+        # USE FOR REMOTE - msds603 is my alias in ./aws file using
+        # secret key from iam on jacobs account
+
+        # session = boto3.Session(profile_name='msds603')
+        # Any clients created from this session will use credentials
+        # from the [dev] section of ~/.aws/credentials.
+        # dev_s3_client = session.resource('s3')
+        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
+        # filename)
+
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
         file_type = filename.rsplit('.', 1)[1]
@@ -225,16 +235,6 @@ def upload():
         db.session.add(file)
         db.session.commit()
 
-        # USE FOR REMOTE - msds603 is my alias in ./aws file using
-        # secret key from iam on jacobs account
-
-        # session = boto3.Session(profile_name='msds603')
-        # Any clients created from this session will use credentials
-        # from the [dev] section of ~/.aws/credentials.
-        # dev_s3_client = session.resource('s3')
-        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
-        # filename)
-        
         # comment outnext two lines when not on local and not beanstalk
         s3 = boto3.resource('s3')
         s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
@@ -243,6 +243,7 @@ def upload():
             os.system(f"rm -rf {file_dir_path}")
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
+
     return render_template('upload.html', form=file)
 
 
@@ -264,6 +265,24 @@ def music():
     uploads = Files.query.filter_by(user_name=current_user.username).all()
     
     return render_template('music.html', uploads=uploads)
+
+
+@application.route('/test_playback/<filename>', methods=['GET', 'POST'])
+def test_playback(filename):
+    s3 = boto3.resource('s3')
+    object = s3.Object('midi-file-upload', filename)
+    #binary_body = object.get()['Body'].read()
+    #return render_template('test_playback.html', midi_binary=binary_body)
+
+    # make directory and save files there
+    file_dir_path = './static/tmp'
+
+    if not os.path.exists(file_dir_path):
+        os.mkdir(file_dir_path)
+
+    object.download_file(f'./static/tmp/{filename}.mid')
+
+    return render_template('test_playback.html', midi_file=filename+'.mid')
 
 
 if __name__ == '__main__':
