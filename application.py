@@ -213,12 +213,12 @@ def upload():
         # USE FOR REMOTE - msds603 is my alias in ./aws file using
         # secret key from iam on jacobs account
 
-        session = boto3.Session(profile_name='msds603')
+        # session = boto3.Session(profile_name='msds603')
         # Any clients created from this session will use credentials
         # from the [dev] section of ~/.aws/credentials.
-        dev_s3_client = session.resource('s3')
-        dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
-        filename)
+        # dev_s3_client = session.resource('s3')
+        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
+        # filename)
 
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
@@ -236,8 +236,8 @@ def upload():
         db.session.commit()
 
         # comment outnext two lines when not on local and not beanstalk
-        # s3 = boto3.resource('s3')
-        # s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+        s3 = boto3.resource('s3')
+        s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
