@@ -83,6 +83,15 @@ audio, source {
   flex-wrap: wrap;
 }
 
+#uploads {
+  margin: auto;
+  display: block;
+}
+#uploadLabel {
+  margin: auto;
+  display: block;
+}
+
 input[type=button], input[type=text], input[type=password] {
   background-color: rgb(73,73,118);
   border: none;
