@@ -273,7 +273,10 @@ def music():
 
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
 def test_playback(filename):
-    s3 = boto3.resource('s3')
+    # uncomment the next 2 lines when on local
+    # session = boto3.Session(profile_name='msds603') # insert your profile name
+    # s3 = session.resource('s3')
+    s3 = boto3.resource('s3') # comment out when on local
     object = s3.Object('midi-file-upload', filename)
     #binary_body = object.get()['Body'].read()
     #return render_template('test_playback.html', midi_binary=binary_body)
