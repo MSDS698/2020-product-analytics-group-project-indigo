@@ -189,6 +189,8 @@ def upload():
     s3 and file properties to Database
     """
     file = UploadFileForm()  # file : UploadFileForm class instance
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+    
     # Check if it is a POST request and if it is valid.
     if file.validate_on_submit():
         f = file.file_selector.data  # f : Data of FileField
@@ -241,10 +243,12 @@ def upload():
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
+            
+        
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
 
-    return render_template('upload.html', form=file)
+    return render_template('upload.html', form=file, uploads=uploads)
 
 
 @application.route('/demo', methods=['GET', 'POST'])
