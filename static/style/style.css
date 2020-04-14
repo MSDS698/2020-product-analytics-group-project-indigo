@@ -92,6 +92,10 @@ audio, source {
   display: block;
 }
 
+#footer {
+  float: bottom;
+}
+
 input[type=button], input[type=text], input[type=password] {
   background-color: rgb(73,73,118);
   border: none;
