@@ -257,24 +257,3 @@ $("#vaesample").click(function(){
   music_vae.sample(1, vae_temperature)
     .then(sample => main_player.start(sample[0]));
 });
-
-$('#samples').on('change', function () {
-        mm.urlToNoteSequence('/static/guitar_bass_samples/'+this.value)
-        .then(ns_val => note_seq = ns_val)
-        .then($("#playbutton").show())
-        .then(
-            drums_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/drum_kit_rnn');
-            drums_rnn.initialize().then(function(){$("#drums_rnn").show()});
-        );
-    });
-
-    const main_player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
-
-    $("#playbutton").click(function(){
-        main_player.start(note_seq);
-        $("#stopbutton").show()
-    });
-
-    $("#stopbutton").click(function(){
-        main_player.stop()
-    });
