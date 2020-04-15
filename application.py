@@ -292,6 +292,10 @@ def test_playback(filename):
     return render_template('test_playback.html', midi_file=filename+'.mid')
 
 
+@application.route('/drums', methods=['GET', 'POST'])
+def drums():
+    return render_template('drums.html')
+
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
     application.config['TEMPLATES_AUTO_RELOAD'] = True
