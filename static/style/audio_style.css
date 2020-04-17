@@ -46,6 +46,12 @@ label {
   color: white;
 }
 
+p {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  text-align: center;
+}
+
 
 .filler {
   height: 75px;
