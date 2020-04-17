@@ -271,6 +271,11 @@ def music():
     return render_template('music.html', uploads=uploads)
 
 
+@application.route('/create', methods=['GET', 'POST'])
+def create():
+    return render_template('create.html')
+
+
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
 def test_playback(filename):
     # uncomment the next 2 lines when on local
