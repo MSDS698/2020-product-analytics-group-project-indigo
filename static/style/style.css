@@ -214,12 +214,55 @@ label {
 }
 
 
-.fa-1x {
-font-size: 1.5rem;
+
+
+
+
+
+
+
+
+
+
+
+/* Style the navigation menu */
+.topnav {
+  overflow: hidden;
+  background-color: rgb(50,50,78);
+  position: relative;
 }
-.navbar-toggler.toggler-example {
-cursor: pointer;
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+.topnav #myLinks {
+  display: none;
 }
-.blue-hamburger {
-color: rgb(71,72,111);
+
+/* Style navigation menu links */
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+
+/* Style the hamburger menu */
+.topnav a.icon {
+  background: rgb(50,50,78);
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Add a grey background color on mouse-over */
+.topnav a:hover {
+  color: black;
+}
+
+/* Style the active link (or home/logo) */
+.active {
+  background-color: rgb(50,50,78);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
 }
