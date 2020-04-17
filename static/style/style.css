@@ -212,3 +212,14 @@ label {
   background-color: #5CAD93;
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
+
+
+.fa-1x {
+font-size: 1.5rem;
+}
+.navbar-toggler.toggler-example {
+cursor: pointer;
+}
+.blue-hamburger {
+color: rgb(71,72,111);
+}
