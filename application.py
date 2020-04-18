@@ -275,6 +275,14 @@ def music():
 def create():
     return render_template('create.html')
 
+@application.route('/buy', methods=['GET', 'POST'])
+def buy():
+    return render_template('buy.html')
+
+@application.route('/my_music', methods=['GET', 'POST'])
+def my_music():
+    return render_template('my_music.html')
+
 
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
 def test_playback(filename):
