@@ -270,12 +270,16 @@ label {
 .icons > .iconLink {
   display: inline-block;
   vertical-align: top;
-  width: 25px;
+  width: 200px;
+  margin-left: 70px;
+  margin-right: 70px;
 }
 
 .icons > .iconLink > .createLabels {
   display: block;
   margin: auto;
+  text-align: center;
+  margin-top: 25px;
 }
 
 .icons:after {
