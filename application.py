@@ -175,10 +175,10 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@application.route('/start')
+@application.route('/create')
 @login_required
 def start():
-    return render_template('start.html')
+    return render_template('create.html')
 
 
 @application.route('/upload', methods=['GET', 'POST'])
