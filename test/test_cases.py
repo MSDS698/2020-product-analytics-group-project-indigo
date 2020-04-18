@@ -4,14 +4,14 @@ import pytest
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from application import db, User, application
+from application import db, Customer, application
 
 
 def UserFromDB(username):
     """
     Function that returns the user with given username from the database
     """
-    user = User.query.filter_by(username=username).first()
+    user = Customer.query.filter_by(username=username).first()
     return user
 
 
@@ -32,8 +32,8 @@ def client():
 def init_database():
     db.create_all()
 
-    user1 = User('post malone', 'post@gmail.com', 'watermalone')
-    user2 = User('tester', 'test@test.com', 'test123')
+    user1 = Customer('post malone', 'post@gmail.com', 'watermalone')
+    user2 = Customer('tester', 'test@test.com', 'test123')
     db.session.add(user1)
     db.session.add(user2)
     db.session.commit()
