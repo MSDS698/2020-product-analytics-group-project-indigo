@@ -18,6 +18,8 @@ h3, h2, p {
   text-align: center;
 }
 
+
+
 a {
   color: white;
   background-color: transparent;
@@ -214,18 +216,7 @@ label {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-/* Style the navigation menu */
+/* Code from W3 schools Style the navigation menu */
 .topnav {
   overflow: hidden;
   background-color: rgb(50,50,78);
@@ -265,4 +256,30 @@ label {
   background-color: rgb(50,50,78);
   color: white;
   font-family: 'Montserrat', sans-serif;
+}
+
+.createIcon {
+  height: 200px;
+}
+
+/* code from https://radiatingstar.com/blog/distribute-divs-images-equaly-line/ */
+.icons {
+  text-align: justify;
+}
+
+.icons > .iconLink {
+  display: inline-block;
+  vertical-align: top;
+  width: 25px;
+}
+
+.icons > .iconLink > .createLabels {
+  display: block;
+  margin: auto;
+}
+
+.icons:after {
+  content: "";
+  width: 100%;
+  display: inline-block;
 }
