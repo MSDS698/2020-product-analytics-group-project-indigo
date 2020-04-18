@@ -61,7 +61,7 @@ class LogInForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class User(db.Model, UserMixin):
+class Customer(db.Model, UserMixin):
     """Class for user object"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -112,7 +112,7 @@ def load_user(id):
     This callback is used to reload the user object
     from the user ID stored in the session.
     """
-    return User.query.get(int(id))
+    return Customer.query.get(int(id))
 
 
 def allowed_file(filename):
@@ -137,13 +137,13 @@ def register():
         password = registration_form.password.data
         email = registration_form.email.data
 
-        user_count = User.query.filter_by(username=username).count() \
-            + User.query.filter_by(email=email).count()
+        user_count = Customer.query.filter_by(username=username).count() \
+            + Customer.query.filter_by(email=email).count()
         if user_count > 0:
             return '<h1>Error - Existing user : ' + username \
                    + ' OR ' + email + '</h1>'
         else:
-            user = User(username, email, password)
+            user = Customer(username, email, password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -158,7 +158,7 @@ def login():
         username = login_form.username.data
         password = login_form.password.data
         # Look for it in the database.
-        user = User.query.filter_by(username=username).first()
+        user = Customer.query.filter_by(username=username).first()
 
         # Login and validate the user.
         if user is not None and user.check_password(password):
