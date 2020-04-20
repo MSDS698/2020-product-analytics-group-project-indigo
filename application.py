@@ -190,7 +190,7 @@ def upload():
     """
     file = UploadFileForm()  # file : UploadFileForm class instance
     uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
+
     # Check if it is a POST request and if it is valid.
     if file.validate_on_submit():
         f = file.file_selector.data  # f : Data of FileField
@@ -243,8 +243,8 @@ def upload():
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
-            
-        
+
+
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
 
@@ -267,7 +267,7 @@ def about():
 @login_required
 def music():
     uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
+
     return render_template('music.html', uploads=uploads)
 
 
@@ -308,6 +308,10 @@ def test_playback(filename):
 @application.route('/drums', methods=['GET', 'POST'])
 def drums():
     return render_template('drums.html')
+
+@application.route('/VAE', methods=['GET', 'POST'])
+def VAE():
+    return render_template('magenta.html')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
