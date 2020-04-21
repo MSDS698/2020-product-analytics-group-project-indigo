@@ -311,7 +311,7 @@ def drums():
 
 @application.route('/VAE', methods=['GET', 'POST'])
 def VAE():
-    return render_template('magenta.html')
+    return render_template('VAE.html')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
