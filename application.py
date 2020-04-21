@@ -199,7 +199,7 @@ def upload():
         # filename : filename of FileField
         if not allowed_file(filename):
             flash('Incorrect File Type')
-            return redirect(url_for('upload'))
+            #return redirect(url_for('upload'))
 
         # make directory and save files there
         cwd = os.getcwd()
