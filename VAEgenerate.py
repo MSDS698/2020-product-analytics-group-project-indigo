@@ -100,6 +100,7 @@ def set_config(alg):
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/trio_16bar*.mid'))]
 
+            
     elif alg == 'cat-drums_2bar_small':
         drums_2bar_small_config = configs.CONFIG_MAP['cat-drums_2bar_small']
         config = drums_2bar_small_config
