@@ -20,6 +20,9 @@
   <body>
     <div class="container">
 
+
+
+
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
         <a href="index" class="active">INDIGO</a>
@@ -50,7 +53,22 @@
           {{ form.submit()}}
       </form>
       </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible" role="alert">
+          <p>{{message}}</p>
+          </div>
+        {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+
     </div>
 
   </body>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
   </html>
