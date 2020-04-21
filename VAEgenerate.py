@@ -67,7 +67,7 @@ def note_sequence_to_midi_file(sequence, output_file,
         # And back the file position to top (not need for Copy but for certainty)
         temp_file.seek(0)
         tf.gfile.Copy(temp_file.name, output_file, overwrite=True)
-  
+
 
 def set_config(alg):
     """
