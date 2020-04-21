@@ -22,6 +22,7 @@ https://msds698.github.io/2020-product-analytics-group-project-indigo/
 3. Activate the environment -- $ source ENV_NAME/bin/activate
 4. Install the necessary packages -- $ pip install -r requirements.txt
 5. Run the application locally -- $ python application.py
+6. To run the test cases, from the root directory -- $ python -m pytest -v test/test_cases.py
 
 
 ### Authors of Indigo: 

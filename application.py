@@ -61,7 +61,7 @@ class LogInForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class User(db.Model, UserMixin):
+class Customer(db.Model, UserMixin):
     """Class for user object"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -112,7 +112,7 @@ def load_user(id):
     This callback is used to reload the user object
     from the user ID stored in the session.
     """
-    return User.query.get(int(id))
+    return Customer.query.get(int(id))
 
 
 def allowed_file(filename):
@@ -137,13 +137,13 @@ def register():
         password = registration_form.password.data
         email = registration_form.email.data
 
-        user_count = User.query.filter_by(username=username).count() \
-            + User.query.filter_by(email=email).count()
+        user_count = Customer.query.filter_by(username=username).count() \
+            + Customer.query.filter_by(email=email).count()
         if user_count > 0:
             return '<h1>Error - Existing user : ' + username \
                    + ' OR ' + email + '</h1>'
         else:
-            user = User(username, email, password)
+            user = Customer(username, email, password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -158,7 +158,7 @@ def login():
         username = login_form.username.data
         password = login_form.password.data
         # Look for it in the database.
-        user = User.query.filter_by(username=username).first()
+        user = Customer.query.filter_by(username=username).first()
 
         # Login and validate the user.
         if user is not None and user.check_password(password):
@@ -175,10 +175,10 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@application.route('/start')
+@application.route('/create')
 @login_required
 def start():
-    return render_template('start.html')
+    return render_template('create.html')
 
 
 @application.route('/upload', methods=['GET', 'POST'])
@@ -189,6 +189,8 @@ def upload():
     s3 and file properties to Database
     """
     file = UploadFileForm()  # file : UploadFileForm class instance
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+
     # Check if it is a POST request and if it is valid.
     if file.validate_on_submit():
         f = file.file_selector.data  # f : Data of FileField
@@ -242,8 +244,11 @@ def upload():
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
 
+
+
         return redirect(url_for('music'))  # Redirect to / (/index) page.
-    return render_template('upload.html', form=file)
+
+    return render_template('upload.html', form=file, uploads=uploads)
 
 
 @application.route('/demo', methods=['GET', 'POST'])
@@ -262,9 +267,51 @@ def about():
 @login_required
 def music():
     uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
+
     return render_template('music.html', uploads=uploads)
 
+
+@application.route('/create', methods=['GET', 'POST'])
+def create():
+    return render_template('create.html')
+
+@application.route('/buy', methods=['GET', 'POST'])
+def buy():
+    return render_template('buy.html')
+
+@application.route('/my_music', methods=['GET', 'POST'])
+def my_music():
+    return render_template('my_music.html')
+
+
+@application.route('/test_playback/<filename>', methods=['GET', 'POST'])
+def test_playback(filename):
+    # uncomment the next 2 lines when on local
+    # session = boto3.Session(profile_name='msds603') # insert your profile name
+    # s3 = session.resource('s3')
+    s3 = boto3.resource('s3') # comment out when on local
+    object = s3.Object('midi-file-upload', filename)
+    #binary_body = object.get()['Body'].read()
+    #return render_template('test_playback.html', midi_binary=binary_body)
+
+    # make directory and save files there
+    file_dir_path = './static/tmp'
+
+    if not os.path.exists(file_dir_path):
+        os.mkdir(file_dir_path)
+
+    object.download_file(f'./static/tmp/{filename}.mid')
+
+    return render_template('test_playback.html', midi_file=filename+'.mid')
+
+
+@application.route('/drums', methods=['GET', 'POST'])
+def drums():
+    return render_template('drums.html')
+
+@application.route('/VAE', methods=['GET', 'POST'])
+def VAE():
+    return render_template('VAE.html')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
