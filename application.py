@@ -140,8 +140,7 @@ def register():
         user_count = Customer.query.filter_by(username=username).count() \
             + Customer.query.filter_by(email=email).count()
         if user_count > 0:
-            return '<h1>Error - Existing user : ' + username \
-                   + ' OR ' + email + '</h1>'
+            flash('Username or email already exists')
         else:
             user = Customer(username, email, password)
             db.session.add(user)

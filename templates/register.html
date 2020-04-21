@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="../static/script/nav_script.js"></script>
-    
+
   </head>
   <body>
   <div class="container">
@@ -25,6 +25,7 @@
       <!-- Navigation links (hidden by default) -->
       <div id="myLinks">
         <a href="buy">BUY</a>
+        <a href="login">Login</a>
         <a href="create">Create</a>
         <a href="my_songs">My Songs</a>
         <a href="about">About</a>
@@ -48,28 +49,25 @@
           {{ form.password.label}} {{form.password()}}<br/>
           {{ form.confirm.label}} {{form.confirm()}}<br/>
           {{ form.accept_tos.label}} {{form.accept_tos()}}<br/>
+
+
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-warning alert-dismissible" role="alert">
+              <p>{{message}}</p>
+              </div>
+            {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+
           {{ form.submit()}}
       </form>
 
     </div>
 
-    <!--
-    {% from "_formhelpers.html" import render_field %}
-    <form method=post>
-      <dl id='formBody'>
-        {{ render_field(form.username) }}
-        <br>
-        {{ render_field(form.email) }}
-        <br>
-        {{ render_field(form.password) }}
-        <br>
-        {{ render_field(form.confirm) }}
-        <br>
-        {{ render_field(form.accept_tos) }}
-      </dl>
-      <p><input id='register' type=submit value=Register>
-    </form>
-  -->
+
 
     </div>
 
