@@ -26,15 +26,7 @@
 
   </head>
   <body>
-    {% with messages = get_flashed_messages() %}
-       {% if messages %}
-         <ul class="flashes">
-            {% for message in messages %}
-             <div class="message_flash">{{ message }}</div>
-            {% endfor %}
-        </ul>
-      {% endif %}
-     {% endwith %}
+
     <div class="container">
 
       <!-- Code from W3 schools Top Navigation Menu -->
@@ -67,6 +59,18 @@
             {{ form.file_selector }}
             <div class="filler"></div>
             <br/>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                <p>{{message}}</p>
+                </div>
+              {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+
             {{ form.submit }}
           </div>
         </form>
