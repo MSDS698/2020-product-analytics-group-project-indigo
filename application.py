@@ -19,6 +19,7 @@ import boto3
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
+on_dev = False
 
 # Initialization
 # Create an application instance which handles all requests.
@@ -213,15 +214,6 @@ def upload():
 
         f.save(file_path)
 
-        # USE FOR REMOTE - msds603 is my alias in ./aws file using
-        # secret key from iam on jacobs account
-
-        # session = boto3.Session(profile_name='msds603')
-        # Any clients created from this session will use credentials
-        # from the [dev] section of ~/.aws/credentials.
-        # dev_s3_client = session.resource('s3')
-        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
-        # filename)
 
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
@@ -238,9 +230,18 @@ def upload():
         db.session.add(file)
         db.session.commit()
 
-        # comment outnext two lines when not on local and not beanstalk
-        s3 = boto3.resource('s3')
-        s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+        # TAKES CARE OF DEV OR local
+        if on_dev:
+            s3 = boto3.resource('s3')
+            s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+
+        # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
+        # secret key from iam on jacobs account
+        else:
+           session = boto3.Session(profile_name='msds603') 
+           dev_s3_client = session.resource('s3')
+           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
@@ -288,10 +289,18 @@ def my_music():
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
 def test_playback(filename):
     # uncomment the next 2 lines when on local
+
     # session = boto3.Session(profile_name='msds603') # insert your profile name
     # s3 = session.resource('s3')
-    s3 = boto3.resource('s3') # comment out when on local
+    if on_dev:
+        s3 = boto3.resource('s3') # comment out when on local
+    #LOCAL
+    else:
+        session = boto3.Session(profile_name='msds603') # insert your profile name
+        s3 = session.resource('s3')
+
     object = s3.Object('midi-file-upload', filename)
+
     #binary_body = object.get()['Body'].read()
     #return render_template('test_playback.html', midi_binary=binary_body)
 
