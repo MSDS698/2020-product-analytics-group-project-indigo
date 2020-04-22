@@ -1,5 +1,5 @@
 import ctypes.util
-import fluidsynth
+# import fluidsynth
 import magenta
 import magenta.music as mm
 import numpy as np
@@ -83,35 +83,37 @@ def set_config(alg):
         config = hierdec_trio_16bar_config
         trio_models['hierdec_trio_16bar'] = TrainedModel(config, 
             batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/trio_16bar_hierdec.ckpt')
-
         #@title Option 1: Use example MIDI files for interpolation endpoints.
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/trio_16bar*.mid'))]
-
     elif alg == 'flat-trio_16bar':
         flat_trio_16bar_config = configs.CONFIG_MAP['flat-trio_16bar']
         config = flat_trio_16bar_config
         trio_models['baseline_flat_trio_16bar'] = TrainedModel(config, 
             batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/trio_16bar_flat.ckpt')
-        
         #@title Option 1: Use example MIDI files for interpolation endpoints.
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/trio_16bar*.mid'))]
-
-
-    elif alg == 'cat-drums_2bar_small':
-        drums_2bar_small_config = configs.CONFIG_MAP['cat-drums_2bar_small']
-        config = drums_2bar_small_config
-        trio_models['cat-drums_2bar_small'] = TrainedModel(config, 
+    elif alg == 'cat-drums_2bar_small_hi':
+        drums_2bar_small_hi_config = configs.CONFIG_MAP['cat-drums_2bar_small']
+        config = drums_2bar_small_hi_config
+        trio_models['cat-drums_2bar_small_hi'] = TrainedModel(config, 
             batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/drums_2bar_small.hikl.ckpt')
+        input_trio_midi_data = [
+            tf.gfile.Open(fn, 'rb').read()
+            for fn in sorted(tf.gfile.Glob('./VAE/midi/drums_2bar*.mid'))]
+    elif alg == 'cat-drums_2bar_small_lo':
+        drums_2bar_small_lo_config = configs.CONFIG_MAP['cat-drums_2bar_small']
+        config = drums_2bar_small_lo_config
+        trio_models['cat-drums_2bar_small_lo'] = TrainedModel(config, 
+            batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/drums_2bar_small.lokl.ckpt')
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/drums_2bar*.mid'))]
     else:
         raise ValueError('Unrecognized Algorithm')
-
     return input_trio_midi_data, config, trio_models
 
 
@@ -150,13 +152,18 @@ def interpolateFromInput(extracted_trios, trio_models, alg):
     trio_16bar_mean = interpolate(trio_models[trio_interp_model], start_trio, 
         end_trio, num_steps=3, max_length=256, individual_duration=32, temperature=temperature)     
 
-    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean, './VAE/output/%s_mean.mid' % trio_interp_model)
+    if not os.path.exists('./VAE/output'):
+        os.mkdir('./VAE/output')
+
+    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean, f"./VAE/output/{alg}_{trio_interp_model}_mean.mid")
+
     print('file wrote')
 
 
 def run(alg):
-	input_trio_midi_data, config, trio_models = set_config(alg)
-	extracted_trios = generate(input_trio_midi_data, config)
-	interpolateFromInput(extracted_trios, trio_models, alg)
+    input_trio_midi_data, config, trio_models = set_config(alg)
+    extracted_trios = generate(input_trio_midi_data, config)
+    interpolateFromInput(extracted_trios, trio_models, alg)
 
-run('cat-drums_2bar_small')
+
+run('cat-drums_2bar_small_lo')
