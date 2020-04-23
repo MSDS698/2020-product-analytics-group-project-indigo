@@ -5,8 +5,6 @@
     <title>INDIGO- Upload</title>
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-    <link rel="stylesheet" href="../static/style/style.css">
-
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
@@ -15,13 +13,27 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <script type="text/javascript" src="../static/script/audio_script.js"></script>
+    
+    <!-- UPLOAD STUFF -->
+    <script src="../static/script/upload_progbar.js"></script> 
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="../static/script/nav_script.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="../static/style/style.css">
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 
   </head>
@@ -74,6 +86,13 @@
             {{ form.submit }}
           </div>
         </form>
+
+        <br></br>
+
+        <div class="progress">
+          <div id = "progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%
+          </div>
+        </div>
 
         <div class="filler">
 
