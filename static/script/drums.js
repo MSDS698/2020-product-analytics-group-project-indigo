@@ -100,6 +100,23 @@ $("#stopbutton").click(function(){
     combined_player.stop()
 });
 
+$("#btnPlaySample").click(function(){
+    if (main_player.isPlaying()) {
+        main_player.stop();
+      } else {
+        main_player.start(note_seq);
+        $("#stopSample").show();
+      }
+});
+
+$("#btnPlayDrums").click(function(){
+    if (main_player.isPlaying()) {
+        main_player.stop();
+      } else {
+        main_player.start(generated_seq);
+        $("#stopDrums").show();
+      }
+});
 
 
 

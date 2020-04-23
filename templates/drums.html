@@ -11,8 +11,15 @@
     <style>
 
       #svg1, #svg2 {
-        margin: 40px;
+        padding: 40px;
+        position: relative;
       }
+      #btnPlaySample, #btnPlayDrums {
+        position: absolute;
+        top: 10px;
+        left: 5px;
+      }
+
     </style>
 </head>
 <body>
@@ -22,12 +29,23 @@
             <option disabled selected value="">Please select a sample</option>
             <option value="bass_4bars.mid">Bass Sample 4 Bars</option>
             <option value="rock_licks_excerpt.mid">Guitar Sample 4 Bars</option>
-            <option value="chuck_berry_8bars.mid">Guitar Sample 8 Bars</option>
+            <option value="chuck_berry_8bars.mid">Chuck Berry (Guitar 8 Bars)</option>
+            <option value="all_around_the_world.mid">All Around the World (Bass 4 Bars)</option>
         </select>
         <!-- <button type="button" id="playbutton" style="display:none">Play Sample</button> -->
         <!-- <button type="button" id="stopbutton" style="display:none">Stop</button> -->
     </div>
     <div style="overflow:scroll; display:none" id="svg1">
+        <button id="btnPlaySample" class="button-circle" aria-label="play">
+              <svg id="playSample" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                  <path d="M0 0h24v24H0z" fill="none"/>
+              </svg>
+              <svg id="stopSample" style="display:none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M6 6h12v12H6z"/>
+              </svg>
+        </button>
         <svg id='originalSVG'></svg>
     </div>
     <div id="div2" style="display:none">
@@ -36,6 +54,16 @@
         <input type="number" id="rnn_temp" max="5.0" min="0.0" value="1.4" step=0.01>
     </div>
     <div style="overflow:scroll; display:none" id="svg2">
+        <button id="btnPlayDrums" class="button-circle" aria-label="play">
+              <svg id="playDrums" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                  <path d="M0 0h24v24H0z" fill="none"/>
+              </svg>
+              <svg id="stopDrums" style="display:none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M6 6h12v12H6z"/>
+              </svg>
+        </button>
         <svg id='drumsSVG'></svg>
     </div>
     <div id="div4">
