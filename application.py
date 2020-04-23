@@ -1,21 +1,33 @@
-import csv
+import boto3
+import ctypes.util
+import magenta
+import magenta.music as mm
+import numpy as np
 import os
 import sys
-from datetime import datetime
+import tempfile
+import tensorflow as tf
+import warnings
 
 from config import Config
+from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash, Flask
 from flask_login import LoginManager, UserMixin, current_user, login_user, \
     login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
+from magenta.models.music_vae import configs
+from magenta.models.music_vae.trained_model import TrainedModel
+from VAEgenerate import interpolate, note_sequence_to_midi_file, set_config, generate, interpolateFromInput, run
 from wtforms import BooleanField, DateField, IntegerField, SelectField, \
     SubmitField, PasswordField, StringField, validators, Form
 from wtforms.validators import DataRequired
 from werkzeug.security import check_password_hash, generate_password_hash
 
-import boto3
+
+# import fluidsynth
+
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
@@ -105,6 +117,36 @@ class Files(db.Model, UserMixin):
 db.create_all()
 db.session.commit()
 
+on_dev = False
+
+@application.route('/VAE', methods=['GET', 'POST'])
+def VAE():
+    if on_dev:
+        s3 = boto3.resource('s3')
+        my_bucket = s3.Bucket('vaecheckpoints')
+        for my_bucket_object in my_bucket.objects.all():
+            print(my_bucket_object)
+    else:
+        s3 = boto3.Session(profile_name='msds603').resource('s3')
+        my_bucket = s3.Bucket('vaecheckpoints')
+        allobj = my_bucket.objects.all()
+        print('type::: ', type(allobj))
+        run('cat-drums_2bar_small_hi', 's3://vaecheckpoints/drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt')
+    
+        # for idx, my_bucket_object in enumerate(allobj):
+        #     # print(f"idx : {idx}, object: {my_bucket_object}")
+        #     if idx==6:
+        #         path = my_bucket_object.key
+        #         print(path)
+        #         filepath =  my_bucket_object #str(path).replace('.index', '')
+        #         print(f"filepath: {filepath}")
+        #         run('cat-drums_2bar_small_hi', filepath)
+        #         print(f"type: {type(my_bucket_object)} ;;;; {my_bucket_object}")
+    return("<h1>wrote file locally</h1>")
+
+# @application.route('/VAE', methods=['GET', 'POST'])
+# def VAE():
+#     return render_template('VAE.html')
 
 @login_manager.user_loader
 def load_user(id):
@@ -308,10 +350,6 @@ def test_playback(filename):
 @application.route('/drums', methods=['GET', 'POST'])
 def drums():
     return render_template('drums.html')
-
-@application.route('/VAE', methods=['GET', 'POST'])
-def VAE():
-    return render_template('VAE.html')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
