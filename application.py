@@ -127,12 +127,18 @@ def VAE():
         for my_bucket_object in my_bucket.objects.all():
             print(my_bucket_object)
     else:
-        s3 = boto3.Session(profile_name='msds603').resource('s3')
-        my_bucket = s3.Bucket('vaecheckpoints')
-        allobj = my_bucket.objects.all()
-        print('type::: ', type(allobj))
-        run('cat-drums_2bar_small_hi', 's3://vaecheckpoints/drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt')
-    
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            print('created temporary directory', tmpdirname)
+            s3 = boto3.Session(profile_name='msds603').resource('s3')
+            my_bucket = s3.Bucket('vaecheckpoints')
+            index = s3.Object('vaecheckpoints', 'drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt.index')
+            data = s3.Object('vaecheckpoints', 'drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt.data-00000-of-00001')
+            index.download_file(tmpdirname+'/drums_2bar_small.hikl.ckpt.index')
+            data.download_file(tmpdirname+'/drums_2bar_small.hikl.ckpt.data-00000-of-00001')
+            # allobj = my_bucket.objects.all()
+            # print('type::: ', type(allobj))
+            run('cat-drums_2bar_small_hi', tmpdirname+'/drums_2bar_small.hikl.ckpt')
+
         # for idx, my_bucket_object in enumerate(allobj):
         #     # print(f"idx : {idx}, object: {my_bucket_object}")
         #     if idx==6:
