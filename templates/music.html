@@ -28,13 +28,18 @@
           <!--<h1>{{ourfiles}}</h1>-->
 
           <label for="uploads">Select from uploads:</label>
-            <select id="uploads" onchange="playMusic(this);">
+            <select id="uploads" onchange="redirectToMusic(this);">
+             <option disabled selected value="">Please select a value</option>
               {% for song in uploads %}
-                <option value="{{song}}">{{song.orig_filename}}</option>
+                <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
               {% endfor %}
             </select>
 
         </div>
+
+        <!-- <audio src="../frank.mp3" controls preload="auto"></audio> -->
+
+
 
         <!-- <input type="file" id="UploadMIDI" name="midifile" style="display: none;" />
         <label for="UploadMIDI" id="upload">

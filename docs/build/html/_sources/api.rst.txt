@@ -4,6 +4,6 @@ API
   :members:
   :undoc-members:
 
-.. automodule:: pytest.test_login
+.. automodule:: test.test_cases
   :members:
   :undoc-members:

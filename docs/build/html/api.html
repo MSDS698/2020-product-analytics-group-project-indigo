@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; Indigo 1 documentation</title>
+  <title>API &mdash; Indigo 0.1 documentation</title>
   
 
   
@@ -154,6 +154,42 @@
   <div class="section" id="module-application">
 <span id="api"></span><h1>API<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="application.Customer">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">Customer</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">email</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#Customer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.Customer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for user object</p>
+<dl class="method">
+<dt id="application.Customer.check_password">
+<code class="sig-name descname">check_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#Customer.check_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.Customer.check_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Customer.email">
+<code class="sig-name descname">email</code><a class="headerlink" href="#application.Customer.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Customer.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#application.Customer.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Customer.password_hash">
+<code class="sig-name descname">password_hash</code><a class="headerlink" href="#application.Customer.password_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="application.Customer.set_password">
+<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#Customer.set_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.Customer.set_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.Customer.username">
+<code class="sig-name descname">username</code><a class="headerlink" href="#application.Customer.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="application.Files">
 <em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">Files</code><span class="sig-paren">(</span><em class="sig-param">user_name</em>, <em class="sig-param">orig_filename</em>, <em class="sig-param">file_type</em>, <em class="sig-param">model_used</em>, <em class="sig-param">our_filename</em>, <em class="sig-param">file_upload_timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#Files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.Files" title="Permalink to this definition">¶</a></dt>
 <dd><p>File class with file and user properties for database</p>
@@ -267,42 +303,6 @@
 
 </dd></dl>
 
-<dl class="class">
-<dt id="application.User">
-<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">email</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class for user object</p>
-<dl class="method">
-<dt id="application.User.check_password">
-<code class="sig-name descname">check_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User.check_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User.check_password" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="application.User.email">
-<code class="sig-name descname">email</code><a class="headerlink" href="#application.User.email" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="application.User.id">
-<code class="sig-name descname">id</code><a class="headerlink" href="#application.User.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="application.User.password_hash">
-<code class="sig-name descname">password_hash</code><a class="headerlink" href="#application.User.password_hash" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="application.User.set_password">
-<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#User.set_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.User.set_password" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="application.User.username">
-<code class="sig-name descname">username</code><a class="headerlink" href="#application.User.username" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="function">
 <dt id="application.about">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.about" title="Permalink to this definition">¶</a></dt>
@@ -316,10 +316,25 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="application.buy">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">buy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#buy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.buy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="application.create">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="application.demo">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">demo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#demo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.demo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load demo page showing Magenta</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="application.drums">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">drums</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#drums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.drums" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="application.index">
@@ -349,8 +364,12 @@ from the user ID stored in the session.</p>
 <dl class="function">
 <dt id="application.music">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">music</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#music"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.music" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load music page</p>
-</dd></dl>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="application.my_music">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">my_music</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#my_music"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.my_music" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="application.register">
@@ -359,51 +378,142 @@ from the user ID stored in the session.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="application.start">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="application.test_playback">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">test_playback</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#test_playback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.test_playback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="application.upload">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a file from a client machine to
 s3 and file properties to Database</p>
 </dd></dl>
 
-<span class="target" id="module-pytest.test_login"></span><dl class="function">
-<dt id="pytest.test_login.UserFromDB">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">UserFromDB</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#UserFromDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.UserFromDB" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-test.test_cases"></span><dl class="function">
+<dt id="test.test_cases.FileFromDB">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">FileFromDB</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#FileFromDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.FileFromDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that returns the file for a given username</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.UserFromDB">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">UserFromDB</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#UserFromDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.UserFromDB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function that returns the user with given username from the database</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_create_two_users">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_create_two_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_create_two_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_create_two_users" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function that creates two users and checks that indivdual user details can
-be correctly returned from the database</p>
+<dt id="test.test_cases.client">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">client</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts Flask test client</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_create_user">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_create_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_create_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_create_user" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function that creates a user and checks that the username, email, and
-password have been stored correctly in the database</p>
+<dt id="test.test_cases.init_database">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">init_database</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#init_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.init_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields postgres db for testing</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_login_incorrect_password">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_incorrect_password</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_incorrect_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_incorrect_password" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="test.test_cases.register_duplicate_email">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">register_duplicate_email</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#register_duplicate_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.register_duplicate_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a duplicate email cannot register
+App needs better error messaging for the user</p>
+</dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_login_incorrect_username">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_incorrect_username</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_incorrect_username"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_incorrect_username" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="test.test_cases.register_duplicate_username">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">register_duplicate_username</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#register_duplicate_username"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.register_duplicate_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a duplicate username cannot register
+App needs better error messaging for the user</p>
+</dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_login_success">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_success" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="test.test_cases.test_file_upload">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_file_upload</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_file_upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_file_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a logged in user can upload a file.
+Try/except to catch errors with s3 access</p>
+</dd></dl>
 
 <dl class="function">
-<dt id="pytest.test_login.test_login_unregistered">
-<code class="sig-prename descclassname">pytest.test_login.</code><code class="sig-name descname">test_login_unregistered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pytest/test_login.html#test_login_unregistered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pytest.test_login.test_login_unregistered" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="test.test_cases.test_home">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_home</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that homepage is up and running</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_login">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_login</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that login page is up and running</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_login_password_failure">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_login_password_failure</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_login_password_failure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_login_password_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests than an incorrect password cannot log in.
+App needs an error message for users</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_login_test_user">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_login_test_user</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_login_test_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_login_test_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests login of that test user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_login_unregistered">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_login_unregistered</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_login_unregistered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_login_unregistered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that unregistered user cannot log in.
+App needs error message and redirect to register page.
+Needs to be implemented.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_login_username_failure">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_login_username_failure</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_login_username_failure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_login_username_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that an incorrect username cannot log in.
+App needs an error message for users</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_logout_logged_in_user">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_logout_logged_in_user</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_logout_logged_in_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_logout_logged_in_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a user can logout and is redirected to the home page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_logout_logged_out_user">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_logout_logged_out_user</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_logout_logged_out_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_logout_logged_out_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a user not logged in cannot log out</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_music_not_logged_in">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_music_not_logged_in</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_music_not_logged_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_music_not_logged_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that user not logged in cannot access the music page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_register">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_register</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that register page is up and running</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_register_test_user">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_register_test_user</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_register_test_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_register_test_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers the test user and checks that is was successful</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_remove_test_user">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_remove_test_user</code><span class="sig-paren">(</span><em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_remove_test_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_remove_test_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes our test user from the Customer db as our testing is complete</p>
+</dd></dl>
 
 </div>
 

@@ -18,6 +18,8 @@ h3, h2, p {
   text-align: center;
 }
 
+
+
 a {
   color: white;
   background-color: transparent;
@@ -81,6 +83,19 @@ audio, source {
 .flex-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+#uploads {
+  margin: auto;
+  display: block;
+}
+#uploadLabel {
+  margin: auto;
+  display: block;
+}
+
+#footer {
+  float: bottom;
 }
 
 input[type=button], input[type=text], input[type=password] {
@@ -188,6 +203,11 @@ label {
   background-color: rgb(93,177,149);
 }
 
+#drumsViz, #instrumentViz, #sampleViz {
+  margin: auto;
+  display: block;
+}
+
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 0px;
@@ -198,4 +218,81 @@ label {
   border-radius: 4px;
   background-color: #5CAD93;
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+
+/* Code from W3 schools Style the navigation menu */
+.topnav {
+  overflow: hidden;
+  background-color: rgb(50,50,78);
+  position: relative;
+}
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+.topnav #myLinks {
+  display: none;
+}
+
+/* Style navigation menu links */
+.topnav a {
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+
+/* Style the hamburger menu */
+.topnav a.icon {
+  background: rgb(50,50,78);
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Add a grey background color on mouse-over */
+.topnav a:hover {
+  color: black;
+}
+
+/* Style the active link (or home/logo) */
+.active {
+  background-color: rgb(50,50,78);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.createIcon {
+  height: 200px;
+}
+
+/* code from https://radiatingstar.com/blog/distribute-divs-images-equaly-line/ */
+.icons {
+  text-align: justify;
+}
+
+.icons > .iconLink {
+  display: inline-block;
+  vertical-align: top;
+  width: 200px;
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
+.icons > .iconLink > .createLabels {
+  display: block;
+  margin: auto;
+  text-align: center;
+  margin-top: 25px;
+}
+
+.icons:after {
+  content: "";
+  width: 100%;
+  display: inline-block;
+}
+
+#price {
+  margin-bottom: 0px;
 }
