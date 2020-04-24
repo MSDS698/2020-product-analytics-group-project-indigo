@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>INDIGO- Upload</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+
+    <link rel="stylesheet" href="../static/style/style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../static/script/audio_script.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="../static/script/nav_script.js"></script>
+
+
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+         <ul class="flashes">
+            {% for message in messages %}
+             <div class="message_flash">{{ message }}</div>
+            {% endfor %}
+        </ul>
+      {% endif %}
+     {% endwith %}
+    <div class="container">
+
+      <!-- Code from W3 schools Top Navigation Menu -->
+      <div class="topnav">
+        <a href="index" class="active">INDIGO</a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+          <a href="buy">BUY</a>
+          <a href="create">Create</a>
+          <a href="my_songs">My Songs</a>
+          <a href="about">About</a>
+          <a href="logout">Logout</a>
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+
+
+
+		<figure>
+		    <h1>Here's the Music We Created For You :)</h1>
+			<iframe src={{path}} width="0" height="0" border="0" scrolling="no" frameBorder="0"></iframe>
+		</figure>
+
+        <div class="filler">
+
+        </div>
+
+
+
+
+    </div> <!-- /container -->
+
+    </div>
+
+  </body>
+
+
+</html>
