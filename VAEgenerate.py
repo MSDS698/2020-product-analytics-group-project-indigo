@@ -144,7 +144,7 @@ def generate(input_trio_midi_data, config):
 
     return extracted_trios
 
-def interpolateFromInput(extracted_trios, trio_models, alg):
+def interpolateFromInput(extracted_trios, trio_models, alg, output_dir):
     """
     interpolate needs two files to play with
     given input 2 midi files/ config(trio_models)/ alg
@@ -162,18 +162,18 @@ def interpolateFromInput(extracted_trios, trio_models, alg):
     trio_16bar_mean = interpolate(trio_models[trio_interp_model], start_trio, 
         end_trio, num_steps=3, max_length=256, individual_duration=32, temperature=temperature)     
 
-    if not os.path.exists('./VAE/output'):
-        os.mkdir('./VAE/output')
+    # if not os.path.exists('./VAE/output'):
+    #     os.mkdir('./VAE/output')
 
-    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean, f"./VAE/output/{alg}_{trio_interp_model}_mean.mid")
+    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean, f"{output_dir}/{alg}.mid")
 
-    print(f"./VAE/output/{alg}_{trio_interp_model}_mean.mid file wrote")
+    print(f"./VAE/output/{alg}_mean.mid file wrote")
 
 
-def run(alg, path_to_checkpoint):
+def run(alg, path_to_checkpoint, output_dir):
     input_trio_midi_data, config, trio_models = set_config(alg, path_to_checkpoint)
     extracted_trios = generate(input_trio_midi_data, config)
-    interpolateFromInput(extracted_trios, trio_models, alg)
+    interpolateFromInput(extracted_trios, trio_models, alg, output_dir)
 
 
 # run('cat-drums_2bar_small_hi', './VAE/checkpoints/drums_2bar_small.hikl.ckpt')

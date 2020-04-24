@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import tensorflow as tf
+import threading
 import warnings
 
 from config import Config
@@ -19,7 +20,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from magenta.models.music_vae import configs
 from magenta.models.music_vae.trained_model import TrainedModel
-from VAEgenerate import interpolate, note_sequence_to_midi_file, set_config, generate, interpolateFromInput, run
+from VAEgenerate import interpolate, note_sequence_to_midi_file, \
+    set_config, generate, interpolateFromInput, run
 from wtforms import BooleanField, DateField, IntegerField, SelectField, \
     SubmitField, PasswordField, StringField, validators, Form
 from wtforms.validators import DataRequired
@@ -113,46 +115,155 @@ class Files(db.Model, UserMixin):
         self.our_filename = our_filename
         self.file_upload_timestamp = file_upload_timestamp
 
+class OutputFiles(db.Model, UserMixin):
+    """OutputFiles class with file that generate from Users"""
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(80), nullable=False)
+    f1 = db.Column(db.String(120), nullable=False)
+    f2 = db.Column(db.String(120), nullable=True)
+    mode = db.Column(db.String(120), nullable=False)
+    alg = db.Column(db.String(120), nullable=True)
+    our_filename = db.Column(db.String(80), unique=True, nullable=False)
+    file_upload_timestamp = db.Column(db.String(120), nullable=False)
+
+    def __init__(self, user_name, our_filename, file_upload_timestamp,
+                 f1, f2='', mode='RNN', alg=''):
+        """
+        f2 is optional since only VAE requires two files,
+        alg is optional since only VAE has different algorithms
+        mode is either RNN or VAE
+        """
+        self.user_name = user_name
+        self.f1 = f1
+        self.f2 = f2
+        self.mode = mode
+        self.alg = alg
+        self.our_filename = our_filename
+        self.file_upload_timestamp = file_upload_timestamp
+        self.__str__ = f"{user_name}_{file_upload_timestamp}"
+
 
 db.create_all()
 db.session.commit()
 
 on_dev = False
 
-@application.route('/VAE', methods=['GET', 'POST'])
-def VAE():
-    if on_dev:
-        s3 = boto3.resource('s3')
-        my_bucket = s3.Bucket('vaecheckpoints')
-        for my_bucket_object in my_bucket.objects.all():
-            print(my_bucket_object)
-    else:
+def run_vae (tmpdir, s3, bucket_name, alg, ckpt, index, data):
+    pass
+
+@application.route('/upload2', methods=['GET', 'POST'])
+@login_required
+def upload2():
+
+    file1 = UploadFileForm()
+    file2 = UploadFileForm()
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+
+    if file1.validate_on_submit() and file2.validate_on_submit():
+
+        f1 = file1.file_selector.data 
+        filename1 = f1.filename
+
+        f2 = file2.file_selector.data
+        filename2 = f2.filename
+        if not allowed_file(filename1) or not allowed_file(filename2):
+            flash('Incorrect File Type for File')
+            return redirect(url_for('VAE'))
+
+        cwd = os.getcwd()
+        file_dir_path = os.path.join(cwd, 'files')
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+        file_path1 = os.path.join(file_dir_path, filename1)
+        file_path2 = os.path.join(file_dir_path, filename2)
+        f1.save(file_path1)
+        f2.save(file_path2)
+
+        model_used = 'user_upload'
+        user_name = current_user.username
+
+        orig_filename1 = filename1.rsplit('.', 1)[0]
+        file_type1 = filename1.rsplit('.', 1)[1]
+        num_user_files1 = Files.query.filter_by(user_name=user_name).count()
+        our_filename1 = f'{user_name}_{num_user_files1}'
+        file_upload_timestamp1 = datetime.now()
+        file1 = Files(user_name, orig_filename1, file_type1,
+                     model_used, our_filename1, file_upload_timestamp1)
+        db.session.add(file1)
+
+        orig_filename2 = filename2.rsplit('.', 1)[0]
+        file_type2 = filename2.rsplit('.', 1)[1]
+        num_user_files2 = Files.query.filter_by(user_name=user_name).count()
+        our_filename2 = f'{user_name}_{num_user_files2}'
+        file_upload_timestamp2 = datetime.now()
+        file2 = Files(user_name, orig_filename2, file_type2,
+                     model_used, our_filename2, file_upload_timestamp2)
+        db.session.add(file2)
+
+        db.session.commit()
+
+        if on_dev:
+            s3 = boto3.resource('s3')
+        else:
+            s3 = boto3.Session(profile_name='msds603').resource('s3')
+        # comment outnext two lines when not on local and not beanstalk
+        s3.meta.client.upload_file(file_path1, 'midi-file-upload', 
+            our_filename1)
+        s3.meta.client.upload_file(file_path2, 'midi-file-upload', 
+            our_filename2)
+
+        if os.path.exists(file_dir_path):
+            os.system(f"rm -rf {file_dir_path}")
+
+        url = ''
+        vae_output_filename = ''
         with tempfile.TemporaryDirectory() as tmpdirname:
             print('created temporary directory', tmpdirname)
-            s3 = boto3.Session(profile_name='msds603').resource('s3')
             my_bucket = s3.Bucket('vaecheckpoints')
-            index = s3.Object('vaecheckpoints', 'drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt.index')
-            data = s3.Object('vaecheckpoints', 'drums_2bar_small.hikl/drums_2bar_small.hikl.ckpt.data-00000-of-00001')
-            index.download_file(tmpdirname+'/drums_2bar_small.hikl.ckpt.index')
-            data.download_file(tmpdirname+'/drums_2bar_small.hikl.ckpt.data-00000-of-00001')
-            # allobj = my_bucket.objects.all()
-            # print('type::: ', type(allobj))
-            run('cat-drums_2bar_small_hi', tmpdirname+'/drums_2bar_small.hikl.ckpt')
+            ckpt = 'drums_2bar_small.hikl'
+            index = s3.Object('vaecheckpoints', 
+                f'{ckpt}/{ckpt}.ckpt.index')
+            data = s3.Object('vaecheckpoints', 
+                f'{ckpt}/{ckpt}.ckpt.data-00000-of-00001')
+            index.download_file(
+                f'{tmpdirname}/{ckpt}.ckpt.index')
+            data.download_file(
+                f'{tmpdirname}/{ckpt}.ckpt.data-00000-of-00001')
+            flash('Waiting for Model to Generate Midi Files')
+            alg = 'cat-drums_2bar_small_hi'
+            run(alg, tmpdirname+f'/{ckpt}.ckpt', tmpdirname)
+            vae_output_timestamp = datetime.now()
+            generate_time = str(vae_output_timestamp).split('.')[-1]
+            outputs = OutputFiles.query.filter_by(user_name=user_name).count()
+            output_bucket = "vaeoutput"
+            vae_output_filename = f"{user_name}_{outputs}_{generate_time}.mid"
+            vae_output_file = OutputFiles(user_name, vae_output_filename, 
+                generate_time, filename1, filename2, mode='VAE', alg=alg)
+            db.session.add(vae_output_file)
+            db.session.commit()
+            s3.meta.client.upload_file(
+                f"{tmpdirname}/{alg}.mid", output_bucket, vae_output_filename)
 
-        # for idx, my_bucket_object in enumerate(allobj):
-        #     # print(f"idx : {idx}, object: {my_bucket_object}")
-        #     if idx==6:
-        #         path = my_bucket_object.key
-        #         print(path)
-        #         filepath =  my_bucket_object #str(path).replace('.index', '')
-        #         print(f"filepath: {filepath}")
-        #         run('cat-drums_2bar_small_hi', filepath)
-        #         print(f"type: {type(my_bucket_object)} ;;;; {my_bucket_object}")
-    return("<h1>wrote file locally</h1>")
+            location = 'us-west-2'
+            output_path = f"{output_bucket}/{vae_output_filename}"
+            url = f"https://s3-{location}.amazonaws.com/{output_path}"
+            print(f"url{url}")
 
-# @application.route('/VAE', methods=['GET', 'POST'])
-# def VAE():
-#     return render_template('VAE.html')
+        cwd = os.getcwd()
+        file_dir_path = os.path.join(cwd, 'files')
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+        vae_output_path = os.path.join(file_dir_path, user_name)
+
+        midi = s3.Object('vaeoutput', vae_output_filename)
+        midi.download_file(vae_output_path)
+        print(f"vae_output_path: {vae_output_path}")
+        return(render_template('VAE.html', path=url))
+
+    return render_template('upload2.html', form1=file1,
+        form2=file2, uploads=uploads)
+
 
 @login_manager.user_loader
 def load_user(id):
