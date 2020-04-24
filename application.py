@@ -19,6 +19,7 @@ import boto3
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
+on_dev = True
 
 # Initialization
 # Create an application instance which handles all requests.
@@ -61,7 +62,7 @@ class LogInForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class User(db.Model, UserMixin):
+class Customer(db.Model, UserMixin):
     """Class for user object"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -112,7 +113,7 @@ def load_user(id):
     This callback is used to reload the user object
     from the user ID stored in the session.
     """
-    return User.query.get(int(id))
+    return Customer.query.get(int(id))
 
 
 def allowed_file(filename):
@@ -137,13 +138,12 @@ def register():
         password = registration_form.password.data
         email = registration_form.email.data
 
-        user_count = User.query.filter_by(username=username).count() \
-            + User.query.filter_by(email=email).count()
+        user_count = Customer.query.filter_by(username=username).count() \
+            + Customer.query.filter_by(email=email).count()
         if user_count > 0:
-            return '<h1>Error - Existing user : ' + username \
-                   + ' OR ' + email + '</h1>'
+            flash('Username or email already exists')
         else:
-            user = User(username, email, password)
+            user = Customer(username, email, password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -158,12 +158,14 @@ def login():
         username = login_form.username.data
         password = login_form.password.data
         # Look for it in the database.
-        user = User.query.filter_by(username=username).first()
+        user = Customer.query.filter_by(username=username).first()
 
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
             return redirect(url_for('start'))
+        else:
+            flash('Incorrect Password')
 
     return render_template('login.html', form=login_form)
 
@@ -175,10 +177,10 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@application.route('/start')
+@application.route('/create')
 @login_required
 def start():
-    return render_template('start.html')
+    return render_template('create.html')
 
 
 @application.route('/upload', methods=['GET', 'POST'])
@@ -212,15 +214,6 @@ def upload():
 
         f.save(file_path)
 
-        # USE FOR REMOTE - msds603 is my alias in ./aws file using
-        # secret key from iam on jacobs account
-
-        # session = boto3.Session(profile_name='msds603')
-        # Any clients created from this session will use credentials
-        # from the [dev] section of ~/.aws/credentials.
-        # dev_s3_client = session.resource('s3')
-        # dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
-        # filename)
 
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
@@ -237,9 +230,18 @@ def upload():
         db.session.add(file)
         db.session.commit()
 
-        # comment outnext two lines when not on local and not beanstalk
-        s3 = boto3.resource('s3')
-        s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+        # TAKES CARE OF DEV OR local
+        if on_dev:
+            s3 = boto3.resource('s3')
+            s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+
+        # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
+        # secret key from iam on jacobs account
+        else:
+           session = boto3.Session(profile_name='msds603') 
+           dev_s3_client = session.resource('s3')
+           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
@@ -271,13 +273,34 @@ def music():
     return render_template('music.html', uploads=uploads)
 
 
+@application.route('/create', methods=['GET', 'POST'])
+def create():
+    return render_template('create.html')
+
+@application.route('/buy', methods=['GET', 'POST'])
+def buy():
+    return render_template('buy.html')
+
+@application.route('/my_music', methods=['GET', 'POST'])
+def my_music():
+    return render_template('my_music.html')
+
+
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
 def test_playback(filename):
     # uncomment the next 2 lines when on local
+
     # session = boto3.Session(profile_name='msds603') # insert your profile name
     # s3 = session.resource('s3')
-    s3 = boto3.resource('s3') # comment out when on local
+    if on_dev:
+        s3 = boto3.resource('s3') # comment out when on local
+    #LOCAL
+    else:
+        session = boto3.Session(profile_name='msds603') # insert your profile name
+        s3 = session.resource('s3')
+
     object = s3.Object('midi-file-upload', filename)
+
     #binary_body = object.get()['Body'].read()
     #return render_template('test_playback.html', midi_binary=binary_body)
 

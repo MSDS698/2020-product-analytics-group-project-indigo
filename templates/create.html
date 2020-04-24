@@ -2,12 +2,11 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-
-    <title>INDIGO</title>
+    <title>INDIGO- Make Music</title>
 
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
-    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="../static/style/style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
@@ -33,7 +32,6 @@
           <a href="my_songs">My Songs</a>
           <a href="about">About</a>
           <a href="logout">Logout</a>
-
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -41,24 +39,48 @@
         </a>
       </div>
 
-
-
-
-
-      <h1>INDIGO</h1>
-
-
-      <div class="btns">
-        <button type="button" name="button" style="display: inline; margin: auto; " onclick="location.href='register';">SIGN UP</button>
-        <button type="button" name="button" style="display: inline; margin: auto; float:right;" onclick="location.href='login';">LOGIN</button>
-      </div>
-
+      <div class="filler"></div>
       <div class="filler"></div>
 
-      <img src="static/icon_color.png" alt="keyboard" width=50% id="keyboard">
+
+      <div class="icons">
+
+        <div class="iconLink">
+          <a href="upload" >
+            <img class="createIcon" src="../static/speaker_icon.png" alt="speaker icon">
+          </a>
+          <a href="upload" class="createLabels">Upload</a>
+        </div>
+
+        <div class="iconLink">
+          <a href="my_songs" >
+            <img class="createIcon" src="../static/mic_icon.png" alt="speaker icon">
+          </a>
+          <a href="my_songs" class="createLabels">My Songs</a>
+        </div>
+
+        <div class="iconLink">
+          <a href="drums">
+            <img class="createIcon" src="../static/drum_icon.png" alt="drum icon">
+          </a>
+          <a href="drums" class="createLabels">DrumsRNN</a>
+        </div>
+
+        <div class="iconLink">
+          <a href="demo">
+            <img class="createIcon" src="../static/music_note_icon.png" alt="music note icon">
+          </a>
+          <a href="demo" class="createLabels">MusicVAE</a>
+        </div>
+      </div>
+
+
+
+
 
     </div>
 
-
   </body>
+
+
 </html>

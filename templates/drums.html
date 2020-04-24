@@ -2,12 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>INDIGO- DrumsRNN</title>
     <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
     <script src="https://unpkg.com/@tonejs/midi"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="static/style/style.css"> -->
+    <link rel="stylesheet" href="../static/style/style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="../static/script/nav_script.js"></script>
+
+
     <style>
       div {
         padding-top: 10px;
@@ -24,8 +34,30 @@
     </style>
 </head>
 <body>
+
+  <!-- Code from W3 schools Top Navigation Menu -->
+  <div class="topnav">
+    <a href="index" class="active">INDIGO</a>
+    <!-- Navigation links (hidden by default) -->
+    <div id="myLinks">
+      <a href="buy">BUY</a>
+      <a href="login">Login</a>
+      <a href="create">Create</a>
+      <a href="my_songs">My Songs</a>
+      <a href="about">About</a>
+      <a href="logout">Logout</a>
+
+    </div>
+    <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+
+  <div class="filler">  </div>
+
     <label>Select from your files:</label>
-    <div id="samplesList">
+    <div id="div1">
         <select id="samples">
             <option disabled selected value="">--select--</option>
             <option value="bass_4bars.mid">Bass Sample (4 Bars)</option>
@@ -46,6 +78,9 @@
                   <path d="M6 6h12v12H6z"/>
               </svg>
         </button>
+
+        <div class="filler"></div>
+
         <svg id='sampleViz'></svg>
     </div>
     <div id="instrumentList" style="display:none">
@@ -82,12 +117,21 @@
                   <path d="M6 6h12v12H6z"/>
               </svg>
         </button>
+
+        <div class="filler">  </div>
+
         <svg id='drumsViz'></svg>
     </div>
     <div id="combined" style="display:none">
         <button type="button" id="btnPlayCombined">Play Sample with Generated Drum Track</button>
         <button type="button" id="stopCombined" style="display:none">Stop Music</button>
     </div>
+
+    <div class="filler"></div>
+
+    <p id='footer'>Made with <a href="https://magenta.tensorflow.org/">Google Magenta</a> </p>
+
+
 </body>
 <script type="text/javascript" src="static/mappings.js"></script>
 <script src='static/script/drums.js'></script>

@@ -26,6 +26,7 @@ Flask-Login==0.5.0
 Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.3
 future==0.16.0
+google-colab==1.0.0
 idna==2.7
 imagesize==1.2.0
 importlib-metadata==1.5.1
@@ -69,6 +70,6 @@ texttable==1.6.2
 urllib3==1.24.3
 wcwidth==0.1.9
 websocket-client==0.57.0
-Werkzeug==1.0.0
+Werkzeug==0.16.1
 WTForms==2.2.1
 zipp==3.1.0
