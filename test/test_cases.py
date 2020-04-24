@@ -108,7 +108,7 @@ def test_login_test_user(client, init_database):
                            follow_redirects=True)
     assert response.status_code == 200
     assert b'INDIGO- Make Music' in response.data
-    assert b'Login' not in response.data
+    assert b'DrumsRNN' in response.data
 
 
 def test_login_username_failure(client, init_database):
@@ -134,7 +134,7 @@ def test_login_password_failure(client, init_database):
                            follow_redirects=True)
     assert b'Login' in response.data
     assert b'Username' in response.data
-    # assert b'Incorrect password' in response.data
+    assert b'Incorrect Password' in response.data
 
 
 def test_login_unregistered(client, init_database):
@@ -158,6 +158,7 @@ def register_duplicate_email(client, init_database):
                                                   accept_tos='y'),
                            follow_redirects=True)
     assert b'Repeat Password' in response.data
+    assert b'Username or email already exists'
 
 
 def register_duplicate_username(client, init_database):
@@ -172,6 +173,7 @@ def register_duplicate_username(client, init_database):
                                                   accept_tos='y'),
                            follow_redirects=True)
     assert b'Repeat Password' in response.data
+    assert b'Username or email already exists'
 
 
 def test_file_upload(client, init_database):
