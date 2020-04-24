@@ -35,7 +35,7 @@ def interpolate(model, start_seq, end_seq, num_steps, max_length=32,
                 individual_duration=4.0):
     """Interpolates between a start and end sequence."""
     note_sequences = model.interpolate(
-        start_seq, end_seq,num_steps=num_steps, length=max_length,
+        start_seq, end_seq, num_steps=num_steps, length=max_length,
         temperature=temperature,
         assert_same_length=assert_same_length)
     interp_seq = mm.sequences_lib.concatenate_sequences(
@@ -45,7 +45,7 @@ def interpolate(model, start_seq, end_seq, num_steps, max_length=32,
 
 
 def note_sequence_to_midi_file(sequence, output_file,
-                               drop_events_n_seconds_after_last_note=None):
+                               drop_events_n_sec=None):
     """
     Convert NoteSequence to a MIDI file on disk.
     Time is stored in the NoteSequence in absolute values (seconds) as opposed to
@@ -54,22 +54,26 @@ def note_sequence_to_midi_file(sequence, output_file,
     Args:
     sequence: A NoteSequence.
     output_file: String path to MIDI file that will be written.
-    drop_events_n_seconds_after_last_note: Events (e.g., time signature changes)
+    drop_events_n_sec: Events (e.g., time signature changes)
         that occur this many seconds after the last note will be dropped. If
         None, then no events will be dropped.
     """
-    pretty_midi_object = mm.midi_io.note_sequence_to_pretty_midi(sequence, drop_events_n_seconds_after_last_note)
-    
+    pretty_midi_object = (mm
+                          .midi_io
+                          .note_sequence_to_pretty_midi(sequence,
+                                                        drop_events_n_sec))
+
     with tempfile.NamedTemporaryFile() as temp_file:
         pretty_midi_object.write(temp_file)
         # Before copying the file, flush any contents
         temp_file.flush()
-        # And back the file position to top (not need for Copy but for certainty)
+        # And back the file position to top
+        # (not need for Copy but for certainty)
         temp_file.seek(0)
         tf.gfile.Copy(temp_file.name, output_file, overwrite=True)
-  
 
-def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoints/drums_2bar_small.hikl.ckpt'):
+
+def set_config(alg, path_to_checkpoint):
     """
     alg is a string
     can be either of alg listed here:
@@ -81,9 +85,9 @@ def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoi
     if alg == 'hierdec-trio_16bar':
         hierdec_trio_16bar_config = configs.CONFIG_MAP['hierdec-trio_16bar']
         config = hierdec_trio_16bar_config
-        trio_models['hierdec_trio_16bar'] = TrainedModel(config, 
-            batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/trio_16bar_hierdec.ckpt')
-        #@title Option 1: Use example MIDI files for interpolation endpoints.
+        trio_models['hierdec_trio_16bar'] = TrainedModel(config,
+             batch_size=4, checkpoint_dir_or_path=path_to_checkpoint)
+        # @title Option 1: Use example MIDI files for interpolation endpoints.
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/trio_16bar*.mid'))]
@@ -91,9 +95,9 @@ def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoi
     elif alg == 'flat-trio_16bar':
         flat_trio_16bar_config = configs.CONFIG_MAP['flat-trio_16bar']
         config = flat_trio_16bar_config
-        trio_models['flat-trio_16bar'] = TrainedModel(config, 
-            batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/trio_16bar_flat.ckpt')
-        #@title Option 1: Use example MIDI files for interpolation endpoints.
+        trio_models['flat-trio_16bar'] = TrainedModel(config,
+              batch_size=4, checkpoint_dir_or_path=path_to_checkpoint)
+        # @title Option 1: Use example MIDI files for interpolation endpoints.
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/trio_16bar*.mid'))]
@@ -101,8 +105,8 @@ def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoi
     elif alg == 'cat-drums_2bar_small_hi':
         drums_2bar_small_hi_config = configs.CONFIG_MAP['cat-drums_2bar_small']
         config = drums_2bar_small_hi_config
-        trio_models['cat-drums_2bar_small_hi'] = TrainedModel(config, 
-            batch_size=4, checkpoint_dir_or_path=path_to_checkpoint)
+        trio_models['cat-drums_2bar_small_hi'] = TrainedModel(config,
+              batch_size=4, checkpoint_dir_or_path=path_to_checkpoint)
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/drums_2bar*.mid'))]
@@ -110,8 +114,8 @@ def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoi
     elif alg == 'cat-drums_2bar_small_lo':
         drums_2bar_small_lo_config = configs.CONFIG_MAP['cat-drums_2bar_small']
         config = drums_2bar_small_lo_config
-        trio_models['cat-drums_2bar_small_lo'] = TrainedModel(config, 
-            batch_size=4, checkpoint_dir_or_path='./VAE/checkpoints/drums_2bar_small.lokl.ckpt')
+        trio_models['cat-drums_2bar_small_lo'] = TrainedModel(config,
+              batch_size=4, checkpoint_dir_or_path=path_to_checkpoint)
         input_trio_midi_data = [
             tf.gfile.Open(fn, 'rb').read()
             for fn in sorted(tf.gfile.Glob('./VAE/midi/drums_2bar*.mid'))]
@@ -127,7 +131,7 @@ def set_config(alg='cat-drums_2bar_small_hi', path_to_checkpoint='./VAE/checkpoi
     return input_trio_midi_data, config, trio_models
 
 
-#@title Option 1: Use example MIDI files for interpolation endpoints.
+# @title Option 1: Use example MIDI files for interpolation endpoints.
 
 def generate(input_trio_midi_data, config):
     """
@@ -135,45 +139,52 @@ def generate(input_trio_midi_data, config):
     generate notes sequence
     """
 
-    trio_input_seqs = [mm.midi_to_sequence_proto(m) for m in input_trio_midi_data]
+    trio_input_seqs = ([mm.midi_to_sequence_proto(m)
+                        for m in input_trio_midi_data])
     extracted_trios = []
     for ns in trio_input_seqs:
         extracted_trios.extend(
             config.data_converter.from_tensors(
-              config.data_converter.to_tensors(ns)[1]))
+                config.data_converter.to_tensors(ns)[1]))
 
     return extracted_trios
 
-def interpolateFromInput(extracted_trios, trio_models, alg, output_dir):
+
+def interpolateFromInput(extracted_trios,
+                         trio_models,
+                         alg,
+                         output_dir):
     """
     interpolate needs two files to play with
     given input 2 midi files/ config(trio_models)/ alg
     generate notesequences
     """
-    #@title Compute the reconstructions and mean of the two trios, selected from the previous cell.
-    trio_interp_model = alg #@param ["hierdec_trio_16bar", "baseline_flat_trio_16bar"]
+    trio_interp_model = alg
 
-    start_trio = 0 #@param {type:"integer"}
-    end_trio = 1 #@param {type:"integer"}
+    start_trio = 0  # @param {type:"integer"}
+    end_trio = 1  # @param {type:"integer"}
     start_trio = extracted_trios[start_trio]
     end_trio = extracted_trios[end_trio]
 
-    temperature = 0.5 #@param {type:"slider", min:0.1, max:1.5, step:0.1}
-    trio_16bar_mean = interpolate(trio_models[trio_interp_model], start_trio, 
-        end_trio, num_steps=3, max_length=256, individual_duration=32, temperature=temperature)     
+    temperature = 0.5  # @param {type:"slider", min:0.1, max:1.5, step:0.1}
+    trio_16bar_mean = interpolate(trio_models[trio_interp_model],
+                                  start_trio, end_trio,
+                                  num_steps=3,
+                                  max_length=256,
+                                  individual_duration=32,
+                                  temperature=temperature)
 
     # if not os.path.exists('./VAE/output'):
     #     os.mkdir('./VAE/output')
 
-    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean, f"{output_dir}/{alg}.mid")
+    mm.midi_io.note_sequence_to_midi_file(trio_16bar_mean,
+                                          f"{output_dir}/{alg}.mid")
 
     print(f"./VAE/output/{alg}_mean.mid file wrote")
 
 
 def run(alg, path_to_checkpoint, output_dir):
-    input_trio_midi_data, config, trio_models = set_config(alg, path_to_checkpoint)
+    input_trio_midi_data, config, trio_models = set_config(alg,
+                                                           path_to_checkpoint)
     extracted_trios = generate(input_trio_midi_data, config)
     interpolateFromInput(extracted_trios, trio_models, alg, output_dir)
-
-
-# run('cat-drums_2bar_small_hi', './VAE/checkpoints/drums_2bar_small.hikl.ckpt')
