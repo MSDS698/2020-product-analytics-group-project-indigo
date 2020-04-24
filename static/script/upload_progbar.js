@@ -37,6 +37,7 @@ $(document).ready(function() {
 			contentType : false,
 			success : function() {
 				alert('File uploaded!');
+				window.location.replace("/drums");
 			}
 
 		});

@@ -203,7 +203,7 @@ label {
   background-color: rgb(93,177,149);
 }
 
-#drumsViz, #sampleViz {
+#drumsViz, #instrumentViz, #sampleViz {
   margin: auto;
   display: block;
 }
