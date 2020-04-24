@@ -1,8 +1,3 @@
-// Array to hold PianoRollSVGVisualizer objects (one for original track, one for added drum layer)
-let noteCanvases = {};
-// Array to hold music players (one for each track) (Not used yet, currently still just using one main player)
-let players = [];
-
 const config = {
     noteHeight: 6,
     pixelsPerTimeStep: 60,  // like a note width
@@ -11,9 +6,17 @@ const config = {
     activeNoteRGB:'157, 229, 184',
 
 }
-// Original Complete Midi File
-const main_player = initialize_player();
-let combined_player;
+
+// Array to hold PianoRollSVGVisualizer objects (one for original track, one for added drum layer)
+let sampleViz;
+let instrumentViz;
+let drumsViz;
+
+// MIDI Players
+let samplePlayer;
+let instrumentPlayer;
+let drumsPlayer
+let combinedPlayer;
 
 //note sequences
 let note_seq;
@@ -29,13 +32,41 @@ let program_notes;
 // models
 let music_rnn;
 
+init();
 
-function initialize_player(){
-  // Use soundfount to be able to play different instruments (not just piano)
-  const player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
-  return player
+function init(){
+    drums_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/drum_kit_rnn');
+    drums_rnn.initialize()
+    .then(function(){
+        $("#drum_rnn").show();
+    });
+
+    samplePlayer = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+    instrumentPlayer = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+    drumsPlayer = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+    combinedPlayer = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+
+    samplePlayer.callbackObject = {
+        run: (note) => sampleViz.redraw(note, true),
+        stop: () => {}
+    };
+    instrumentPlayer.callbackObject = {
+        run: (note) => instrumentViz.redraw(note, true),
+        stop: () => {}
+    };
+    drumsPlayer.callbackObject = {
+        run: (note) => drumsViz.redraw(note, true),
+        stop: () => {}
+    };
+    combinedPlayer.callbackObject = {
+        run: function(note){
+            drumsViz.redraw(note, true);
+            sampleViz.redraw(note, true);
+            },
+        stop: () => {}
+    };
+
 }
-
 
 // Even Listeners
 $('#samples').on('change', function () {
@@ -43,19 +74,12 @@ $('#samples').on('change', function () {
     .then(ns_val => note_seq = ns_val)
     .then(unimportant => quant_note_seq = mm.sequences.quantizeNoteSequence(note_seq, 4))
     .then(function(){
-        $("#svg1").show();
-        noteCanvases['user'] = new mm.PianoRollSVGVisualizer(
+        $("#sample").show();
+        sampleViz = new mm.PianoRollSVGVisualizer(
                                 note_seq,
-                                document.getElementById('originalSVG'),
+                                document.getElementById('sampleViz'),
                                 config
                                 );
-    });
-
-
-    drums_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/drum_kit_rnn');
-    drums_rnn.initialize()
-    .then(function(){
-        $("#div2").show();
     });
 
 });
@@ -68,55 +92,40 @@ $("#drums_rnn").click(function(){
     drums_rnn.continueSequence(quant_note_seq, steps, temp)
     .then(function(sample) {
         generated_seq = sample;
-        $("#svg2").show();
+        $("#drums").show();
         unquant_note_seq = mm.sequences.unquantizeSequence(generated_seq);
-        noteCanvases['drums'] = new mm.PianoRollSVGVisualizer(
+        drumsViz = new mm.PianoRollSVGVisualizer(
                                 unquant_note_seq,
-                                document.getElementById('drumsSVG'),
+                                document.getElementById('drumsViz'),
                                 config
                               );
         combined_seq = mm.sequences.clone(quant_note_seq);
         combined_seq['notes'].push(...generated_seq['notes']);
 
-        combined_player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
-        combined_player.callbackObject = {
-            run: function(note){
-                noteCanvases['drums'].redraw(note, true);
-                noteCanvases['user'].redraw(note, true);
-            },
-            stop: () => {console.log('done')}
-        };
-
         $("#combined").show();
     })
 });
 
-$("#combined").click(function(){
-    combined_player.start(combined_seq);
-    $("#stopbutton").show();
+$("#btnPlayCombined").click(function(){
+    combinedPlayer.start(combined_seq);
+    $("#stopCombined").show();
 });
 
-$("#stopbutton").click(function(){
-    combined_player.stop()
+$("#stopCombined").click(function(){
+    combinedPlayer.stop();
 });
 
-$("#btnPlaySample").click(function(){
-    if (main_player.isPlaying()) {
-        main_player.stop();
+$("#btnPlaySample").click( (e) => play(samplePlayer, note_seq));
+$("#btnPlayDrums").click( (e) => play(drumsPlayer, generated_seq));
+
+function play(player, n_seq){
+    if (player.isPlaying()) {
+        player.stop();
       } else {
-        main_player.start(note_seq);
-        $("#stopSample").show();
+        player.start(n_seq);
       }
-});
+}
 
-$("#btnPlayDrums").click(function(){
-    if (main_player.isPlaying()) {
-        main_player.stop();
-      } else {
-        main_player.start(generated_seq);
-        $("#stopDrums").show();
-      }
-});
 
 
 
