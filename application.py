@@ -148,8 +148,6 @@ class OutputFiles(db.Model, UserMixin):
 db.create_all()
 db.session.commit()
 
-on_dev = False
-
 def run_vae (tmpdir, s3, bucket_name, alg, ckpt, index, data):
     pass
 
