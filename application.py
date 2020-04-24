@@ -230,7 +230,6 @@ def upload2():
                 f'{tmpdirname}/{ckpt}.ckpt.index')
             data.download_file(
                 f'{tmpdirname}/{ckpt}.ckpt.data-00000-of-00001')
-            flash('Waiting for Model to Generate Midi Files')
             alg = 'cat-drums_2bar_small_hi'
             run(alg, tmpdirname+f'/{ckpt}.ckpt', tmpdirname)
             vae_output_timestamp = datetime.now()
