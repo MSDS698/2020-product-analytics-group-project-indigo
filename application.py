@@ -182,6 +182,11 @@ def logout():
 def start():
     return render_template('create.html')
 
+@application.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+
 
 @application.route('/upload', methods=['GET', 'POST'])
 @login_required
