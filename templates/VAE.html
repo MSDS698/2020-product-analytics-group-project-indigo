@@ -1,14 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>INDIGO- Make Music</title>
-
+    <title>INDIGO- Upload</title>
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
     <link rel="stylesheet" href="../static/style/style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,9 +24,18 @@
 
     <script src="../static/script/nav_script.js"></script>
 
+
   </head>
   <body>
-
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+         <ul class="flashes">
+            {% for message in messages %}
+             <div class="message_flash">{{ message }}</div>
+            {% endfor %}
+        </ul>
+      {% endif %}
+     {% endwith %}
     <div class="container">
 
       <!-- Code from W3 schools Top Navigation Menu -->
@@ -27,11 +44,10 @@
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
           <a href="buy">BUY</a>
-          <a href="login">Login</a>
-          <a href="profile">My Songs</a>
+          <a href="create">Create</a>
+          <a href="my_songs">My Songs</a>
           <a href="about">About</a>
           <a href="logout">Logout</a>
-
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -39,44 +55,21 @@
         </a>
       </div>
 
-      <div class="filler"></div>
-      <div class="filler"></div>
 
 
-      <div class="icons">
+		<figure>
+		    <h1>Here's the Music We Created For You :)</h1>
+			<iframe src={{path}} width="0" height="0" border="0" scrolling="no" frameBorder="0"></iframe>
+		</figure>
 
-        <div class="iconLink">
-          <a href="upload" >
-            <img class="createIcon" src="../static/speaker_icon.png" alt="speaker icon">
-          </a>
-          <a href="upload" class="createLabels">Upload</a>
+        <div class="filler">
+
         </div>
 
-        <div class="iconLink">
-          <a href="my_songs" >
-            <img class="createIcon" src="../static/mic_icon.png" alt="speaker icon">
-          </a>
-          <a href="my_songs" class="createLabels">My Songs</a>
-        </div>
-
-        <div class="iconLink">
-          <a href="drums">
-            <img class="createIcon" src="../static/drum_icon.png" alt="drum icon">
-          </a>
-          <a href="drums" class="createLabels">DrumsRNN</a>
-        </div>
-
-        <div class="iconLink">
-          <a href="demo">
-            <img class="createIcon" src="../static/music_note_icon.png" alt="music note icon">
-          </a>
-          <a href="demo" class="createLabels">MusicVAE</a>
-        </div>
-      </div>
 
 
 
-
+    </div> <!-- /container -->
 
     </div>
 
