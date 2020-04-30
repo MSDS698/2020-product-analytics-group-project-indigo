@@ -10,6 +10,7 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, \
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
+#from flask_bootstrap import Bootstrap
 from wtforms import BooleanField, DateField, IntegerField, SelectField, \
     SubmitField, PasswordField, StringField, validators, Form
 from wtforms.validators import DataRequired
@@ -30,6 +31,8 @@ application.config.from_object(Config)
 db = SQLAlchemy(application)
 db.create_all()
 db.session.commit()
+
+#bootstrap = Bootstrap(application)
 
 # login_manager needs to be initiated before running the app
 login_manager = LoginManager()
@@ -185,7 +188,8 @@ def start():
 @application.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+    return render_template('profile.html', uploads=uploads, username=current_user.username)
 
 
 @application.route('/upload', methods=['GET', 'POST'])

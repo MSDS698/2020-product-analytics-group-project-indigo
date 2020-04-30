@@ -123,6 +123,59 @@ input[type=button], input[type=text], input[type=password] {
   width: 500px;
 }
 
+.profileButtons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.profileArea {
+  margin: auto;
+  display: block;
+  width: 700px;
+}
+
+.profileHeader {
+  width: 74%;
+  display: inline;
+  float: left;
+}
+
+.mySongsProfile {
+  width:74%;
+  display: inline;
+  float:left;
+}
+.navWrapper{
+  width:74%;
+  display: inline;
+  float:left;
+}
+
+.otherUsersProfile {
+  width:25%;
+  display:inline;
+  float:right;
+}
+
+#browseBtn {
+  background-color: rgb(73,73,118);
+  border-width: 0px;
+  width: 200px;
+  height: 66px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+  margin: auto;
+  display: block;
+}
+
+table {
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+}
+
 dl {
   color: white;
   font-family: 'Montserrat', sans-serif;
