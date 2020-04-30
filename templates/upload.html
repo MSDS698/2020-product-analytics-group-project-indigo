@@ -18,7 +18,7 @@
     <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
     <!-- UPLOAD STUFF -->
-    <script src="../static/script/upload_progbar.js"></script>
+    <!--<script src="../static/script/upload_progbar.js"></script>-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -73,13 +73,69 @@
             <div class="filler"></div>
             <br/>
 
+            <!-- {% if invalid_file_extension %}
+                <p> Please uplaod a midi file </p>
+            {% endif %}
+
+            {% if dup_file %}
+                <p> Please uplaod a NEW file </p>
+            {% endif %} -->
+            <script>
+                  $('form').on('submit', function(event) {
+
+    //event.preventDefault();
+
+    var formData = new FormData($('form')[0]);
+
+    $.ajax({
+      xhr : function(){
+        var xhr = new window.XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', function(e) {
+          if (e.lengthComputable) {
+            console.log('Bytes Loaded: ' + e.loaded);
+            console.log('Total Size: ' + e.total);
+            console.log('Percentage Uploaded' + (e.loaded / e.total))
+
+            var percent = Math.round((e.loaded / e.total) * 100)
+
+            $('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
+
+          }
+
+        });
+        return xhr;
+
+
+      },
+
+
+
+      type : 'POST',
+      url : '/upload',
+      data : formData,
+      processData : false,
+      contentType : false,
+      success : function() {
+        alert('File uploaded!');
+        window.location.replace("/drums");
+      }
+
+    });
+
+
+
+  });
+            </script>
+
             {% with messages = get_flashed_messages() %}
               {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                <p>{{message}}</p>
-                </div>
-              {% endfor %}
+                <script>
+                  var messages = {{ messages | safe }};
+                  for (var i=0; i<messages.length; i++) {
+                  alert(messages[i]);
+                }
+                </script>
               {% endif %}
             {% endwith %}
 
