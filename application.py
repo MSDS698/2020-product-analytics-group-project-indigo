@@ -249,7 +249,7 @@ def upload():
         else:
            session = boto3.Session(profile_name='msds603') 
            dev_s3_client = session.resource('s3')
-           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', filename)
+           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
 
 
         if os.path.exists(file_dir_path):
