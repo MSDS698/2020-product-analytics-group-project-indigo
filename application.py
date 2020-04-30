@@ -166,7 +166,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('start'))
+            return redirect(url_for('profile'))
         else:
             flash('Incorrect Password')
 

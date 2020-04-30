@@ -52,11 +52,13 @@
       <div class="profileArea">
 
         <div class="profileButtons">
-          <!-- <button type="button" name="button" style="display: inline; margin: auto;" onclick="location.href='upload';">Upload</button> -->
-          <input type="file" id="browse" name="files" style="display: none;" />
+
+          <!-- <input type="file" id="browse" name="files" style="display: none;" />
           <label for="browse" id=browseBtn>
             Upload
-          </label>
+          </label> -->
+
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='upload';">Upload</button>
 
           <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='drums';">Drums</button>
 
@@ -69,19 +71,19 @@
 
         <div class="profileHeader">
           <img src="../static/default_profile.png" alt="default profile picture" style="width:33%;">
-          <h3 style="display:inline;float:right;width:67%;text-align:left;">{{username}}</h3>
-          <p style="display:inline;float:right;width:67%;text-align:left;">Bio</p>
+          <h2 style="display:inline;float:right;width:67%;text-align:left;">{{username | upper}}</h2>
+          <!-- <p style="display:inline;float:right;width:67%;text-align:left;">Bio</p> -->
         </div>
 
         <div class="mySongsProfile">
 
-          <table>
+          <table style="width:100%;">
             <thead>
-              <th align="left">My Songs</th>
+              <th align="left" style="width:100%;">My Songs</th>
             </thead>
             <tbody>
               {% for song in uploads %}
-                <tr>
+                <tr style="width:100%;">
                   <td>{{song.orig_filename}}</td>
                 </tr>
               {% endfor %}
@@ -93,9 +95,11 @@
 
         <div class="otherUsersProfile">
 
+          <h2>Discover Users: </h2>
+
           <div class="otherProfile">
             <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:20%;">Name 1</p>
+            <p style="display:inline;float:right;margin-top:25%;">Name 1</p>
           </div>
 
           <div class="otherProfile">

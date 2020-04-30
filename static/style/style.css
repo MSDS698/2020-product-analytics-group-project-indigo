@@ -19,7 +19,6 @@ h3, h2, p {
 }
 
 
-
 a {
   color: white;
   background-color: transparent;
@@ -155,6 +154,19 @@ input[type=button], input[type=text], input[type=password] {
   width:25%;
   display:inline;
   float:right;
+}
+
+tr {
+  background-color: rgb(73,73,118);
+}
+
+tr:hover {
+  background-color: #437d98;
+}
+
+th {
+  font-size: 25px;
+  background-color: rgb(50,50,80);
 }
 
 #browseBtn {
