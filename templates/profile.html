@@ -1,0 +1,125 @@
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <title>INDIGO</title>
+
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+
+    <link rel="stylesheet" href="static/style/style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="../static/script/nav_script.js"></script>
+
+  </head>
+  <body>
+
+    <div class="container">
+
+      <!-- Code from W3 schools Top Navigation Menu -->
+      <div class="topnav">
+        <a href="index" class="active">INDIGO</a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+          <a href="buy">BUY</a>
+          <a href="login">Login</a>
+          <a href="create">Create</a>
+          <a href="my_songs">My Songs</a>
+          <a href="about">About</a>
+          <a href="logout">Logout</a>
+
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+
+      <!-- Body  -->
+
+      <h1>INDIGO</h1>
+      <div class="filler"></div>
+
+
+      <div class="profileArea">
+
+        <div class="profileButtons">
+
+          <!-- <input type="file" id="browse" name="files" style="display: none;" />
+          <label for="browse" id=browseBtn>
+            Upload
+          </label> -->
+
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='upload';">Upload</button>
+
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='drums';">Drums</button>
+
+          <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='upload2';">Music Interpolation</button>
+        </div>
+
+        <div class="filler"></div>
+
+        <div class="navWrapper">
+
+        <div class="profileHeader">
+          <img src="../static/default_profile.png" alt="default profile picture" style="width:33%;">
+          <h2 style="display:inline;float:right;width:67%;text-align:left;">{{username | upper}}</h2>
+          <!-- <p style="display:inline;float:right;width:67%;text-align:left;">Bio</p> -->
+        </div>
+
+        <div class="mySongsProfile">
+
+          <table style="width:100%;">
+            <thead>
+              <th align="left" style="width:100%;">My Songs</th>
+            </thead>
+            <tbody>
+              {% for song in uploads %}
+                <tr style="width:100%;">
+                  <td>{{song.orig_filename}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+        </div>
+
+        <div class="otherUsersProfile">
+
+          <h2>Discover Users: </h2>
+
+          <div class="otherProfile">
+            <img src="../static/default_profile.png" alt="" style="width:100px;" >
+            <p style="display:inline;float:right;margin-top:25%;">Name 1</p>
+          </div>
+
+          <div class="otherProfile">
+            <img src="../static/default_profile.png" alt="" style="width:100px;" >
+            <p style="display:inline;float:right;margin-top:20%;">Name 2</p>
+          </div>
+
+          <div class="otherProfile">
+            <img src="../static/default_profile.png" alt="" style="width:100px;" >
+            <p style="display:inline;float:right;margin-top:20%;">Name 3</p>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </body>
+</html>

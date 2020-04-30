@@ -19,7 +19,6 @@ h3, h2, p {
 }
 
 
-
 a {
   color: white;
   background-color: transparent;
@@ -121,6 +120,72 @@ input[type=button], input[type=text], input[type=password] {
   margin: auto;
   display: block;
   width: 500px;
+}
+
+.profileButtons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.profileArea {
+  margin: auto;
+  display: block;
+  width: 700px;
+}
+
+.profileHeader {
+  width: 74%;
+  display: inline;
+  float: left;
+}
+
+.mySongsProfile {
+  width:74%;
+  display: inline;
+  float:left;
+}
+.navWrapper{
+  width:74%;
+  display: inline;
+  float:left;
+}
+
+.otherUsersProfile {
+  width:25%;
+  display:inline;
+  float:right;
+}
+
+tr {
+  background-color: rgb(73,73,118);
+}
+
+tr:hover {
+  background-color: #437d98;
+}
+
+th {
+  font-size: 25px;
+  background-color: rgb(50,50,80);
+}
+
+#browseBtn {
+  background-color: rgb(73,73,118);
+  border-width: 0px;
+  width: 200px;
+  height: 66px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  padding: 5px;
+  font-size: 20px;
+  color: white;
+  margin: auto;
+  display: block;
+}
+
+table {
+  color: white;
+  font-family: 'Montserrat', sans-serif;
 }
 
 dl {
