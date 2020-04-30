@@ -20,7 +20,7 @@ import boto3
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
-on_dev = True
+on_dev = False
 
 # Initialization
 # Create an application instance which handles all requests.
@@ -233,6 +233,17 @@ def upload():
         num_user_files = Files.query.filter_by(user_name=user_name).count()
         our_filename = f'{user_name}_{num_user_files}'
         file_upload_timestamp = datetime.now()
+
+        #check for duplicates file
+        user_file_list = db.session.query(Files.orig_filename).filter(Files.user_name==user_name).all()
+        user_file_list = [elem[0] for elem in user_file_list]
+
+        if orig_filename in user_file_list:
+            #return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
+
+            flash('You have already uploaded a file with this name, please upload a new file or rename this one to upload.')
+            return redirect(url_for('upload'))
+
 
         file = Files(user_name, orig_filename, file_type,
                      model_used, our_filename, file_upload_timestamp)
