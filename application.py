@@ -20,7 +20,7 @@ import boto3
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
-on_dev = False
+on_dev = True
 
 # Initialization
 # Create an application instance which handles all requests.
