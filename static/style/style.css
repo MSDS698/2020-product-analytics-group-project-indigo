@@ -143,6 +143,9 @@ input[type=button], input[type=text], input[type=password] {
   width:74%;
   display: inline;
   float:left;
+  height:300px;
+  margin-bottom: 100px;
+
 }
 .navWrapper{
   width:74%;

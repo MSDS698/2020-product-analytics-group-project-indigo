@@ -167,7 +167,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile', username=username))
         else:
             flash('Incorrect Password')
 
@@ -186,16 +186,16 @@ def logout():
 def start():
     return render_template('create.html')
 
-@application.route('/profile')
+@application.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
-def profile():
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
+def profile(username):
+    uploads = Files.query.filter_by(user_name=username).all()
     other_users = Customer.query.all()
     other_users = [o.username for o in other_users]
     other_users.remove(current_user.username)
     random.shuffle(other_users)
     return render_template('profile.html', uploads=uploads, 
-                           username=current_user.username, 
+                           username=username, 
                            other_users=other_users[:3])
 
 
