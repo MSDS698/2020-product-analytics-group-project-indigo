@@ -59,7 +59,7 @@
 
           <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='upload';">Upload</button>
 
-          <button type="button" name="button" style="display: inline; margin: auto; margin-left:20px;" onclick="location.href='drums';">Drums</button>
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:19px;" onclick="location.href='drums';">Drums</button>
 
           <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='upload2';">Music Interpolation</button>
         </div>
@@ -96,20 +96,14 @@
 
           <h2>Discover Users: </h2>
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:25%;">Name 1</p>
-          </div>
+          {% for other in other_users %}
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:20%;">Name 2</p>
-          </div>
+            <div class="otherProfile">
+              <img src="../static/default_profile.png" alt="" style="width:100px;" >
+              <p style="display:inline;float:right;margin-top:25%;">{{other | upper}}</p>
+            </div>
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:20%;">Name 3</p>
-          </div>
+          {% endfor %}
 
         </div>
 
