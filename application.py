@@ -2,6 +2,7 @@ import csv
 import os
 import sys
 from datetime import datetime
+import random
 
 from config import Config
 from flask import render_template, redirect, url_for, request, flash, Flask
@@ -43,7 +44,7 @@ class UploadFileForm(FlaskForm):
     """Class for uploading file when submitted"""
     file_selector = FileField('File', validators=[FileRequired()])
     submit = SubmitField('Submit')
-
+    
 
 class RegistrationForm(FlaskForm):
     """Class for register a new user."""
@@ -166,7 +167,7 @@ def login():
         # Login and validate the user.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile', username=username))
         else:
             flash('Incorrect Password')
 
@@ -185,11 +186,17 @@ def logout():
 def start():
     return render_template('create.html')
 
-@application.route('/profile')
+@application.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
-def profile():
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
-    return render_template('profile.html', uploads=uploads, username=current_user.username)
+def profile(username):
+    uploads = Files.query.filter_by(user_name=username).all()
+    other_users = Customer.query.all()
+    other_users = [o.username for o in other_users]
+    other_users.remove(current_user.username)
+    random.shuffle(other_users)
+    return render_template('profile.html', uploads=uploads, 
+                           username=username, 
+                           other_users=other_users[:3])
 
 
 @application.route('/upload', methods=['GET', 'POST'])
