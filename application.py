@@ -346,6 +346,12 @@ def test_playback(filename):
 def drums():
     return render_template('drums.html')
 
+
+@application.route('/vae', methods=['GET', 'POST'])
+def vae():
+    return render_template('vae.html')
+
+
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
     application.config['TEMPLATES_AUTO_RELOAD'] = True
