@@ -181,10 +181,10 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@application.route('/create')
-@login_required
-def start():
-    return render_template('create.html')
+#@application.route('/create')
+#@login_required
+#def start():
+#    return render_template('create.html')
 
 @application.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
@@ -277,40 +277,50 @@ def upload():
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
 
-    return render_template('upload.html', form=file, uploads=uploads)
+    return render_template('upload.html', form=file, uploads=uploads, username=current_user.username)
 
 
-@application.route('/demo', methods=['GET', 'POST'])
-def demo():
-    """ Load demo page showing Magenta """
-    return render_template('demo.html')
+#@application.route('/demo', methods=['GET', 'POST'])
+#def demo():
+#    """ Load demo page showing Magenta """
+#    return render_template('demo.html')
 
 
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     """Load About page"""
-    return render_template('about.html')
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = None
+    return render_template('about.html', username=username, 
+                           authenticated=current_user.is_authenticated)
 
 
-@application.route('/music', methods=['GET', 'POST'])
-@login_required
-def music():
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
-    return render_template('music.html', uploads=uploads)
+#@application.route('/music', methods=['GET', 'POST'])
+#@login_required
+#def music():
+#    uploads = Files.query.filter_by(user_name=current_user.username).all()
+#    
+#    return render_template('music.html', uploads=uploads)
 
 
-@application.route('/create', methods=['GET', 'POST'])
-def create():
-    return render_template('create.html')
+#@application.route('/create', methods=['GET', 'POST'])
+#def create():
+#    return render_template('create.html')
 
 @application.route('/buy', methods=['GET', 'POST'])
 def buy():
-    return render_template('buy.html')
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = None
+    return render_template('buy.html', username=username, 
+                           authenticated=current_user.is_authenticated)
 
-@application.route('/my_music', methods=['GET', 'POST'])
-def my_music():
-    return render_template('my_music.html')
+#@application.route('/my_music', methods=['GET', 'POST'])
+#def my_music():
+#    return render_template('my_music.html')
 
 
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
@@ -343,11 +353,17 @@ def test_playback(filename):
 
 
 @application.route('/drums', methods=['GET', 'POST'])
+@login_required
 def drums():
     return render_template('drums.html')
+
+@application.errorhandler(401)
+def re_route(e):
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
     application.config['TEMPLATES_AUTO_RELOAD'] = True
     application.debug = True
     application.run()
+
