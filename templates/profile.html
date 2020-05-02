@@ -7,9 +7,9 @@
 
     <title>INDIGO</title>
 
-    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+    <link rel="shortcut icon" type="image/jpg" href="../../static/favicon.png"/>
 
-    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="../../static/style/style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
 
@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="../static/script/nav_script.js"></script>
+    <script src="../../static/script/nav_script.js"></script>
 
   </head>
   <body>
@@ -57,11 +57,11 @@
             Upload
           </label> -->
 
-          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='upload';">Upload</button>
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='../upload';">Upload</button>
 
-          <button type="button" name="button" style="display: inline; margin: auto; margin-left:20px;" onclick="location.href='drums';">Drums</button>
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:17px;" onclick="location.href='../drums';">Drums</button>
 
-          <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='upload2';">Music Interpolation</button>
+          <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='../upload2';">Music Interpolation</button>
         </div>
 
         <div class="filler"></div>
@@ -74,7 +74,7 @@
           <!-- <p style="display:inline;float:right;width:67%;text-align:left;">Bio</p> -->
         </div>
 
-        <div class="mySongsProfile">
+        <div class="mySongsProfile" style="overflow-y:auto;">
 
           <table style="width:100%;">
             <thead>
@@ -96,20 +96,16 @@
 
           <h2>Discover Users: </h2>
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:25%;">Name 1</p>
-          </div>
+          {% for other in other_users %}
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:20%;">Name 2</p>
-          </div>
+            <div class="otherProfile">
+              <img src="../static/default_profile.png" alt="" style="width:100px;" >
 
-          <div class="otherProfile">
-            <img src="../static/default_profile.png" alt="" style="width:100px;" >
-            <p style="display:inline;float:right;margin-top:20%;">Name 3</p>
-          </div>
+              <a href="{{other}}" style="display:inline;float:right;margin-top:25%;">{{other | upper}}</a>
+
+            </div>
+
+          {% endfor %}
 
         </div>
 
