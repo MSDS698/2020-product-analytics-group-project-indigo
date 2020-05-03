@@ -11,7 +11,7 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, \
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
-#from flask_bootstrap import Bootstrap
+# from flask_bootstrap import Bootstrap
 from wtforms import BooleanField, DateField, IntegerField, SelectField, \
     SubmitField, PasswordField, StringField, validators, Form
 from wtforms.validators import DataRequired
@@ -33,7 +33,7 @@ db = SQLAlchemy(application)
 db.create_all()
 db.session.commit()
 
-#bootstrap = Bootstrap(application)
+# bootstrap = Bootstrap(application)
 
 # login_manager needs to be initiated before running the app
 login_manager = LoginManager()
@@ -44,7 +44,7 @@ class UploadFileForm(FlaskForm):
     """Class for uploading file when submitted"""
     file_selector = FileField('File', validators=[FileRequired()])
     submit = SubmitField('Submit')
-    
+
 
 class RegistrationForm(FlaskForm):
     """Class for register a new user."""
@@ -181,10 +181,12 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@application.route('/create')
-@login_required
-def start():
-    return render_template('create.html')
+
+# @application.route('/create')
+# @login_required
+# def start():
+#    return render_template('create.html')
+
 
 @application.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
@@ -194,8 +196,8 @@ def profile(username):
     other_users = [o.username for o in other_users]
     other_users.remove(current_user.username)
     random.shuffle(other_users)
-    return render_template('profile.html', uploads=uploads, 
-                           username=username, 
+    return render_template('profile.html', uploads=uploads,
+                           username=username,
                            other_users=other_users[:3])
 
 
@@ -208,7 +210,7 @@ def upload():
     """
     file = UploadFileForm()  # file : UploadFileForm class instance
     uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
+
     # Check if it is a POST request and if it is valid.
     if file.validate_on_submit():
         f = file.file_selector.data  # f : Data of FileField
@@ -241,14 +243,16 @@ def upload():
         our_filename = f'{user_name}_{num_user_files}'
         file_upload_timestamp = datetime.now()
 
-        #check for duplicates file
-        user_file_list = db.session.query(Files.orig_filename).filter(Files.user_name==user_name).all()
+        # check for duplicates file
+        user_file_list = db.session.query(Files.orig_filename)\
+            .filter(Files.user_name==user_name).all()
         user_file_list = [elem[0] for elem in user_file_list]
 
         if orig_filename in user_file_list:
-            #return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
+            # return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
 
-            flash('You have already uploaded a file with this name, please upload a new file or rename this one to upload.')
+            flash('You have already uploaded a file with this name, \
+                  please upload a new file or rename this one to upload.')
             return redirect(url_for('upload'))
 
 
@@ -260,14 +264,16 @@ def upload():
         # TAKES CARE OF DEV OR local
         if on_dev:
             s3 = boto3.resource('s3')
-            s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+            s3.meta.client.upload_file(file_path, 'midi-file-upload',
+                                       our_filename)
 
         # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
         # secret key from iam on jacobs account
         else:
            session = boto3.Session(profile_name='msds603') 
            dev_s3_client = session.resource('s3')
-           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
+                                                 our_filename)
 
 
         if os.path.exists(file_dir_path):
@@ -277,40 +283,51 @@ def upload():
 
         return redirect(url_for('music'))  # Redirect to / (/index) page.
 
-    return render_template('upload.html', form=file, uploads=uploads)
+    return render_template('upload.html', form=file, uploads=uploads,
+                           username=current_user.username)
 
 
-@application.route('/demo', methods=['GET', 'POST'])
-def demo():
-    """ Load demo page showing Magenta """
-    return render_template('demo.html')
+# @application.route('/demo', methods=['GET', 'POST'])
+# def demo():
+#    """ Load demo page showing Magenta """
+#    return render_template('demo.html')
 
 
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     """Load About page"""
-    return render_template('about.html')
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = None
+    return render_template('about.html', username=username,
+                           authenticated=current_user.is_authenticated)
 
 
-@application.route('/music', methods=['GET', 'POST'])
-@login_required
-def music():
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
-    
-    return render_template('music.html', uploads=uploads)
+# @application.route('/music', methods=['GET', 'POST'])
+# @login_required
+# def music():
+#    uploads = Files.query.filter_by(user_name=current_user.username).all()
+#    
+#    return render_template('music.html', uploads=uploads)
 
 
-@application.route('/create', methods=['GET', 'POST'])
-def create():
-    return render_template('create.html')
+# @application.route('/create', methods=['GET', 'POST'])
+# def create():
+#    return render_template('create.html')
 
 @application.route('/buy', methods=['GET', 'POST'])
 def buy():
-    return render_template('buy.html')
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = None
+    return render_template('buy.html', username=username,
+                           authenticated=current_user.is_authenticated)
 
-@application.route('/my_music', methods=['GET', 'POST'])
-def my_music():
-    return render_template('my_music.html')
+# @application.route('/my_music', methods=['GET', 'POST'])
+# def my_music():
+#    return render_template('my_music.html')
 
 
 @application.route('/test_playback/<filename>', methods=['GET', 'POST'])
@@ -328,8 +345,8 @@ def test_playback(filename):
 
     object = s3.Object('midi-file-upload', filename)
 
-    #binary_body = object.get()['Body'].read()
-    #return render_template('test_playback.html', midi_binary=binary_body)
+    # binary_body = object.get()['Body'].read()
+    # return render_template('test_playback.html', midi_binary=binary_body)
 
     # make directory and save files there
     file_dir_path = './static/tmp'
@@ -343,6 +360,7 @@ def test_playback(filename):
 
 
 @application.route('/drums', methods=['GET', 'POST'])
+@login_required
 def drums():
     return render_template('drums.html')
 
@@ -350,6 +368,10 @@ def drums():
 @application.route('/vae', methods=['GET', 'POST'])
 def vae():
     return render_template('vae.html')
+
+@application.errorhandler(401)
+def re_route(e):
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
