@@ -30,10 +30,16 @@
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
           <a href="buy">BUY</a>
+          {% if not authenticated %}
           <a href="login">Login</a>
-          <a href="profile">My Songs</a>
+          {% endif %}
+          {% if authenticated %}
+          <a href="profile/{{username}}">My Songs</a>
+          {% endif %}
           <a href="about">About</a>
+          {% if authenticated %}
           <a href="logout">Logout</a>
+          {% endif %}
 
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->

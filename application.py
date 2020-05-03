@@ -130,7 +130,12 @@ def allowed_file(filename):
 @application.route('/')
 def index():
     """Index Page : Renders index.html with author names."""
-    return (render_template('index.html'))
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = None
+    return render_template('index.html', username=username,
+                           authenticated=current_user.is_authenticated)
 
 
 @application.route('/register',  methods=['GET', 'POST'])
