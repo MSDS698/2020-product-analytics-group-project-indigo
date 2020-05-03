@@ -68,14 +68,54 @@ function init(){
         run: function(note){
             drumsViz.redraw(note, true);
             sampleViz.redraw(note, true);
-            instrumentViz.redraw(note, true);
+            //instrumentViz.redraw(note, true); // Only add later below if know multiple instruments are in midi file
             },
         stop: () => {}
     };
 
 }
 
+function prepare_note_seq(note_seq_var){
+    quantized_note_seq = mm.sequences.quantizeNoteSequence(note_seq_var, 4);
+    $("#sample").show();
+    sample_tempo = note_seq_var['tempos'];
+    sampleViz = new mm.PianoRollSVGVisualizer(
+                            note_seq_var,
+                            document.getElementById('sampleViz'),
+                            config
+                            );
+
+    // Find the programs/instruments that exist in the MIDI file
+    programs = [...new Set(quantized_note_seq['notes'].map(note => note.program))];
+    // Create an array of arrays, one array for each program/instrument's notes
+    program_notes = programs.map(program => notes_filter(program));
+    // Create array of Magenta note_sequence objects, one fore each program/instrument
+    separated_sequences =  program_notes.map(obj => replace_notes_in_sequence(quantized_note_seq, obj));
+
+
+    if (separated_sequences.length > 1) {
+        // call function to load list showing option for track separately
+        create_instrument_list(separated_sequences);
+        $("#instrumentList").show();
+        // Add instrumentViz redraw if multiple instruments exist
+        combinedPlayer.callbackObject = {
+            run: function(note){
+                drumsViz.redraw(note, true);
+                sampleViz.redraw(note, true);
+                instrumentViz.redraw(note, true);
+                },
+            stop: () => {}
+        };
+    }
+    else {
+         alert("Only one instrument found in MIDI file, click ok to continue");
+         instrument_seq = quantized_note_seq;
+    }
+
+}
+
 // Event Listeners
+/*
 $('#samples').on('change', function () {
     mm.urlToNoteSequence('/static/guitar_bass_samples/'+this.value)
     .then(ns_val => note_seq = ns_val)
@@ -109,8 +149,9 @@ $('#samples').on('change', function () {
         }
 
     })
-
 });
+*/
+
 
 $('#instruments').on('change', function () {
     console.log(this.value)

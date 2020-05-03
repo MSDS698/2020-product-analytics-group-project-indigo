@@ -70,7 +70,7 @@
       <i class="fa fa-bars"></i>
     </a>
   </div>
-
+    <!--
     <label>Select from your files:</label>
     <div id="div1">
         <select id="samples">
@@ -82,7 +82,9 @@
             <option value="drive.mid">Drive</option>
         </select>
     </div>
+    -->
     <div style="overflow:scroll; display:none" id="sample">
+        <h3>Original Midi File</h3>
         <button id="btnPlaySample" class="button-circle" aria-label="play">
               <svg id="playSample" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -102,6 +104,7 @@
         </select>
     </div>
     <div style="overflow:scroll; display:none" id="instrument">
+        <h3>Selected Instrument</h3>
         <button id="btnPlayInstrument" class="button-circle" aria-label="play">
               <svg id="playInstrument" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -114,7 +117,7 @@
         </button>
         <svg id='instrumentViz'></svg>
     </div>
-    <div id="drum_rnn" style="display:none">
+    <div id="drum_rnn" style="display:none; padding-top: 30px; padding-bottom: 30px;">
         <button type="button" id="drums_rnn">Generate Drum Beat (RNN)</button>
         <div style="text-align:center">
             <label for="rnn_temp" id="rnnLabel">Model Temperature (Higher = More Experimental Output):</label>
@@ -122,6 +125,7 @@
         </div>
     </div>
     <div style="overflow:scroll; display:none" id="drums">
+        <h3>Generated Drums</h3>
         <button id="btnPlayDrums" class="button-circle" aria-label="play">
               <svg id="playDrums" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -143,6 +147,13 @@
 
 
 </body>
-<script type="text/javascript" src="static/mappings.js"></script>
-<script src='static/script/drums.js'></script>
+<script type="text/javascript" src="/static/mappings.js"></script>
+<script src='/static/script/drums.js'></script>
+<script>
+    mm.urlToNoteSequence('/static/tmp/{{midi_file}}')
+    .then(function(url_note_seq){
+        note_seq = url_note_seq;
+        prepare_note_seq(note_seq);
+    });
+</script>
 </html>

@@ -313,23 +313,24 @@ def my_music():
     return render_template('my_music.html')
 
 
-@application.route('/test_playback/<filename>', methods=['GET', 'POST'])
-def test_playback(filename):
+@application.route('/drums/<filename>', methods=['GET', 'POST'])
+@login_required
+def drums(filename):
     # uncomment the next 2 lines when on local
 
     # session = boto3.Session(profile_name='msds603') # insert your profile name
     # s3 = session.resource('s3')
     if on_dev:
-        s3 = boto3.resource('s3') # comment out when on local
-    #LOCAL
+        s3 = boto3.resource('s3')  # comment out when on local
+    # LOCAL
     else:
-        session = boto3.Session(profile_name='msds603') # insert your profile name
+        session = boto3.Session(profile_name='msds603')  # insert your profile name
         s3 = session.resource('s3')
 
     object = s3.Object('midi-file-upload', filename)
 
-    #binary_body = object.get()['Body'].read()
-    #return render_template('test_playback.html', midi_binary=binary_body)
+    # binary_body = object.get()['Body'].read()
+    # return render_template('test_playback.html', midi_binary=binary_body)
 
     # make directory and save files there
     file_dir_path = './static/tmp'
@@ -339,17 +340,89 @@ def test_playback(filename):
 
     object.download_file(f'./static/tmp/{filename}.mid')
 
-    return render_template('test_playback.html', midi_file=filename+'.mid')
-
-
-@application.route('/drums', methods=['GET', 'POST'])
-def drums():
-    return render_template('drums.html')
+    return render_template('drums.html', midi_file=filename + '.mid')
 
 
 @application.route('/vae', methods=['GET', 'POST'])
 def vae():
     return render_template('vae.html')
+
+
+@application.route('/drums-upload', methods=['GET', 'POST'])
+@login_required
+def drums_upload():
+    """
+    Upload a file from a client machine to
+    s3 and file properties to Database
+    """
+    file = UploadFileForm()  # file : UploadFileForm class instance
+    uploads = Files.query.filter_by(user_name=current_user.username).all()
+
+    # Check if it is a POST request and if it is valid.
+    if file.validate_on_submit():
+        f = file.file_selector.data  # f : Data of FileField
+        filename = f.filename
+        # filename : filename of FileField
+        if not allowed_file(filename):
+            flash('Incorrect File Type: Please upload a MIDI file')
+            return redirect(url_for('upload'))
+
+        # make directory and save files there
+        cwd = os.getcwd()
+
+        file_dir_path = os.path.join(cwd, 'files')
+
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+
+        file_path = os.path.join(file_dir_path, filename)
+
+        f.save(file_path)
+
+        user_name = current_user.username
+        orig_filename = filename.rsplit('.', 1)[0]
+        file_type = filename.rsplit('.', 1)[1]
+        model_used = 'user_upload'
+
+        # get num of files user has uploaded thus far
+        num_user_files = Files.query.filter_by(user_name=user_name).count()
+        our_filename = f'{user_name}_{num_user_files}'
+        file_upload_timestamp = datetime.now()
+
+        # check for duplicates file
+        user_file_list = db.session.query(Files.orig_filename).filter(Files.user_name == user_name).all()
+        user_file_list = [elem[0] for elem in user_file_list]
+
+        if orig_filename in user_file_list:
+            # return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
+
+            flash(
+                'You have already uploaded a file with this name, please upload a new file or rename this one to upload.')
+            #return redirect(url_for('drums-upload'))
+
+        file = Files(user_name, orig_filename, file_type,
+                     model_used, our_filename, file_upload_timestamp)
+        db.session.add(file)
+        db.session.commit()
+
+        # TAKES CARE OF DEV OR local
+        if on_dev:
+            s3 = boto3.resource('s3')
+            s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+
+        # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
+        # secret key from iam on jacobs account
+        else:
+            session = boto3.Session(profile_name='msds603')
+            dev_s3_client = session.resource('s3')
+            dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+
+        if os.path.exists(file_dir_path):
+            os.system(f"rm -rf {file_dir_path}")
+
+        return redirect(f'/drums/{our_filename}')  # Redirect to drums page.
+
+    return render_template('drums-upload.html', form=file, uploads=uploads)
 
 
 if __name__ == '__main__':
