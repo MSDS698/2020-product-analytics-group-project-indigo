@@ -369,6 +369,10 @@ def drums():
 def vae():
     return render_template('vae.html')
 
+@application.errorhandler(401)
+def re_route(e):
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
