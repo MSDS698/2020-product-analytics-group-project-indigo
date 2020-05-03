@@ -64,7 +64,7 @@ function interpolate() {
   // Music VAE requires quantized melodies, so quantize them first.
   // const star = mm.sequences.quantizeNoteSequence(TWINKLE_TWINKLE, 4);
   music_vae
-  .interpolate([upload1, upload2], 4)
+  .interpolate([upload1_quant, upload2_quant], 4)
   .then((sample) => {
     const concatenated = mm.sequences.concatenate(sample);
     vaePlayer.start(concatenated);
