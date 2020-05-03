@@ -281,13 +281,10 @@ def upload():
            dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
                                                  our_filename)
 
-
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
             
-        
-
-        return redirect(url_for('profile', current_user.username))  # Redirect to / (/index) page.
+        return redirect(url_for('profile', username=current_user.username))  # Redirect to /profile/<username> page.
 
     return render_template('upload.html', form=file, uploads=uploads,
                            username=current_user.username)
