@@ -287,7 +287,7 @@ def upload():
             
         
 
-        return redirect(url_for('profile/' + current_user.username))  # Redirect to / (/index) page.
+        return redirect(url_for('profile', current_user.username))  # Redirect to / (/index) page.
 
     return render_template('upload.html', form=file, uploads=uploads,
                            username=current_user.username)
