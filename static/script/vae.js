@@ -1,23 +1,22 @@
 // Initialize the model.
 const music_vae = new mm.MusicVAE('https://storage.googleapis.com/magentadata/js/checkpoints/music_vae/mel_4bar_small_q2');
-
 music_vae.initialize().then(() => {
   document.getElementById('loading').style.display = 'none';
   [...document.getElementsByTagName('button')].forEach(b => b.style = '');
 });
 
-let note_seq;
-let quantized_note_seq;
-
 // Create a player to play the sampled sequence.
 const vaePlayer = new mm.Player();
 const vae_temperature = 1.5
-const biggie = (mm.urlToNoteSequence('../static/bass_4bars.mid')
-                .then(ns_val => note_seq = ns_val)
-                .then(vars => quantized_note_seq = mm.sequences.quantizeNoteSequence(note_seq, 4)))
 
-// const mid1 = fs.readFileSync('midi/biggie_notorious_thugs.mid');
-// const ns1 = midi_io.midiToSequenceProto(mid1);
+let note_seq;
+let quantized_note_seq;
+const upload1 = (mm.urlToNoteSequence('../static/bass_4bars.mid')
+                .then(ns_val => note_seq = ns_val)
+                .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
+const upload2 = (mm.urlToNoteSequence('../static/biggie_notorious_thugs.mid')
+                .then(ns_val => note_seq = ns_val)
+                .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
 
 const TWINKLE_TWINKLE = {
   notes: [
@@ -55,39 +54,19 @@ const LITTLE_TEAPOT = {
     totalQuantizedSteps: 26,
   };
 
-let combined;
-
-function vae_interpolate() {
+function interpolate() {
   mm.Player.tone.context.resume();  // enable audio
   if (vaePlayer.isPlaying()) {
     vaePlayer.stop();
     return;
-}
+  }
 
   // Music VAE requires quantized melodies, so quantize them first.
-  const star = mm.sequences.quantizeNoteSequence(TWINKLE_TWINKLE, 4);
-  // music_vae.interpolate([star, LITTLE_TEAPOT], 4).then((sample) => {combined = sample[1]; vaePlayer.start(combined)})
+  // const star = mm.sequences.quantizeNoteSequence(TWINKLE_TWINKLE, 4);
   music_vae
-  .interpolate([biggie, LITTLE_TEAPOT], 4)
+  .interpolate([upload1, upload2], 4)
   .then((sample) => {
     const concatenated = mm.sequences.concatenate(sample);
-    // const concatenated = concatenateSequences(sample);
     vaePlayer.start(concatenated);
   });
 }
-
-// function concatenateSequences(seqs) {
-//   const seq = mm.sequences.clone(seqs[0]);
-//   let numSteps = seqs[0].totalQuantizedSteps;
-//   for (let i=1; i<seqs.length; i++) {
-//     const s = mm.sequences.clone(seqs[i]);
-//     s.notes.forEach(note => {
-//       note.quantizedStartStep += numSteps;
-//       note.quantizedEndStep += numSteps;
-//       seq.notes.push(note);
-//     });
-//     numSteps += s.totalQuantizedSteps;
-//   }
-//   seq.totalQuantizedSteps = numSteps;
-//   return seq;
-// }
