@@ -390,7 +390,7 @@ def drums_upload():
         # filename : filename of FileField
         if not allowed_file(filename):
             flash('Incorrect File Type: Please upload a MIDI file')
-            return redirect(url_for('upload'))
+            return redirect('drums-upload')
 
         # make directory and save files there
         cwd = os.getcwd()
