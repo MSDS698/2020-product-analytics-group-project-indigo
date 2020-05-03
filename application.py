@@ -200,6 +200,7 @@ def profile(username):
     other_users = Customer.query.all()
     other_users = [o.username for o in other_users]
     other_users.remove(current_user.username)
+    other_users.remove('test')
     random.shuffle(other_users)
     return render_template('profile.html', uploads=uploads,
                            username=username,
@@ -286,7 +287,7 @@ def upload():
             
         
 
-        return redirect(url_for('music'))  # Redirect to / (/index) page.
+        return redirect(url_for('profile/' + current_user.username))  # Redirect to / (/index) page.
 
     return render_template('upload.html', form=file, uploads=uploads,
                            username=current_user.username)
