@@ -48,7 +48,7 @@
         <div id="myLinks">
           <a href="buy">BUY</a>
           <a href="login">Login</a>
-          <a href="profile">My Songs</a>
+          <a href="profile/{{username}}">My Songs</a>
           <a href="about">About</a>
           <a href="logout">Logout</a>
 
@@ -80,7 +80,7 @@
             {% if dup_file %}
                 <p> Please uplaod a NEW file </p>
             {% endif %} -->
-            
+
             {% with messages = get_flashed_messages() %}
               {% if messages %}
                 <script>

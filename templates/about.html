@@ -28,10 +28,16 @@
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
           <a href="buy">BUY</a>
-          <a href="login">Login</a>
-          <a href="profile">My Songs</a>
+          {% if not authenticated %}
+            <a href="login">Login</a>
+          {% endif %}
+          {% if authenticated %}
+            <a href="profile/{{username}}">My Songs</a>
+          {% endif %}
           <a href="about">About</a>
-          <a href="logout">Logout</a>
+          {% if authenticated %}
+            <a href="logout">Logout</a>
+          {% endif %}
 
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
@@ -54,7 +60,7 @@
         <img src="static/Rushil.png" alt="Rushil Headshot" height = "300px">
         <h3>Rushil Sheth</h3>
         <h4>Fullstack Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:rjsheth2@usfca.edu';">Contact</button>
       </div>
 
@@ -62,7 +68,7 @@
         <img src="static/Jacob.png" alt="Jacob Headshot" height = "300px">
         <h3>Jacob Goffin</h3>
         <h4>Product Manager</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:jgoffin@usfca.edu';">Contact</button>
       </div>
 
@@ -70,7 +76,7 @@
         <img src="static/Lori.png" alt="Lori Headshot" height = "300px">
         <h3>Lori Sheng</h3>
         <h4>Backend Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:lsheng@usfca.edu';">Contact</button>
       </div>
 
@@ -78,7 +84,7 @@
         <img src="static/Ash.png" alt="Ash Headshot" height = "300px">
         <h3>Ash Jha</h3>
         <h4>Fullstack Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:akjha@usfca.edu';">Contact</button>
       </div>
 
@@ -86,7 +92,7 @@
         <img src="static/Hannah.png" alt="Hannah Headshot" height = "300px">
         <h3>Hannah Lyon</h3>
         <h4>Front End Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:hlyon@usfca.edu';">Contact</button>
       </div>
 
@@ -94,7 +100,7 @@
         <img src="static/Alan.png" alt="Alan Headshot" height = "300px">
         <h3>Alan Flint</h3>
         <h4>Data Scientist</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:aflint2@usfca.edu';">Contact</button>
       </div>
 
@@ -102,7 +108,7 @@
         <img src="static/Kirsten.png" alt="Kirsten Headshot" height = "300px">
         <h3>Kirsten Tsai</h3>
         <h4>Backend Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:mtsai@usfca.edu';">Contact</button>
       </div>
 
