@@ -365,9 +365,9 @@ def drums():
     return render_template('drums.html')
 
 
-@application.errorhandler(401)
-def re_route(e):
-    return redirect(url_for('login'))
+@application.route('/vae', methods=['GET', 'POST'])
+def vae():
+    return render_template('vae.html')
 
 
 if __name__ == '__main__':
