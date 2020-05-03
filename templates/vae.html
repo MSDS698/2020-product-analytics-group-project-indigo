@@ -16,7 +16,11 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.21/Tone.js"></script>
+
     <script type="text/javascript" src="../static/script/audio_script.js"></script>
+
+    <script src='../static/script/vae.js'></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -58,7 +62,8 @@
 
 
 		<figure>
-		    <h1>Here's the Music We Created For You :)</h1>
+        <h1 id="loading">Loading...</h1>
+        <button onclick="interpolate()" style="display:none">VAE Interpolate</button>
 			<iframe src={{path}} width="0" height="0" border="0" scrolling="no" frameBorder="0"></iframe>
 		</figure>
 
