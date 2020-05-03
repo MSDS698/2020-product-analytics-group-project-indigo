@@ -11,10 +11,10 @@ const vae_temperature = 1.5
 
 let note_seq;
 let quantized_note_seq;
-const upload1 = (mm.urlToNoteSequence('../static/bass_4bars.mid')
+const upload1 = (mm.urlToNoteSequence('../static/guitar_bass_samples/bass_4bars.mid')
                 .then(ns_val => note_seq = ns_val)
                 .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
-const upload2 = (mm.urlToNoteSequence('../static/biggie_notorious_thugs.mid')
+const upload2 = (mm.urlToNoteSequence('../static/midi_samples/biggie_notorious_thugs.mid')
                 .then(ns_val => note_seq = ns_val)
                 .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
 
