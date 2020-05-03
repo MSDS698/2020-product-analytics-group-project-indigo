@@ -423,7 +423,7 @@ def drums_upload():
 
             flash(
                 'You have already uploaded a file with this name, please upload a new file or rename this one to upload.')
-            #return redirect(url_for('drums-upload'))
+            return redirect('drums-upload')
 
         file = Files(user_name, orig_filename, file_type,
                      model_used, our_filename, file_upload_timestamp)
