@@ -518,7 +518,7 @@ def vae_upload():
 @login_required
 def vae():
     """Interpolate between 2 files"""
-    
+
     filename1 = request.args.get('filename1')
     filename2 = request.args.get('filename2')
 
@@ -529,7 +529,6 @@ def vae():
         session = boto3.Session(profile_name='msds603')  # insert your profile name
         s3 = session.resource('s3')
 
-    print(filename1, filename2)
     object1 = s3.Object('midi-file-upload', filename1)
     object2 = s3.Object('midi-file-upload', filename2)
 
