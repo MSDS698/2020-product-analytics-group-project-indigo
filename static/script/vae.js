@@ -54,20 +54,20 @@ const LITTLE_TEAPOT = {
     totalQuantizedSteps: 26,
   };
 
+// function interpolate() {
 function interpolate(midi1, midi2) {
 
-  // midi1 = JSON.stringify(midi1)
-  // midi2 = JSON.stringify(midi2)
+  console.log(typeof midi1, midi1)
+  console.log(typeof midi2, midi2)
 
-  console.log(midi1)
-  console.log(midi2)
+  mm.urlToNoteSequence(midi1)  
 
-  var upload1 = (mm.urlToNoteSequence(midi1)
-                  .then(ns_val => note_seq = ns_val)
-                  .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
-  var upload2 = (mm.urlToNoteSequence(midi2)
-                  .then(ns_val => note_seq = ns_val)
-                  .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
+  // var upload1 = (mm.urlToNoteSequence(midi1)
+  //                 .then(ns_val => note_seq = ns_val)
+  //                 .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
+  // var upload2 = (mm.urlToNoteSequence(midi2)
+  //                 .then(ns_val => note_seq = ns_val)
+  //                 .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
 
   mm.Player.tone.context.resume();  // enable audio
   if (vaePlayer.isPlaying()) {

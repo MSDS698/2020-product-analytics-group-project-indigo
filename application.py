@@ -469,6 +469,9 @@ def vae_upload():
             os.mkdir(file_dir_path)
         file_path1 = os.path.join(file_dir_path, filename1)
         file_path2 = os.path.join(file_dir_path, filename2)
+        print('filepaths', file_path1, file_path2)
+        print(f1)
+        print(f2)
         f1.save(file_path1)
         f2.save(file_path2)
 
@@ -503,10 +506,9 @@ def vae_upload():
         s3.meta.client.upload_file(file_path1, 'midi-file-upload', our_filename1)
         s3.meta.client.upload_file(file_path2, 'midi-file-upload', our_filename2)
 
-        if os.path.exists(file_dir_path):
-            os.system(f"rm -rf {file_dir_path}")
+        # if os.path.exists(file_dir_path):
+        #     os.system(f"rm -rf {file_dir_path}")
 
-        # return redirect(f'/vae/{our_filename1}')
         return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
 
     return render_template('vae-upload.html',
@@ -521,6 +523,8 @@ def vae():
 
     filename1 = request.args.get('filename1')
     filename2 = request.args.get('filename2')
+
+    print(filename1, filename2)
 
     if on_dev:
         s3 = boto3.resource('s3')  # comment out when on local
