@@ -13,7 +13,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 # from flask_bootstrap import Bootstrap
 from wtforms import BooleanField, DateField, IntegerField, SelectField, \
-    SubmitField, PasswordField, StringField, validators, Form
+    SubmitField, PasswordField, StringField, validators, Form, \
+    MultipleFileField
 from wtforms.validators import DataRequired
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -43,6 +44,15 @@ login_manager.init_app(application)
 class UploadFileForm(FlaskForm):
     """Class for uploading file when submitted"""
     file_selector = FileField('File', validators=[FileRequired()])
+    submit = SubmitField('Submit')
+
+
+class UploadMultipleForm(FlaskForm):
+    """
+    Class for uploading multiple files. Note that the FileAllowed validator
+    does not work for MultipleFileField.
+    """
+    files = MultipleFileField('Files')
     submit = SubmitField('Submit')
 
 
@@ -447,74 +457,73 @@ def drums_upload():
 @application.route('/vae-upload', methods=['GET', 'POST'])
 @login_required
 def vae_upload():
+    file = UploadMultipleForm()
 
-    file1 = UploadFileForm()
-    file2 = UploadFileForm()
-    uploads = Files.query.filter_by(user_name=current_user.username).all()
+    if file.validate_on_submit():
+        ls_files = request.files.getlist('midi_files')
+        if len(ls_files) == 2:
+            f1, f2 = ls_files[0], ls_files[1]
+            filename1, filename2 = f1.filename, f2.filename
 
-    if file1.validate_on_submit() and file2.validate_on_submit():
+            if (not allowed_file(filename1)) or (not allowed_file(filename1)):
+                flash('Incorrect File Type: Please upload MIDI files - .mid or .midi extensions')
+                return redirect('vae-upload')
+            else:
+                # write locally. Will be deleted later.
+                cwd = os.getcwd()
+                file_dir_path = os.path.join(cwd, 'files')
+                if not os.path.exists(file_dir_path):
+                    os.mkdir(file_dir_path)
+                file_path1 = os.path.join(file_dir_path, filename1)
+                file_path2 = os.path.join(file_dir_path, filename2)
+                print('filepaths', file_path1, file_path2)
+                f1.save(file_path1)
+                f2.save(file_path2)
 
-        f1 = file1.file_selector.data
-        filename1 = f1.filename
+                model_used = 'user_upload'
+                user_name = current_user.username
 
-        f2 = file2.file_selector.data
-        filename2 = f2.filename
-        if not allowed_file(filename1) or not allowed_file(filename2):
-            flash('Incorrect File Type: Please upload a MIDI file')
+                orig_filename1 = filename1.rsplit('.', 1)[0]
+                file_type1 = filename1.rsplit('.', 1)[1]
+                num_user_files1 = Files.query.filter_by(user_name=user_name).count()
+                our_filename1 = f'{user_name}_{num_user_files1}'
+                file_upload_timestamp1 = datetime.now()
+                file1 = Files(user_name, orig_filename1, file_type1,
+                              model_used, our_filename1, file_upload_timestamp1)
+                db.session.add(file1)
+
+                orig_filename2 = filename2.rsplit('.', 1)[0]
+                file_type2 = filename2.rsplit('.', 1)[1]
+                num_user_files2 = Files.query.filter_by(user_name=user_name).count()
+                our_filename2 = f'{user_name}_{num_user_files2}'
+                file_upload_timestamp2 = datetime.now()
+                file2 = Files(user_name, orig_filename2, file_type2,
+                              model_used, our_filename2, file_upload_timestamp2)
+                db.session.add(file2)
+
+                db.session.commit()
+
+                if on_dev:
+                    s3 = boto3.resource('s3')
+                else:
+                    s3 = boto3.Session(profile_name='msds603').resource('s3')
+
+                s3.meta.client.upload_file(file_path1, 'midi-file-upload', our_filename1)
+                s3.meta.client.upload_file(file_path2, 'midi-file-upload', our_filename2)
+
+                # remove the locally written files
+                if os.path.exists(file_dir_path):
+                    os.system(f"rm -rf {file_dir_path}")
+
+                # redirect to vae url with file arguments
+                return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
+        else:
+            flash('Please upload exactly 2 MIDI files')
             return redirect('vae-upload')
 
-        cwd = os.getcwd()
-        file_dir_path = os.path.join(cwd, 'files')
-        if not os.path.exists(file_dir_path):
-            os.mkdir(file_dir_path)
-        file_path1 = os.path.join(file_dir_path, filename1)
-        file_path2 = os.path.join(file_dir_path, filename2)
-        print('filepaths', file_path1, file_path2)
-        print(f1)
-        print(f2)
-        f1.save(file_path1)
-        f2.save(file_path2)
-
-        model_used = 'user_upload'
-        user_name = current_user.username
-
-        orig_filename1 = filename1.rsplit('.', 1)[0]
-        file_type1 = filename1.rsplit('.', 1)[1]
-        num_user_files1 = Files.query.filter_by(user_name=user_name).count()
-        our_filename1 = f'{user_name}_{num_user_files1}'
-        file_upload_timestamp1 = datetime.now()
-        file1 = Files(user_name, orig_filename1, file_type1,
-                      model_used, our_filename1, file_upload_timestamp1)
-        db.session.add(file1)
-
-        orig_filename2 = filename2.rsplit('.', 1)[0]
-        file_type2 = filename2.rsplit('.', 1)[1]
-        num_user_files2 = Files.query.filter_by(user_name=user_name).count()
-        our_filename2 = f'{user_name}_{num_user_files2}'
-        file_upload_timestamp2 = datetime.now()
-        file2 = Files(user_name, orig_filename2, file_type2,
-                      model_used, our_filename2, file_upload_timestamp2)
-        db.session.add(file2)
-
-        db.session.commit()
-
-        if on_dev:
-            s3 = boto3.resource('s3')
-        else:
-            s3 = boto3.Session(profile_name='msds603').resource('s3')
-        # comment outnext two lines when not on local and not beanstalk
-        s3.meta.client.upload_file(file_path1, 'midi-file-upload', our_filename1)
-        s3.meta.client.upload_file(file_path2, 'midi-file-upload', our_filename2)
-
-        # if os.path.exists(file_dir_path):
-        #     os.system(f"rm -rf {file_dir_path}")
-
-        return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
-
     return render_template('vae-upload.html',
-                           form1=file1,
-                           form2=file2,
-                           uploads=uploads)
+                           form=file)
+
 
 @application.route('/vae', methods=['GET', 'POST'])
 @login_required

@@ -54,36 +54,19 @@
         </a>
       </div>
 
-
-
-        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
-          <h1>INDIGO</h1>
-            <h3>File 1 Upload</h3>
-            <div class="formArea">
-            {{ form1.csrf_token }} <!--  render the form's CSRF field like normal. -->
-
-            {{ form1.file_selector }}
-            <div class="filler"></div>
-            <br/>
-          </div>
-        </form>
-
-        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
-            <h3>File 2 Upload</h3>
-            <div class="formArea">
-            {{ form2.csrf_token }} <!--  render the form's CSRF field like normal. -->
-
-            {{ form2.file_selector }}
-            <div class="filler"></div>
-            <br/>
-            {{ form2.submit }}
-          </div>
-        </form>
-
-        <div class="filler">
-
+      <form method="POST" enctype="multipart/form-data">
+        <h1>INDIGO</h1>
+        <h3>Upload 2 Midi Files (.mid or .midi)</h3>
+        <br/>
+        <div class="formArea">
+          {{form.csrf_token}}
+          <input type="file" name="midi_files" multiple>
+          <!-- <input type="submit" value="Submit"> -->
+          {{ form.submit }}
         </div>
 
+        <br/>
+      </form>    
 
 
 
