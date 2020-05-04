@@ -516,6 +516,7 @@ def vae_upload():
                     os.system(f"rm -rf {file_dir_path}")
 
                 # redirect to vae url with file arguments
+                # return redirect(f'/vae/{our_filename1}/{our_filename2}')
                 return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
         else:
             flash('Please upload exactly 2 MIDI files')
@@ -524,7 +525,7 @@ def vae_upload():
     return render_template('vae-upload.html',
                            form=file)
 
-
+# @application.route('/vae/<filename1>/<filename2>', methods=['GET', 'POST']) # not working
 @application.route('/vae', methods=['GET', 'POST'])
 @login_required
 def vae():
