@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>INDIGO- Upload</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <!-- UPLOAD STUFF -->
+    <!--<script src="../static/script/upload_progbar.js"></script>-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="../static/script/nav_script.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../static/style/style.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+  </head>
+    <body>
+    <div class="container">
+        <!-- Code from W3 schools Top Navigation Menu -->
+        <div class="topnav">
+        <a href="index" class="active">INDIGO</a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+          <a href="buy">BUY</a>
+          <a href="login">Login</a>
+          <a href="profile">My Songs</a>
+          <a href="about">About</a>
+          <a href="logout">Logout</a>
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
+          <h1>INDIGO</h1>
+            <h3>File 1 Upload</h3>
+            <div class="formArea">
+            {{ form1.csrf_token }} <!--  render the form's CSRF field like normal. -->
+            {{ form1.file_selector }}
+        <div class="filler"></div>
+            <br/>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <script>
+                  var messages = {{ messages | safe }};
+                  for (var i=0; i<messages.length; i++) {
+                  alert(messages[i]);
+                }
+                </script>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </form>
+
+        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
+            <h3>File 2 Upload</h3>
+            <div class="formArea">
+            {{ form2.csrf_token }} <!--  render the form's CSRF field like normal. -->
+            {{ form2.file_selector }}
+        <div class="filler"></div>
+            <br/>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <script>
+                  var messages = {{ messages | safe }};
+                  for (var i=0; i<messages.length; i++) {
+                  alert(messages[i]);
+                }
+                </script>
+              {% endif %}
+            {% endwith %}
+            {{ form2.submit }}
+          </div>
+        </form>
+
+        <label for="uploads">Select from uploads:</label>
+        <select id="uploads" onchange="redirectToMusic(this);">
+         <option disabled selected value="">Please select a value</option>
+          {% for song in uploads %}
+            <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
+          {% endfor %}
+        </select>
+
+        <label for="uploads">Select from uploads:</label>
+        <select id="uploads" onchange="redirectToMusic(this);">
+         <option disabled selected value="">Please select a value</option>
+          {% for song in uploads %}
+            <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
+          {% endfor %}
+        </select>
+        <br></br>
+        <div class="filler"></div>
+    </div> <!-- /container -->
+    </body>
+
+    <script>
+        function redirectToMusic(obj){
+            var selectedValue = obj.options[obj.selectedIndex].value;
+            window.location  = '/vae/'+selectedValue;
+        }
+    </script>
+
+</html>
