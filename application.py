@@ -363,6 +363,7 @@ def drums(filename):
 
 
 @application.route('/vae', methods=['GET', 'POST'])
+@login_required
 def vae():
     return render_template('vae.html')
 
