@@ -54,13 +54,11 @@ const LITTLE_TEAPOT = {
     totalQuantizedSteps: 26,
   };
 
+let upload1_quant;
+let upload2_quant;
+let combined
 function interpolate(midi1, midi2) {
-
-  let note_seq1;
-  let note_seq2
-  let upload1_quant;
-  let upload2_quant;
-
+  
   const upload1 = (mm.urlToNoteSequence(midi1)
                   .then(ns_val => note_seq1 = ns_val)
                   .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq1, 4)))
@@ -68,12 +66,7 @@ function interpolate(midi1, midi2) {
                   .then(ns_val => note_seq2 = ns_val)
                   .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq2, 4)))
 
-  mm.Player.tone.context.resume();  // enable audio
-  if (vaePlayer.isPlaying()) {
-    vaePlayer.stop();
-    return;
-  }
-
+  // mm.Player.tone.context.resume();  // enable audio
   // Music VAE requires quantized melodies, so quantize them first.
   // const star = mm.sequences.quantizeNoteSequence(TWINKLE_TWINKLE, 4);
   music_vae
@@ -82,4 +75,17 @@ function interpolate(midi1, midi2) {
     const concatenated = mm.sequences.concatenate(sample);
     vaePlayer.start(concatenated);
   });
+
+  if (vaePlayer.isPlaying()) {
+
+    vaePlayer.stop();
+    return;
+  }
+}
+
+function first(midi1, midi2){
+
+  interpolate(midi1, midi2);
+  setTimeout(() => {  interpolate(midi1, midi2); }, 2000);
+  
 }
