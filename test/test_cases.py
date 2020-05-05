@@ -79,9 +79,10 @@ def test_music_not_logged_in(client):
     """
     Tests that user not logged in cannot access the music page
     """
-    response = client.get('/music')
-    # 401 is unauthorized status code
-    assert response.status_code == 401
+    response = client.get('/profile/' + TEST_USER['user'])
+    # 302 is redirected status code
+    # page redirect to login
+    assert response.status_code == 302
 
 
 def test_register_test_user(client):
@@ -106,8 +107,8 @@ def test_login_test_user(client, init_database):
                                                password=TEST_USER['password']),
                            follow_redirects=True)
     assert response.status_code == 200
-    assert b'INDIGO- Make Music' in response.data
-    assert b'DrumsRNN' in response.data
+    assert b'Discover Users:' in response.data
+    assert b'Drums' in response.data
 
 
 def test_login_username_failure(client, init_database):
@@ -180,29 +181,25 @@ def test_file_upload(client, init_database):
     Tests that a logged in user can upload a file.
     Try/except to catch errors with s3 access
     """
+    # Delete files from our user already in DB, in case one exists
+    Files.query.filter_by(user_name=TEST_USER['user']).delete()
+    db.session.commit()
     client.post('/login', data=dict(username=TEST_USER['user'],
                                     password=TEST_USER['password']),
                 follow_redirects=True)
-    try:
-        response = client.post('/upload', data=dict(file_selector=
-                                                    (io.BytesIO(b"test string"),
-                                                     'Queen_test.mid')),
-                               follow_redirects=True,
-                               content_type='multipart/form-data')
-        assert b'Select from uploads' in response.data
-        assert FileFromDB(TEST_USER['user']).orig_filename == 'Queen_test'
-        # Deletes the uploaded test file from s3
-        s3_file_name = FileFromDB(TEST_USER['user']).our_filename
-        s3 = boto3.resource('s3')
-        s3.Object('midi-file-upload', s3_file_name).delete()
-        # Deletes the uploaded test file entry from postgres
-        Files.query.filter_by(user_name=TEST_USER['user']).delete()
-        db.session.commit()
-    # Catch any exception, bad practice--but will catch any possible s3 error
-    # that users get, while also allowing us to test properly in the try clause
-    except:
-        assert True
-
+    response = client.post('/upload', data=dict(file_selector=
+                                                (io.BytesIO(b"test string"),
+                                                 'Queen_test.mid')),
+                           follow_redirects=True,
+                           content_type='multipart/form-data')
+    assert b'Discover Users:' in response.data
+    assert FileFromDB(TEST_USER['user']).orig_filename == 'Queen_test'
+    assert FileFromDB(TEST_USER['user']).our_filename.\
+        startswith(TEST_USER['user'])
+    # Deletes the uploaded test file entry from postgres
+    Files.query.filter_by(user_name=TEST_USER['user']).delete()
+    db.session.commit()
+    
 
 def test_logout_logged_in_user(client, init_database):
     """
@@ -221,8 +218,8 @@ def test_logout_logged_out_user(client, init_database):
     Tests that a user not logged in cannot log out
     """
     response = client.get('/logout')
-    # 401 is unauthorized status code
-    assert response.status_code == 401
+    # 302 is redirected status code
+    assert response.status_code == 302
 
 
 def test_remove_test_user(init_database):
