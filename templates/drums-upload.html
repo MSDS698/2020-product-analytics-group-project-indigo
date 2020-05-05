@@ -2,35 +2,39 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>INDIGO- Upload</title>
+    <title>INDIGO - Upload</title>
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
-
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
     <!-- UPLOAD STUFF -->
     <!--<script src="../static/script/upload_progbar.js"></script>-->
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <script src="../static/script/nav_script.js"></script>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <link rel="stylesheet" href="../static/style/style.css">
-
-
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-
+    <style>
+        #left, #middle, #right {
+            display: inline-block;
+            text-align: center;
+            padding: 20px;
+            width: 33%;
+            height: 200px;
+            vertical-align: middle;
+        }
+        #samples, #uploads {
+            width: 300px;
+        }
+        #submit {
+            height: 50px;
+            width: 150px;
+        }
+    </style>
   </head>
     <body>
     <div class="container">
@@ -50,40 +54,55 @@
           <i class="fa fa-bars"></i>
         </a>
         </div>
+        <h1>INDIGO</h1>
+        <h3 style="padding-bottom:10px;">Select From One of The Three Methods Below</h3>
+        <div id="left">
+            <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
+            <p>File Upload</p>
+                <div class="formArea" style="width:300px;">
+                    {{ form.csrf_token }} <!--  render the form's CSRF field like normal. -->
 
-        <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
-          <h1>INDIGO</h1>
-            <h3>File Upload</h3>
-            <div class="formArea">
-            {{ form.csrf_token }} <!--  render the form's CSRF field like normal. -->
-
-            {{ form.file_selector }}
-        <div class="filler"></div>
-            <br/>
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <script>
-                  var messages = {{ messages | safe }};
-                  for (var i=0; i<messages.length; i++) {
-                  alert(messages[i]);
-                }
-                </script>
-              {% endif %}
-            {% endwith %}
-            {{ form.submit }}
-          </div>
-        </form>
-
-        <label for="uploads">Select from uploads:</label>
-        <select id="uploads" onchange="redirectToMusic(this);">
-         <option disabled selected value="">Please select a value</option>
-          {% for song in uploads %}
-            <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
-          {% endfor %}
-        </select>
-        <br></br>
-        <div class="filler"></div>
-    </div> <!-- /container -->
+                    {{ form.file_selector }}
+                    <div style="height:30px;"></div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <script>
+                              var messages = {{ messages | safe }};
+                              for (var i=0; i<messages.length; i++) {
+                              alert(messages[i]);
+                            }
+                            </script>
+                        {% endif %}
+                    {% endwith %}
+                    {{ form.submit }}
+                </div>
+            </form>
+        </div>
+        <div id="middle">
+            <label for="uploads" style="text-align: center;">Select from Existing Uploads:</label>
+            <div id="uploadsDiv">
+                <select id="uploads" onchange="redirectToMusic(this);">
+                 <option disabled selected value="">Select one of your midi files</option>
+                  {% for song in uploads %}
+                    <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id ="right">
+            <label for="samples" style="text-align: center;">Select from Samples:</label>
+            <div id="samplesDiv">
+                <select id="samples" onchange="redirectToMusic(this);">
+                    <option disabled selected value="">Choose from our sample midi files</option>
+                    <option value="bass_4bars">Bass Sample (4 Bars)</option>
+                    <option value="chuck_berry_8bars">Chuck Berry (Guitar 8 Bars)</option>
+                    <option value="all_around_the_world">All Around the World</option>
+                    <option value="nirvana">Where Did You Sleep Last Night?</option>
+                    <option value="drive">Drive</option>
+                </select>
+            </div>
+        </div>
+    </div>
     </body>
 
     <script>

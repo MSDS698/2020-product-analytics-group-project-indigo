@@ -349,19 +349,27 @@ def drums(filename):
         session = boto3.Session(profile_name='msds603')  # insert your profile name
         s3 = session.resource('s3')
 
-    object = s3.Object('midi-file-upload', filename)
 
-    # binary_body = object.get()['Body'].read()
-    # return render_template('test_playback.html', midi_binary=binary_body)
+    try:
+        object = s3.Object('midi-file-upload', filename)
 
-    # make directory and save files there
-    file_dir_path = './static/tmp'
+        # binary_body = object.get()['Body'].read()
+        # return render_template('test_playback.html', midi_binary=binary_body)
 
-    if not os.path.exists(file_dir_path):
-        os.mkdir(file_dir_path)
+        # make directory and save files there
+        file_dir_path = './static/tmp'
 
-    object.download_file(f'./static/tmp/{filename}.mid')
-    return render_template('drums.html', midi_file=filename + '.mid')
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+
+        object.download_file(f'./static/tmp/{filename}.mid')
+        user_file = True
+    except Exception as e:
+        # Flag used in template to direct file to be loaded from tmp or samples directory
+        user_file = False
+
+    finally:
+        return render_template('drums.html', midi_file=filename + '.mid', user_file=user_file)
 
 
 @application.route('/vae', methods=['GET', 'POST'])
@@ -390,7 +398,7 @@ def drums_upload():
         # filename : filename of FileField
         if not allowed_file(filename):
             flash('Incorrect File Type: Please upload a MIDI file')
-            return redirect(url_for('upload'))
+            return redirect(url_for('drums-upload'))
 
         # make directory and save files there
         cwd = os.getcwd()
