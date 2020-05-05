@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
     <meta charset="UTF-8">
     <title>INDIGO- DrumsRNN</title>
     <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
@@ -69,19 +78,6 @@
       <i class="fa fa-bars"></i>
     </a>
   </div>
-    <!--
-    <label>Select from your files:</label>
-    <div id="div1">
-        <select id="samples">
-            <option disabled selected value="">--select--</option>
-            <option value="bass_4bars.mid">Bass Sample (4 Bars)</option>
-            <option value="chuck_berry_8bars.mid">Chuck Berry (Guitar 8 Bars)</option>
-            <option value="all_around_the_world.mid">All Around the World</option>
-            <option value="nirvana.mid">Where Did You Sleep Last Night?</option>
-            <option value="drive.mid">Drive</option>
-        </select>
-    </div>
-    -->
     <div style="overflow:scroll; display:none" id="sample">
         <h3>Original Midi File</h3>
         <button id="btnPlaySample" class="button-circle" aria-label="play">
@@ -149,10 +145,18 @@
 <script type="text/javascript" src="/static/mappings.js"></script>
 <script src='/static/script/drums.js'></script>
 <script>
-    mm.urlToNoteSequence('/static/tmp/{{midi_file}}')
-    .then(function(url_note_seq){
-        note_seq = url_note_seq;
-        prepare_note_seq(note_seq);
-    });
+    {% if user_file %}
+        mm.urlToNoteSequence('/static/tmp/{{midi_file}}')
+        .then(function(url_note_seq){
+            note_seq = url_note_seq;
+            prepare_note_seq(note_seq);
+        });
+    {% else %}
+        mm.urlToNoteSequence('/static/guitar_bass_samples/{{midi_file}}')
+        .then(function(url_note_seq){
+            note_seq = url_note_seq;
+            prepare_note_seq(note_seq);
+        });
+    {% endif %}
 </script>
 </html>

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
+
     <meta charset="utf-8">
     <title>INDIGO- Sign Up</title>
     <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
@@ -24,12 +35,15 @@
       <a href="index" class="active">INDIGO</a>
       <!-- Navigation links (hidden by default) -->
       <div id="myLinks">
-        <a href="buy">BUY</a>
-        <a href="about">About</a>
+        <a href="buy" onclick="
+       gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});"> BUY </a>
+        <a href="about" onclick="
+       gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
 
       </div>
       <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <a href="javascript:void(0);" class="icon" onclick="myFunction();
+       gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -59,7 +73,7 @@
           {% endwith %}
 
 
-          {{ form.submit()}}
+          {{ form.submit(onclick="gtag('event','click',{'event_category':'button', 'event_label':'register_submit', 'value':1});") }}
       </form>
 
     </div>
@@ -68,7 +82,8 @@
 
     </div>
 
-    <p>Already have an account? <a href="login">Log in.</a> </p>
+    <p>Already have an account? <a href="login" onclick="
+       gtag('event','click',{'event_category':'button', 'event_label':'login_button', 'value':1});">Log in.</a> </p>
 
   </body>
 </html>

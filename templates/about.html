@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
+
     <meta charset="utf-8">
 
     <title>Indigo- About</title>
@@ -27,21 +38,22 @@
         <a href="index" class="active">INDIGO</a>
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
-          <a href="buy">BUY</a>
+          <a href="buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
           {% if not authenticated %}
-            <a href="login">Login</a>
+            <a href="login"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'login_nav_bar', 'value':1});">Login</a>
           {% endif %}
           {% if authenticated %}
-            <a href="profile/{{username}}">My Songs</a>
+            <a href="profile/{{username}}"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
           {% endif %}
-          <a href="about">About</a>
+          <a href="about"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
           {% if authenticated %}
-            <a href="logout">Logout</a>
+          <a href="logout"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
           {% endif %}
 
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();
+        gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
       </div>
