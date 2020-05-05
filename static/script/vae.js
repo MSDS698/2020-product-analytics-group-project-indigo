@@ -9,8 +9,8 @@ music_vae.initialize().then(() => {
 const vaePlayer = new mm.Player();
 const vae_temperature = 1.5
 
-let note_seq;
-let quantized_note_seq;
+// let note_seq;
+// let quantized_note_seq;
 // const upload1 = (mm.urlToNoteSequence('../static/guitar_bass_samples/bass_4bars.mid')
 //                 .then(ns_val => note_seq = ns_val)
 //                 .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
@@ -54,20 +54,19 @@ const LITTLE_TEAPOT = {
     totalQuantizedSteps: 26,
   };
 
-// function interpolate() {
 function interpolate(midi1, midi2) {
 
-  console.log(typeof midi1, midi1)
-  console.log(typeof midi2, midi2)
+  let note_seq1;
+  let note_seq2
+  let upload1_quant;
+  let upload2_quant;
 
-  mm.urlToNoteSequence(midi1)  
-
-  // var upload1 = (mm.urlToNoteSequence(midi1)
-  //                 .then(ns_val => note_seq = ns_val)
-  //                 .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
-  // var upload2 = (mm.urlToNoteSequence(midi2)
-  //                 .then(ns_val => note_seq = ns_val)
-  //                 .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq, 4)))
+  const upload1 = (mm.urlToNoteSequence(midi1)
+                  .then(ns_val => note_seq1 = ns_val)
+                  .then(vars => upload1_quant = mm.sequences.quantizeNoteSequence(note_seq1, 4)))
+  const upload2 = (mm.urlToNoteSequence(midi2)
+                  .then(ns_val => note_seq2 = ns_val)
+                  .then(vars => upload2_quant = mm.sequences.quantizeNoteSequence(note_seq2, 4)))
 
   mm.Player.tone.context.resume();  // enable audio
   if (vaePlayer.isPlaying()) {

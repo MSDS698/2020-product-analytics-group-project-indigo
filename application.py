@@ -476,7 +476,6 @@ def vae_upload():
                     os.mkdir(file_dir_path)
                 file_path1 = os.path.join(file_dir_path, filename1)
                 file_path2 = os.path.join(file_dir_path, filename2)
-                print('filepaths', file_path1, file_path2)
                 f1.save(file_path1)
                 f2.save(file_path2)
 
@@ -516,7 +515,6 @@ def vae_upload():
                     os.system(f"rm -rf {file_dir_path}")
 
                 # redirect to vae url with file arguments
-                # return redirect(f'/vae/{our_filename1}/{our_filename2}')
                 return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
         else:
             flash('Please upload exactly 2 MIDI files')
@@ -533,8 +531,6 @@ def vae():
 
     filename1 = request.args.get('filename1')
     filename2 = request.args.get('filename2')
-
-    print(filename1, filename2)
 
     if on_dev:
         s3 = boto3.resource('s3')  # comment out when on local
