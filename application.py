@@ -200,6 +200,7 @@ def profile(username):
     other_users = Customer.query.all()
     other_users = [o.username for o in other_users]
     other_users.remove(current_user.username)
+    other_users.remove('test')
     random.shuffle(other_users)
     return render_template('profile.html', uploads=uploads,
                            username=username,
@@ -280,13 +281,10 @@ def upload():
            dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
                                                  our_filename)
 
-
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
             
-        
-
-        return redirect(url_for('music'))  # Redirect to / (/index) page.
+        return redirect(url_for('profile', username=current_user.username))  # Redirect to /profile/<username> page.
 
     return render_template('upload.html', form=file, uploads=uploads,
                            username=current_user.username)
@@ -398,8 +396,7 @@ def drums_upload():
         # filename : filename of FileField
         if not allowed_file(filename):
             flash('Incorrect File Type: Please upload a MIDI file')
-            return redirect(url_for('drums-upload'))
-
+            return redirect('drums-upload')
         # make directory and save files there
         cwd = os.getcwd()
 

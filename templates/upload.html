@@ -47,7 +47,6 @@
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
           <a href="buy">BUY</a>
-          <a href="login">Login</a>
           <a href="profile/{{username}}">My Songs</a>
           <a href="about">About</a>
           <a href="logout">Logout</a>
@@ -65,6 +64,7 @@
 
         <form method="POST" enctype="multipart/form-data"> <!-- post : handle submission -->
           <h1>INDIGO</h1>
+          <div class="filler"></div>
             <h3>File Upload</h3>
             <div class="formArea">
             {{ form.csrf_token }} <!--  render the form's CSRF field like normal. -->
