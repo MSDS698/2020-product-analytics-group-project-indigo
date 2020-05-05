@@ -181,6 +181,9 @@ def test_file_upload(client, init_database):
     Tests that a logged in user can upload a file.
     Try/except to catch errors with s3 access
     """
+    # Delete files from our user already in DB, in case one exists
+    Files.query.filter_by(user_name=TEST_USER['user']).delete()
+    db.session.commit()
     client.post('/login', data=dict(username=TEST_USER['user'],
                                     password=TEST_USER['password']),
                 follow_redirects=True)
