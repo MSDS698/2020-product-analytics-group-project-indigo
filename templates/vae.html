@@ -26,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <script src="../static/script/nav_script.js"></script>
     <script src='../static/script/vae.js'></script>
 
   </head>
@@ -44,26 +44,26 @@
 
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
-        <a href="index" class="active">INDIGO</a>
-        <!-- Navigation links (hidden by default) -->
-        <div id="myLinks">
-          <a href="buy">BUY</a>
-          <a href="create">Create</a>
-          <a href="my_songs">My Songs</a>
-          <a href="about">About</a>
-          <a href="logout">Logout</a>
-        </div>
+            <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+            <!-- Navigation links (hidden by default) -->
+            <div id="myLinks">
+              <a href="../buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+              <a href="../profile" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+              <a href="../about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+              <a href="../logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+            </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
-      </div>
+        </div>
 
 
 
 		<figure>
         <h1 id="loading">Loading...</h1>
-        <button onclick="interpolate(midi1='../static/tmp/{{midi_file1}}', midi2='../static/tmp/{{midi_file2}}')" style="display:none">VAE Interpolate</button>
+        <button onclick="interpolate(midi1='../static/tmp/{{midi_file1}}', midi2='../static/tmp/{{midi_file2}}');
+                  gtag('event','click',{'event_category':'button', 'event_label':'generate_vae', 'value':10});" style="display:none">VAE Interpolate</button>
         <br/>
         <button onclick="stop()" style="display:none">Stop</button>
 		</figure>

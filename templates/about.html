@@ -35,7 +35,7 @@
 
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
-        <a href="index" class="active">INDIGO</a>
+        <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
           <a href="buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
@@ -52,8 +52,7 @@
 
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction();
-        gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
       </div>

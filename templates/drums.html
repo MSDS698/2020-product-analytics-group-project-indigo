@@ -64,17 +64,17 @@
 
   <!-- Code from W3 schools Top Navigation Menu -->
   <div class="topnav">
-    <a href="index" class="active">INDIGO</a>
+    <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
     <!-- Navigation links (hidden by default) -->
     <div id="myLinks">
-      <a href="../buy">BUY</a>
-      <a href="../profile/{{username}}">My Songs</a>
-      <a href="../about">About</a>
-      <a href="../logout">Logout</a>
+      <a href="../buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+      <a href="../profile" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+      <a href="../about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+      <a href="../logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
 
     </div>
     <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
       <i class="fa fa-bars"></i>
     </a>
   </div>
@@ -113,7 +113,7 @@
         <svg id='instrumentViz'></svg>
     </div>
     <div id="drum_rnn" style="display:none; padding-top: 30px; padding-bottom: 30px;">
-        <button type="button" id="drums_rnn">Generate Drum Beat (RNN)</button>
+        <button type="button" id="drums_rnn" onclick="gtag('event','click',{'event_category':'button', 'event_label':'generate_drum', 'value':10});">Generate Drum Beat (RNN)</button>
         <div style="text-align:center">
             <label for="rnn_temp" id="rnnLabel">Model Temperature (Higher = More Experimental Output):</label>
             <input type="number" id="rnn_temp" max="5.0" min="0.0" value="1.4" step=0.01>
@@ -134,7 +134,7 @@
         <svg id='drumsViz'></svg>
     </div>
     <div id="combined" class="buttonContainer" style="display:none">
-        <button type="button" id="btnPlayCombined">Play Sample with Generated Drum Track</button>
+        <button type="button" id="btnPlayCombined" onclick="gtag('event','click',{'event_category':'button', 'event_label':'play_drum', 'value':10});">Play Sample with Generated Drum Track</button>
         <button type="button" id="stopCombined" style="display:none">Stop Music</button>
     </div>
 
