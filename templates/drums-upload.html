@@ -50,17 +50,16 @@
     <div class="container">
         <!-- Code from W3 schools Top Navigation Menu -->
         <div class="topnav">
-        <a href="index" class="active">INDIGO</a>
-        <!-- Navigation links (hidden by default) -->
-        <div id="myLinks">
-          <a href="buy">BUY</a>
-          <a href="login">Login</a>
-          <a href="profile">My Songs</a>
-          <a href="about">About</a>
-          <a href="logout">Logout</a>
-        </div>
+            <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+            <!-- Navigation links (hidden by default) -->
+            <div id="myLinks">
+              <a href="../buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+              <a href="../profile" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+              <a href="../about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+              <a href="../logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+            </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
         </div>
@@ -84,14 +83,14 @@
                             </script>
                         {% endif %}
                     {% endwith %}
-                    {{ form.submit }}
+                    {{ form.submit(onclick="gtag('event','click',{'event_category':'button', 'event_label':'drum_upload', 'value':1});") }}
                 </div>
             </form>
         </div>
         <div id="middle">
             <label for="uploads" style="text-align: center;">Select from Existing Uploads:</label>
             <div id="uploadsDiv">
-                <select id="uploads" onchange="redirectToMusic(this);">
+                <select id="uploads" onchange="redirectToMusic(this);" onclick="gtag('event','click',{'event_category':'button', 'event_label':'drum_select_upload', 'value':1});">
                  <option disabled selected value="">Select one of your midi files</option>
                   {% for song in uploads %}
                     <option value="{{song.our_filename}}">{{song.orig_filename}}</option>
@@ -102,7 +101,7 @@
         <div id ="right">
             <label for="samples" style="text-align: center;">Select from Samples:</label>
             <div id="samplesDiv">
-                <select id="samples" onchange="redirectToMusic(this);">
+                <select id="samples" onchange="redirectToMusic(this);" onclick="gtag('event','click',{'event_category':'button', 'event_label':'drum_select_sample', 'value':1});">
                     <option disabled selected value="">Choose from our sample midi files</option>
                     <option value="bass_4bars">Bass Sample (4 Bars)</option>
                     <option value="chuck_berry_8bars">Chuck Berry (Guitar 8 Bars)</option>

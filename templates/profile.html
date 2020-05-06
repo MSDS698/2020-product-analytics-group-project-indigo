@@ -36,20 +36,19 @@
 
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
-        <a href="../index" class="active">INDIGO</a>
+        <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
-          <a href="../buy">BUY</a>
-          <a href="../profile/{{username}}">My Songs</a>
-          <a href="../about">About</a>
-          <a href="../logout">Logout</a>
-
+          <a href="../buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+          <a href="../profile/{{username}}" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+          <a href="../about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+          <a href="../logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
-      </div>
+    </div>
 
       <!-- Body  -->
 
@@ -66,11 +65,11 @@
             Upload
           </label> -->
 
-          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='../upload';">Upload</button>
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:30px;" onclick="location.href='../upload';gtag('event','click',{'event_category':'button', 'event_label':'upload_button', 'value':1});">Upload</button>
 
-          <button type="button" name="button" style="display: inline; margin: auto; margin-left:17px;" onclick="location.href='../drums-upload';">Drums</button>
+          <button type="button" name="button" style="display: inline; margin: auto; margin-left:17px;" onclick="location.href='../drums-upload';gtag('event','click',{'event_category':'button', 'event_label':'drums_button', 'value':5});">Drums</button>
 
-          <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='../vae-upload';">Music Interpolation</button>
+          <button type="button" name="button" style="display: inline; margin: auto; float:right" onclick="location.href='../vae-upload';gtag('event','click',{'event_category':'button', 'event_label':'vae_button', 'value':5});">Music Interpolation</button>
         </div>
 
         <div class="filler"></div>
