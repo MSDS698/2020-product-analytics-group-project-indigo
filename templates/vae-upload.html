@@ -1,33 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-165125544-1');
-    </script>
-
     <meta charset="utf-8">
     <title>INDIGO- Upload</title>
-    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
-    <script src="https://unpkg.com/@tonejs/midi"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
 
     <link rel="stylesheet" href="../static/style/style.css">
-    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../static/script/audio_script.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src='../static/script/vae.js'></script>
+    <script src="../static/script/nav_script.js"></script>
+
 
   </head>
   <body>
@@ -59,17 +54,19 @@
         </a>
       </div>
 
-
-
-		<figure>
-        <h1 id="loading">Loading...</h1>
-        <button onclick="interpolate(midi1='../static/tmp/{{midi_file1}}', midi2='../static/tmp/{{midi_file2}}')" style="display:none">VAE Interpolate</button>
+      <form method="POST" enctype="multipart/form-data">
+        <h1>INDIGO</h1>
+        <h3>Upload 2 Midi Files (.mid or .midi)</h3>
         <br/>
-        <button onclick="stop()" style="display:none">Stop</button>
-		</figure>
+        <div class="formArea">
+          {{form.csrf_token}}
+          <input type="file" name="midi_files" multiple>
+          <!-- <input type="submit" value="Submit"> -->
+          {{ form.submit }}
+        </div>
 
-        <div class="filler"></div>
-
+        <br/>
+      </form>    
 
 
 
