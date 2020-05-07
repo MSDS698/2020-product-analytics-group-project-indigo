@@ -197,12 +197,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-# @application.route('/create')
-# @login_required
-# def start():
-#    return render_template('create.html')
-
-
 @application.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
@@ -300,12 +294,6 @@ def upload():
                            username=current_user.username)
 
 
-# @application.route('/demo', methods=['GET', 'POST'])
-# def demo():
-#    """ Load demo page showing Magenta """
-#    return render_template('demo.html')
-
-
 @application.route('/about', methods=['GET', 'POST'])
 def about():
     """Load About page"""
@@ -317,18 +305,6 @@ def about():
                            authenticated=current_user.is_authenticated)
 
 
-# @application.route('/music', methods=['GET', 'POST'])
-# @login_required
-# def music():
-#    uploads = Files.query.filter_by(user_name=current_user.username).all()
-#    
-#    return render_template('music.html', uploads=uploads)
-
-
-# @application.route('/create', methods=['GET', 'POST'])
-# def create():
-#    return render_template('create.html')
-
 @application.route('/buy', methods=['GET', 'POST'])
 def buy():
     if current_user.is_authenticated:
@@ -337,10 +313,6 @@ def buy():
         username = None
     return render_template('buy.html', username=username,
                            authenticated=current_user.is_authenticated)
-
-# @application.route('/my_music', methods=['GET', 'POST'])
-# def my_music():
-#    return render_template('my_music.html')
 
 
 @application.route('/drums/<filename>', methods=['GET', 'POST'])
@@ -529,6 +501,7 @@ def vae_upload():
 
     return render_template('vae-upload.html',
                            form=file)
+
 
 # @application.route('/vae/<filename1>/<filename2>', methods=['GET', 'POST']) # not working
 @application.route('/vae', methods=['GET', 'POST'])
