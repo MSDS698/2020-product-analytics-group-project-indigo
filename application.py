@@ -1,10 +1,9 @@
-import csv
+import boto3
 import os
-import sys
-from datetime import datetime
 import random
 
 from config import Config
+from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash, Flask
 from flask_login import LoginManager, UserMixin, current_user, login_user, \
     login_required, logout_user
@@ -18,7 +17,6 @@ from wtforms import BooleanField, DateField, IntegerField, SelectField, \
 from wtforms.validators import DataRequired
 from werkzeug.security import check_password_hash, generate_password_hash
 
-import boto3
 
 ALLOWED_EXTENSIONS = {'midi', 'mid'}
 
@@ -242,7 +240,6 @@ def upload():
 
         f.save(file_path)
 
-
         user_name = current_user.username
         orig_filename = filename.rsplit('.', 1)[0]
         file_type = filename.rsplit('.', 1)[1]
@@ -255,16 +252,13 @@ def upload():
 
         # check for duplicates file
         user_file_list = db.session.query(Files.orig_filename)\
-            .filter(Files.user_name==user_name).all()
+            .filter(Files.user_name == user_name).all()
         user_file_list = [elem[0] for elem in user_file_list]
 
         if orig_filename in user_file_list:
-            # return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
-
             flash('You have already uploaded a file with this name, \
                   please upload a new file or rename this one to upload.')
             return redirect(url_for('upload'))
-
 
         file = Files(user_name, orig_filename, file_type,
                      model_used, our_filename, file_upload_timestamp)
@@ -280,15 +274,16 @@ def upload():
         # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
         # secret key from iam on jacobs account
         else:
-           session = boto3.Session(profile_name='msds603') 
-           dev_s3_client = session.resource('s3')
-           dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload',
-                                                 our_filename)
+            session = boto3.Session(profile_name='msds603')
+            dev_s3_client = session.resource('s3')
+            dev_s3_client.meta.client.upload_file(file_path,
+                                                  'midi-file-upload',
+                                                  our_filename)
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
-            
-        return redirect(url_for('profile', username=current_user.username))  # Redirect to /profile/<username> page.
+        # Redirect to /profile/<username> page.
+        return redirect(url_for('profile', username=current_user.username))
 
     return render_template('upload.html', form=file, uploads=uploads,
                            username=current_user.username)
@@ -320,15 +315,15 @@ def buy():
 def drums(filename):
     # uncomment the next 2 lines when on local
 
-    # session = boto3.Session(profile_name='msds603') # insert your profile name
+    # session = boto3.Session(profile_name='msds603') insert your profile name
     # s3 = session.resource('s3')
     if on_dev:
         s3 = boto3.resource('s3')  # comment out when on local
     # LOCAL
     else:
-        session = boto3.Session(profile_name='msds603')  # insert your profile name
+        # insert your profile name
+        session = boto3.Session(profile_name='msds603')
         s3 = session.resource('s3')
-
 
     try:
         object = s3.Object('midi-file-upload', filename)
@@ -345,11 +340,13 @@ def drums(filename):
         object.download_file(f'./static/tmp/{filename}.mid')
         user_file = True
     except Exception as e:
-        # Flag used in template to direct file to be loaded from tmp or samples directory
+        # Flag used in template to direct file to be
+        # loaded from tmp or samples directory
         user_file = False
 
     finally:
-        return render_template('drums.html', midi_file=filename + '.mid', user_file=user_file)
+        return render_template('drums.html', midi_file=filename + '.mid',
+                               user_file=user_file)
 
 
 @application.errorhandler(401)
@@ -398,14 +395,14 @@ def drums_upload():
         file_upload_timestamp = datetime.now()
 
         # check for duplicates file
-        user_file_list = db.session.query(Files.orig_filename).filter(Files.user_name == user_name).all()
+        user_file_list = db.session.query(Files.orig_filename).\
+            filter(Files.user_name == user_name).all()
         user_file_list = [elem[0] for elem in user_file_list]
 
         if orig_filename in user_file_list:
-            # return render_template('upload.html', form=file, uploads=uploads, invalid_file_extension = False, dup_file = True)
-
             flash(
-                'You have already uploaded a file with this name, please upload a new file or rename this one to upload.')
+                'You have already uploaded a file with this name, '
+                'please upload a new file or rename this one to upload.')
             return redirect('drums-upload')
 
         file = Files(user_name, orig_filename, file_type,
@@ -416,14 +413,17 @@ def drums_upload():
         # TAKES CARE OF DEV OR local
         if on_dev:
             s3 = boto3.resource('s3')
-            s3.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+            s3.meta.client.upload_file(file_path, 'midi-file-upload',
+                                       our_filename)
 
         # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
         # secret key from iam on jacobs account
         else:
             session = boto3.Session(profile_name='msds603')
             dev_s3_client = session.resource('s3')
-            dev_s3_client.meta.client.upload_file(file_path, 'midi-file-upload', our_filename)
+            dev_s3_client.meta.client.upload_file(file_path,
+                                                  'midi-file-upload',
+                                                  our_filename)
 
         if os.path.exists(file_dir_path):
             os.system(f"rm -rf {file_dir_path}")
@@ -445,7 +445,8 @@ def vae_upload():
             filename1, filename2 = f1.filename, f2.filename
 
             if (not allowed_file(filename1)) or (not allowed_file(filename1)):
-                flash('Incorrect File Type: Please upload MIDI files - .mid or .midi extensions')
+                flash('Incorrect File Type: Please upload MIDI files - .mid '
+                      'or .midi extensions')
                 return redirect('vae-upload')
             else:
                 # write locally. Will be deleted later.
@@ -463,20 +464,24 @@ def vae_upload():
 
                 orig_filename1 = filename1.rsplit('.', 1)[0]
                 file_type1 = filename1.rsplit('.', 1)[1]
-                num_user_files1 = Files.query.filter_by(user_name=user_name).count()
+                num_user_files1 = Files.query.filter_by(user_name=user_name).\
+                    count()
                 our_filename1 = f'{user_name}_{num_user_files1}'
                 file_upload_timestamp1 = datetime.now()
                 file1 = Files(user_name, orig_filename1, file_type1,
-                              model_used, our_filename1, file_upload_timestamp1)
+                              model_used, our_filename1,
+                              file_upload_timestamp1)
                 db.session.add(file1)
 
                 orig_filename2 = filename2.rsplit('.', 1)[0]
                 file_type2 = filename2.rsplit('.', 1)[1]
-                num_user_files2 = Files.query.filter_by(user_name=user_name).count()
+                num_user_files2 = Files.query.filter_by(user_name=user_name).\
+                    count()
                 our_filename2 = f'{user_name}_{num_user_files2}'
                 file_upload_timestamp2 = datetime.now()
                 file2 = Files(user_name, orig_filename2, file_type2,
-                              model_used, our_filename2, file_upload_timestamp2)
+                              model_used, our_filename2,
+                              file_upload_timestamp2)
                 db.session.add(file2)
 
                 db.session.commit()
@@ -486,15 +491,18 @@ def vae_upload():
                 else:
                     s3 = boto3.Session(profile_name='msds603').resource('s3')
 
-                s3.meta.client.upload_file(file_path1, 'midi-file-upload', our_filename1)
-                s3.meta.client.upload_file(file_path2, 'midi-file-upload', our_filename2)
+                s3.meta.client.upload_file(file_path1, 'midi-file-upload',
+                                           our_filename1)
+                s3.meta.client.upload_file(file_path2, 'midi-file-upload',
+                                           our_filename2)
 
                 # remove the locally written files
                 if os.path.exists(file_dir_path):
                     os.system(f"rm -rf {file_dir_path}")
 
                 # redirect to vae url with file arguments
-                return redirect(url_for('vae', filename1=our_filename1, filename2=our_filename2))
+                return redirect(url_for('vae', filename1=our_filename1,
+                                        filename2=our_filename2))
         else:
             flash('Please upload exactly 2 MIDI files')
             return redirect('vae-upload')
@@ -503,7 +511,8 @@ def vae_upload():
                            form=file)
 
 
-# @application.route('/vae/<filename1>/<filename2>', methods=['GET', 'POST']) # not working
+# @application.route('/vae/<filename1>/<filename2>',
+# methods=['GET', 'POST']) # not working
 @application.route('/vae', methods=['GET', 'POST'])
 @login_required
 def vae():
@@ -516,7 +525,8 @@ def vae():
         s3 = boto3.resource('s3')  # comment out when on local
     # LOCAL
     else:
-        session = boto3.Session(profile_name='msds603')  # insert your profile name
+        # insert your profile name
+        session = boto3.Session(profile_name='msds603')
         s3 = session.resource('s3')
 
     object1 = s3.Object('midi-file-upload', filename1)
@@ -534,6 +544,7 @@ def vae():
     return render_template('vae.html',
                            midi_file1=filename1 + '.mid',
                            midi_file2=filename2 + '.mid')
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True

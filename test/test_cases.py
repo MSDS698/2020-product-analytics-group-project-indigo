@@ -1,6 +1,7 @@
-import boto3
 import pytest
 import io
+import os
+import subprocess
 from application import application, db, Customer, Files
 
 TEST_USER = dict(user='TEST_USER',
@@ -229,3 +230,13 @@ def test_remove_test_user(init_database):
     Customer.query.filter_by(username=TEST_USER['user']).delete()
     db.session.commit()
     assert UserFromDB(TEST_USER['user']) is None
+
+
+def test_pep8():
+    path = os.path.dirname(os.path.abspath(__file__))
+    print(path)
+    with open(path + '/pep8.sh', 'r') as f:
+        script = f.read()
+    pep8_output = subprocess.check_output(script, shell=True).decode("utf-8")
+    assert 'E' not in pep8_output
+
