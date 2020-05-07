@@ -205,6 +205,7 @@ $("#btnPlaySample").click( (e) => play(samplePlayer, note_seq));
 $("#btnPlayDrums").click( (e) => play(drumsPlayer, generated_seq));
 $("#btnPlayInstrument").click( (e) => play(instrumentPlayer, instrument_seq));
 
+// Credit to: https://codepen.io/iansimon/embed/Bxgbgz
 $("#btnDownload").click(function(){
   output_midi = mm.sequenceProtoToMidi(combined_seq); // produces a byteArray
   output_file = new Blob([output_midi], {type: 'audio/midi'});
