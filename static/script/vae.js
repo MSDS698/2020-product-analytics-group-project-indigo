@@ -13,6 +13,11 @@ let upload1_quant;
 let upload2_quant;
 let note_seq1;
 let note_seq2;
+let concatenated
+
+//download
+let output_midi;
+let output_file;
 
 function interpolate(midi1, midi2) {
   
@@ -26,8 +31,9 @@ function interpolate(midi1, midi2) {
                   .then(vars => music_vae
                       .interpolate([upload1_quant, upload2_quant], 4)
                       .then((sample) => {
-                        const concatenated = mm.sequences.concatenate(sample);
+                        concatenated = mm.sequences.concatenate(sample);
                         vaePlayer.start(concatenated);
+                        $("#download").show();
                       }));
 }
 
@@ -38,5 +44,26 @@ function stop(){
   else{
     vaePlayer.start();
   }
-  return;
+}
+
+// Credit to: https://codepen.io/iansimon/embed/Bxgbgz
+function download(){
+  console.log('HI!');
+  output_midi = mm.sequenceProtoToMidi(concatenated); // produces a byteArray
+  output_file = new Blob([output_midi], {type: 'audio/midi'});
+
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(file, 'output.mid');
+  } else { // Others
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(output_file);
+    a.href = url;
+    a.download = 'output.mid';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
 }

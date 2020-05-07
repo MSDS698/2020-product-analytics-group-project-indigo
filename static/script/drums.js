@@ -40,6 +40,7 @@ let music_rnn;
 
 //download
 let output_midi;
+let output_file;
 
 init();
 
@@ -214,9 +215,9 @@ $("#btnDownload").click(function(){
     window.navigator.msSaveOrOpenBlob(file, 'output.mid');
   } else { // Others
     const a = document.createElement('a');
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(output_file);
     a.href = url;
-    a.download = 'interp.mid';
+    a.download = 'output.mid';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
