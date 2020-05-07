@@ -92,8 +92,10 @@ def test_register_test_user(client):
     """
     response = client.post('/register', data=dict(username=TEST_USER['user'],
                                                   email=TEST_USER['email'],
-                                                  password=TEST_USER['password'],
-                                                  confirm=TEST_USER['password'],
+                                                  password=TEST_USER
+                                                  ['password'],
+                                                  confirm=TEST_USER
+                                                  ['password'],
                                                   accept_tos='y'),
                            follow_redirects=True)
     assert response.status_code == 200
@@ -188,9 +190,8 @@ def test_file_upload(client, init_database):
     client.post('/login', data=dict(username=TEST_USER['user'],
                                     password=TEST_USER['password']),
                 follow_redirects=True)
-    response = client.post('/upload', data=dict(file_selector=
-                                                (io.BytesIO(b"test string"),
-                                                 'Queen_test.mid')),
+    response = client.post('/upload', data=dict(
+        file_selector=(io.BytesIO(b"test string"), 'Queen_test.mid')),
                            follow_redirects=True,
                            content_type='multipart/form-data')
     assert b'Discover Users:' in response.data
@@ -200,7 +201,7 @@ def test_file_upload(client, init_database):
     # Deletes the uploaded test file entry from postgres
     Files.query.filter_by(user_name=TEST_USER['user']).delete()
     db.session.commit()
-    
+
 
 def test_logout_logged_in_user(client, init_database):
     """
@@ -239,4 +240,3 @@ def test_pep8():
         script = f.read()
     pep8_output = subprocess.check_output(script, shell=True).decode("utf-8")
     assert 'E' not in pep8_output
-
