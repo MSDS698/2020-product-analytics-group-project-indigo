@@ -38,6 +38,10 @@ let program_notes;
 // models
 let music_rnn;
 
+//download
+let output_midi;
+let output_file;
+
 init();
 
 function init(){
@@ -185,6 +189,7 @@ $("#drums_rnn").click(function(){
         combined_seq['notes'].push(...generated_seq['notes']);
 
         $("#combined").show();
+        $("#download").show();
     })
 });
 
@@ -200,6 +205,27 @@ $("#stopCombined").click(function(){
 $("#btnPlaySample").click( (e) => play(samplePlayer, note_seq));
 $("#btnPlayDrums").click( (e) => play(drumsPlayer, generated_seq));
 $("#btnPlayInstrument").click( (e) => play(instrumentPlayer, instrument_seq));
+
+// Credit to: https://codepen.io/iansimon/embed/Bxgbgz
+$("#btnDownload").click(function(){
+  output_midi = mm.sequenceProtoToMidi(combined_seq); // produces a byteArray
+  output_file = new Blob([output_midi], {type: 'audio/midi'});
+
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(file, 'output.mid');
+  } else { // Others
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(output_file);
+    a.href = url;
+    a.download = 'output.mid';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+});
 
 
 function play(player, n_seq){
