@@ -18,6 +18,9 @@ let concatenated
 //download
 let output_midi;
 let output_file;
+//saving
+let output_filename;
+let json_data;
 
 function interpolate(midi1, midi2) {
   
@@ -33,7 +36,7 @@ function interpolate(midi1, midi2) {
                       .then((sample) => {
                         concatenated = mm.sequences.concatenate(sample);
                         vaePlayer.start(concatenated);
-                        $("#download").show();
+                        $("#saveDiv").show();
                       }));
 }
 
@@ -46,9 +49,33 @@ function stop(){
   }
 }
 
+function save(){
+    output_filename = $("#save_name").val();
+    if(output_filename==''){
+        alert("Filename can't be empty, please enter a valid filename");
+        return
+    }
+    json_data = {"byteArray": mm.sequenceProtoToMidi(mm.sequences.unquantizeSequence(concatenated)),
+                 "output_filename":output_filename,
+                 "model": "vae"
+                }
+    $.ajax({
+        url: "/save",
+        method: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(json_data),
+        success: function(result){
+            alert(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert("Error: "+errorThrown);
+        }
+    });
+}
+
 // Credit to: https://codepen.io/iansimon/embed/Bxgbgz
 function download(){
-  console.log('HI!');
+  output_filename = $("#save_name").val();
   output_midi = mm.sequenceProtoToMidi(concatenated); // produces a byteArray
   output_file = new Blob([output_midi], {type: 'audio/midi'});
 
@@ -58,7 +85,7 @@ function download(){
     const a = document.createElement('a');
     const url = URL.createObjectURL(output_file);
     a.href = url;
-    a.download = 'output.mid';
+    a.download = output_filename+'.mid';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
