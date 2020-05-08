@@ -91,12 +91,20 @@
               <th align="left" style="width:100%;">My Songs</th>
             </thead>
             <tbody>
-              {% for song in uploads %}
+              <!-- {% for song in uploads %}
                 <tr style="width:100%;">
                   <td>{{song.orig_filename}}</td>
                   <td>{{song.model_used}}</td>
                 </tr>
+              {% endfor %} -->
+
+              {% for i in range(uploads | length) %}
+                <tr style="width:100%;">
+                <td> <a href="" onclick="MIDIjs.play('./static/tmp/{{objects[i].key}}.mid');">{{uploads[i].orig_filename}}</a> </td>
+                <td>{{uploads[i].model_used}}</td>
+              </tr>
               {% endfor %}
+
             </tbody>
           </table>
 

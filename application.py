@@ -205,9 +205,42 @@ def profile(username):
     other_users.remove(current_user.username)
     other_users.remove('test')
     random.shuffle(other_users)
+    
+    ##############
+    
+    if on_dev:
+        s3 = boto3.resource('s3')  # comment out when on local
+    # LOCAL
+    else:
+        # insert your profile name
+        session = boto3.Session(profile_name='msds603')
+        s3 = session.resource('s3')
+
+    try:
+        objects = [s3.Object('midi-file-upload', u.orig_filename) for u in uploads]
+
+        # binary_body = object.get()['Body'].read()
+        # return render_template('test_playback.html', midi_binary=binary_body)
+
+        # make directory and save files there
+        file_dir_path = './static/tmp'
+
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+            
+        for o in range(len(objects)):
+            objects[o].download_file(f'./static/tmp/{uploads[o].orig_filename}.mid')
+            
+        user_file = True
+    except Exception as e:
+        # Flag used in template to direct file to be
+        # loaded from tmp or samples directory
+        user_file = False
+
+
 
     return render_template('profile.html', uploads=uploads,
-                           username=username,
+                           username=username, objects=objects,
                            other_users=other_users[:3])
 
 
@@ -304,6 +337,8 @@ def about():
 
 @application.route('/buy', methods=['GET', 'POST'])
 def buy():
+    """ Return page with information on purchasing our product 
+    """
     if current_user.is_authenticated:
         username = current_user.username
     else:
@@ -353,6 +388,8 @@ def drums(filename):
 
 @application.errorhandler(401)
 def re_route(e):
+    """ Handle 401 errors and redirect non-logged in users to login page. 
+    """
     return redirect(url_for('login'))
 
 
@@ -438,6 +475,8 @@ def drums_upload():
 @application.route('/vae-upload', methods=['GET', 'POST'])
 @login_required
 def vae_upload():
+    """ Page to upload two files for use in music interpolation using the MusicVAE
+    """
     file = UploadMultipleForm()
 
     if file.validate_on_submit():
@@ -518,7 +557,7 @@ def vae_upload():
 @application.route('/vae', methods=['GET', 'POST'])
 @login_required
 def vae():
-    """Interpolate between 2 files"""
+    """Interpolate between 2 files using MusicVAE using the two uploaded files """
 
     filename1 = request.args.get('filename1')
     filename2 = request.args.get('filename2')
@@ -551,6 +590,8 @@ def vae():
 
 @application.route('/save', methods=['GET', 'POST'])
 def save():
+    """
+    """
     try:
         jsonData = request.get_json()
         model_used = jsonData['model']
