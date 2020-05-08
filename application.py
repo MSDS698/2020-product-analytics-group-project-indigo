@@ -204,6 +204,7 @@ def profile(username):
     other_users.remove(current_user.username)
     other_users.remove('test')
     random.shuffle(other_users)
+
     return render_template('profile.html', uploads=uploads,
                            username=username,
                            other_users=other_users[:3])

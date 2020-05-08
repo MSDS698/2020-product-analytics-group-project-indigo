@@ -29,6 +29,8 @@
 
     <script src="../../static/script/nav_script.js"></script>
 
+    <script type='text/javascript' src='//www.midijs.net/lib/midi.js'></script>
+
   </head>
   <body>
 
@@ -92,6 +94,7 @@
               {% for song in uploads %}
                 <tr style="width:100%;">
                   <td>{{song.orig_filename}}</td>
+                  <td>{{song.model_used}}</td>
                 </tr>
               {% endfor %}
             </tbody>
