@@ -137,8 +137,13 @@
         <button type="button" id="btnPlayCombined" onclick="gtag('event','click',{'event_category':'button', 'event_label':'play_drum', 'value':10});">Play Sample with Generated Drum Track</button>
         <button type="button" id="stopCombined" style="display:none">Stop Music</button>
     </div>
-    <div id="download" style="display:none">
-        <button type="button" id="btnDownload">Download</button>
+    <div id="saveDiv" style="display:none; text-align:center">
+        <div style="text-align:center">
+            <label for="save_name" id="saveLabel" style="vertical-align:middle">Give your output a name:</label>
+            <input type="text" id="save_name" style="float:none; width:250px; vertical-align:middle; margin:0px;">
+        </div>
+        <button type="button" id="save" style="display:inline-block;">Save Output</button>
+        <button type="button" id="btnDownload" style="display:inline-block;">Download</button>
     </div>
     <p id='footer'>Made with <a href="https://magenta.tensorflow.org/">Google Magenta</a> </p>
 
