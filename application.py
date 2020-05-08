@@ -1,6 +1,7 @@
 import boto3
 import os
 import random
+import unicodedata, re
 
 from config import Config
 from datetime import datetime
@@ -546,6 +547,79 @@ def vae():
                            midi_file1=filename1 + '.mid',
                            midi_file2=filename2 + '.mid')
 
+
+
+@application.route('/save', methods=['GET', 'POST'])
+def save():
+    try:
+        jsonData = request.get_json()
+        model_used = jsonData['model']
+        newFilename = slugify(jsonData["output_filename"])
+        IntArray = [int(val) for val in jsonData['byteArray'].values()]
+        newFileByteArray = bytearray(IntArray)
+
+        file_path = f'static/tmp/{newFilename}.mid'
+        with open(file_path, 'wb') as f:
+            f.write(newFileByteArray)
+
+        user_name = current_user.username
+        orig_filename = newFilename
+        print(orig_filename)
+
+        # get num of files user has uploaded thus far
+        num_user_files = Files.query.filter_by(user_name=user_name).count()
+        our_filename = f'{user_name}_{num_user_files}_{model_used}'
+        file_upload_timestamp = datetime.now()
+
+        # check for duplicates file
+        user_file_list = db.session.query(Files.orig_filename). \
+            filter(Files.user_name == user_name).all()
+        user_file_list = [elem[0] for elem in user_file_list]
+
+        if orig_filename in user_file_list:
+            return(
+                'You have already uploaded a file with this name, '
+                'please rename this one to save.')
+
+        file = Files(user_name, orig_filename, 'mid',
+                     model_used, our_filename, file_upload_timestamp)
+        db.session.add(file)
+        db.session.commit()
+
+        # TAKES CARE OF DEV OR local
+        if on_dev:
+            s3 = boto3.resource('s3')
+            s3.meta.client.upload_file(file_path, 'midi-file-upload',
+                                       our_filename)
+
+        # USE FOR REMOTE - msds603 is my alias in ./aws credentials file using
+        # secret key from iam on jacobs account
+        else:
+            session = boto3.Session(profile_name='msds603')
+            dev_s3_client = session.resource('s3')
+            dev_s3_client.meta.client.upload_file(file_path,
+                                                  'midi-file-upload',
+                                                  our_filename)
+
+        return "File saved!"
+
+    except Exception as e:
+        return f"Error occurred, try again: \n {e}"
+
+
+def slugify(value, allow_unicode=False):
+    """
+    Convert to ASCII if 'allow_unicode' is False. Convert spaces to hyphens.
+    Remove characters that aren't alphanumerics, underscores, or hyphens.
+    Convert to lowercase. Also strip leading and trailing whitespace.
+    """
+    value = str(value)
+    if allow_unicode:
+        value = unicodedata.normalize('NFKC', value)
+    else:
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '', value.lower()).strip()
+    return re.sub(r'[-\s]+', '-', value)
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True

@@ -41,6 +41,9 @@ let music_rnn;
 //download
 let output_midi;
 let output_file;
+//saving
+let output_filename;
+let json_data;
 
 init();
 
@@ -167,6 +170,7 @@ $('#instruments').on('change', function () {
                                 config
                                 );
     $("#instrument").show();
+    $(window).scrollTop($('#instrument').offset().top)
 });
 
 $("#drums_rnn").click(function(){
@@ -189,7 +193,8 @@ $("#drums_rnn").click(function(){
         combined_seq['notes'].push(...generated_seq['notes']);
 
         $("#combined").show();
-        $("#download").show();
+        $("#saveDiv").show();
+        $(window).scrollTop($('#drums').offset().top)
     })
 });
 
@@ -206,10 +211,37 @@ $("#btnPlaySample").click( (e) => play(samplePlayer, note_seq));
 $("#btnPlayDrums").click( (e) => play(drumsPlayer, generated_seq));
 $("#btnPlayInstrument").click( (e) => play(instrumentPlayer, instrument_seq));
 
+
+$("#save").click(function(){
+    output_filename = $("#save_name").val();
+    if(output_filename==''){
+        alert("Filename can't be empty, please enter a valid filename");
+        return
+    }
+    json_data = {"byteArray": mm.sequenceProtoToMidi(mm.sequences.unquantizeSequence(combined_seq)),
+                 "output_filename":output_filename,
+                 "model": "rnn"
+                }
+    $.ajax({
+        url: "/save",
+        method: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(json_data),
+        success: function(result){
+            alert(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert("Error: "+errorThrown);
+        }
+    });
+});
+
+
 // Credit to: https://codepen.io/iansimon/embed/Bxgbgz
 $("#btnDownload").click(function(){
   output_midi = mm.sequenceProtoToMidi(combined_seq); // produces a byteArray
   output_file = new Blob([output_midi], {type: 'audio/midi'});
+  output_filename = $("#save_name").val();
 
   if (window.navigator.msSaveOrOpenBlob) {
     window.navigator.msSaveOrOpenBlob(file, 'output.mid');
@@ -217,7 +249,7 @@ $("#btnDownload").click(function(){
     const a = document.createElement('a');
     const url = URL.createObjectURL(output_file);
     a.href = url;
-    a.download = 'output.mid';
+    a.download = output_filename+'.mid';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {

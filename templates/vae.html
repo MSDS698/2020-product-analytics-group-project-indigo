@@ -28,7 +28,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="../static/script/nav_script.js"></script>
     <script src='../static/script/vae.js'></script>
-
+    <style>
+        #save, #btnDownload {
+            display:inline-block;
+        }
+    </style>
   </head>
   <body>
     {% with messages = get_flashed_messages() %}
@@ -70,9 +74,14 @@
 
         <div class="filler"></div>
 
-    <div id="download" style="display:none">
-        <button type="button" id="btnDownload" onclick="download()">Download</button>
-    </div>
+        <div id="saveDiv" style="display:none; text-align:center">
+            <div style="text-align:center">
+                <label for="save_name" id="saveLabel" style="vertical-align:middle">Give your output a name:</label>
+                <input type="text" id="save_name" style="float:none; width:250px; vertical-align:middle; margin:0px;">
+            </div>
+            <button type="button" id="save" onclick="save()">Save Output</button>
+            <button type="button" id="btnDownload" onclick="download()">Download</button>
+        </div>
 
     </div>
 
