@@ -153,77 +153,88 @@
             
   <div class="section" id="requirements">
 <h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
-<div class="line-block">
-<div class="line">alabaster==0.7.12</div>
-<div class="line">attrs==19.3.0</div>
-<div class="line">awscli==1.18.29</div>
-<div class="line">awsebcli==3.17.1</div>
-<div class="line">Babel==2.8.0</div>
-<div class="line">bcrypt==3.1.7</div>
-<div class="line">blessed==1.17.4</div>
-<div class="line">botocore==1.14.17</div>
-<div class="line">boto3==1.12.23</div>
-<div class="line">cached-property==1.5.1</div>
-<div class="line">cement==2.8.2</div>
-<div class="line">certifi==2019.11.28</div>
-<div class="line">cffi==1.14.0</div>
-<div class="line">chardet==3.0.4</div>
-<div class="line">click==7.1.1</div>
-<div class="line">colorama==0.3.9</div>
-<div class="line">cryptography==2.8</div>
-<div class="line">docker==4.2.0</div>
-<div class="line">docker-compose==1.25.4</div>
-<div class="line">dockerpty==0.4.1</div>
-<div class="line">docopt==0.6.2</div>
-<div class="line">docutils==0.15.2</div>
-<div class="line">Flask==1.1.1</div>
-<div class="line">Flask-Login==0.5.0</div>
-<div class="line">Flask-SQLAlchemy==2.4.1</div>
-<div class="line">Flask-WTF==0.14.3</div>
-<div class="line">future==0.16.0</div>
-<div class="line">idna==2.7</div>
-<div class="line">imagesize==1.2.0</div>
-<div class="line">importlib-metadata==1.5.1</div>
-<div class="line">itsdangerous==1.1.0</div>
-<div class="line">Jinja2==2.11.1</div>
-<div class="line">jmespath==0.9.5</div>
-<div class="line">jsonschema==3.2.0</div>
-<div class="line">MarkupSafe==1.1.1</div>
-<div class="line">packaging==20.3</div>
-<div class="line">paramiko==2.7.1</div>
-<div class="line">pathspec==0.5.9</div>
-<div class="line">pyasn1==0.4.8</div>
-<div class="line">pycparser==2.20</div>
-<div class="line">Pygments==2.6.1</div>
-<div class="line">PyNaCl==1.3.0</div>
-<div class="line">pyparsing==2.4.6</div>
-<div class="line">pyrsistent==0.16.0</div>
-<div class="line">python-dateutil==2.8.0</div>
-<div class="line">pytz==2019.3</div>
-<div class="line">PyYAML==5.2</div>
-<div class="line">requests==2.20.1</div>
-<div class="line">rsa==3.4.2</div>
-<div class="line">s3transfer==0.3.3</div>
-<div class="line">semantic-version==2.5.0</div>
-<div class="line">six==1.11.0</div>
-<div class="line">snowballstemmer==2.0.0</div>
-<div class="line">Sphinx==2.4.4</div>
-<div class="line">sphinxcontrib-applehelp==1.0.2</div>
-<div class="line">sphinxcontrib-devhelp==1.0.2</div>
-<div class="line">sphinxcontrib-htmlhelp==1.0.3</div>
-<div class="line">sphinxcontrib-jsmath==1.0.1</div>
-<div class="line">sphinxcontrib-qthelp==1.0.3</div>
-<div class="line">sphinxcontrib-serializinghtml==1.1.4</div>
-<div class="line">sphinx_rtd_theme==0.4.3</div>
-<div class="line">SQLAlchemy==1.3.9</div>
-<div class="line">termcolor==1.1.0</div>
-<div class="line">texttable==1.6.2</div>
-<div class="line">urllib3==1.24.3</div>
-<div class="line">wcwidth==0.1.9</div>
-<div class="line">websocket-client==0.57.0</div>
-<div class="line">Werkzeug==1.0.0</div>
-<div class="line">WTForms==2.2.1</div>
-<div class="line">zipp==3.1.0</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alabaster</span><span class="o">==</span><span class="mf">0.7</span><span class="o">.</span><span class="mi">12</span>
+<span class="n">atomicwrites</span><span class="o">==</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">attrs</span><span class="o">==</span><span class="mf">19.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">awscli</span><span class="o">==</span><span class="mf">1.18</span><span class="o">.</span><span class="mi">29</span>
+<span class="n">awsebcli</span><span class="o">==</span><span class="mf">3.17</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">Babel</span><span class="o">==</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">bcrypt</span><span class="o">==</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">7</span>
+<span class="n">blessed</span><span class="o">==</span><span class="mf">1.17</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">boto3</span><span class="o">==</span><span class="mf">1.12</span><span class="o">.</span><span class="mi">23</span>
+<span class="n">botocore</span><span class="o">==</span><span class="mf">1.14</span><span class="o">.</span><span class="mi">17</span>
+<span class="n">cached</span><span class="o">-</span><span class="nb">property</span><span class="o">==</span><span class="mf">1.5</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">cement</span><span class="o">==</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">certifi</span><span class="o">==</span><span class="mf">2019.11</span><span class="o">.</span><span class="mi">28</span>
+<span class="n">cffi</span><span class="o">==</span><span class="mf">1.14</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">chardet</span><span class="o">==</span><span class="mf">3.0</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">click</span><span class="o">==</span><span class="mf">7.1</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">colorama</span><span class="o">==</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">cryptography</span><span class="o">==</span><span class="mf">2.8</span>
+<span class="n">DateTime</span><span class="o">==</span><span class="mf">4.3</span>
+<span class="n">docker</span><span class="o">==</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span><span class="o">==</span><span class="mf">1.25</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">dockerpty</span><span class="o">==</span><span class="mf">0.4</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">docopt</span><span class="o">==</span><span class="mf">0.6</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">docutils</span><span class="o">==</span><span class="mf">0.15</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">Flask</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">Flask</span><span class="o">-</span><span class="n">Login</span><span class="o">==</span><span class="mf">0.5</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Flask</span><span class="o">-</span><span class="n">S3</span><span class="o">==</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">Flask</span><span class="o">-</span><span class="n">SQLAlchemy</span><span class="o">==</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">Flask</span><span class="o">-</span><span class="n">WTF</span><span class="o">==</span><span class="mf">0.14</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">future</span><span class="o">==</span><span class="mf">0.16</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">idna</span><span class="o">==</span><span class="mf">2.7</span>
+<span class="n">imagesize</span><span class="o">==</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">importlib</span><span class="o">-</span><span class="n">metadata</span><span class="o">==</span><span class="mf">1.5</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">itsdangerous</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Jinja2</span><span class="o">==</span><span class="mf">2.11</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">jmespath</span><span class="o">==</span><span class="mf">0.9</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">jsonschema</span><span class="o">==</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">MarkupSafe</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">more</span><span class="o">-</span><span class="n">itertools</span><span class="o">==</span><span class="mf">8.2</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">packaging</span><span class="o">==</span><span class="mf">20.3</span>
+<span class="n">paramiko</span><span class="o">==</span><span class="mf">2.7</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">pathspec</span><span class="o">==</span><span class="mf">0.5</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">pluggy</span><span class="o">==</span><span class="mf">0.13</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">psycopg2</span><span class="o">==</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">py</span><span class="o">==</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">pyasn1</span><span class="o">==</span><span class="mf">0.4</span><span class="o">.</span><span class="mi">8</span>
+<span class="n">pycparser</span><span class="o">==</span><span class="mf">2.20</span>
+<span class="n">Pygments</span><span class="o">==</span><span class="mf">2.6</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">PyNaCl</span><span class="o">==</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">pyparsing</span><span class="o">==</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">6</span>
+<span class="n">pyrsistent</span><span class="o">==</span><span class="mf">0.16</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">pytest</span><span class="o">==</span><span class="mf">5.2</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">pytest</span><span class="o">-</span><span class="n">flask</span><span class="o">==</span><span class="mf">0.10</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">python</span><span class="o">-</span><span class="n">dateutil</span><span class="o">==</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">pytz</span><span class="o">==</span><span class="mf">2019.3</span>
+<span class="n">PyYAML</span><span class="o">==</span><span class="mf">5.2</span>
+<span class="n">requests</span><span class="o">==</span><span class="mf">2.20</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">rsa</span><span class="o">==</span><span class="mf">3.4</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">s3transfer</span><span class="o">==</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">semantic</span><span class="o">-</span><span class="n">version</span><span class="o">==</span><span class="mf">2.5</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">six</span><span class="o">==</span><span class="mf">1.11</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">snowballstemmer</span><span class="o">==</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Sphinx</span><span class="o">==</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">sphinx</span><span class="o">-</span><span class="n">rtd</span><span class="o">-</span><span class="n">theme</span><span class="o">==</span><span class="mf">0.4</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">applehelp</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">devhelp</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">htmlhelp</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">jsmath</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">qthelp</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">sphinxcontrib</span><span class="o">-</span><span class="n">serializinghtml</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">4</span>
+<span class="n">SQLAlchemy</span><span class="o">==</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">termcolor</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">texttable</span><span class="o">==</span><span class="mf">1.6</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">unicode</span><span class="o">==</span><span class="mf">2.7</span>
+<span class="n">urllib3</span><span class="o">==</span><span class="mf">1.24</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">wcwidth</span><span class="o">==</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">9</span>
+<span class="n">websocket</span><span class="o">-</span><span class="n">client</span><span class="o">==</span><span class="mf">0.57</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Werkzeug</span><span class="o">==</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">WTForms</span><span class="o">==</span><span class="mf">2.2</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">zipp</span><span class="o">==</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">zope</span><span class="o">.</span><span class="n">interface</span><span class="o">==</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">0</span>
+</pre></div>
 </div>
 </div>
 

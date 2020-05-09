@@ -10,7 +10,7 @@ Our web application will have a user interface that allows users to dictate the 
 
 ### The Application:
 
-http://indigo-webserver.eba-mxse8mrw.us-west-2.elasticbeanstalk.com/
+http://indigomusicstudio.com/
 
 ### Code Documentation:
 

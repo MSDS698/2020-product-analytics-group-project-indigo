@@ -118,7 +118,9 @@
           {% for other in other_users %}
 
             <div class="otherProfile">
-              <img src="../static/default_profile.png" alt="" style="width:100px;" >
+              <a href="{{other}}">
+              <img src="../static/default_profile.png" alt="" style="width:100px;"> 
+            </a>
 
               <a href="{{other}}" style="display:inline;float:right;margin-top:25%;">{{other | upper}}</a>
 
@@ -136,4 +138,7 @@
 
 
   </body>
+
+
+
 </html>

@@ -2,10 +2,10 @@ Authors
 =======
 The Indigo team members are:
 
-| Jacob Goffin - Product Manager and Front End Engineer
-| Hannah Lyon - Front End UI and JS integration
-| Ash Jha - Engineer to build Magenta JS API pipeline
-| Rushil Sheth - Engineer to build Magenta JS API pipeline
-| Kirsten Tsai - Backend Infrastructure and Data Engineering
-| Lori Sheng - Backend Infrastructure and Data Engineering
+| Jacob Goffin - Product Manager
+| Hannah Lyon - Front End Engineer
+| Ash Jha - Fullstack Engineer
+| Rushil Sheth - Full Stack Engineer
+| Kirsten Tsai - Backend Engineer
+| Lori Sheng - Backend Engineer
 | Alan Flint - Data Scientist and QA
