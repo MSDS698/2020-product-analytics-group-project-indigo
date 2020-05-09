@@ -4,6 +4,7 @@ import random
 import unicodedata, re
 import json
 
+
 from config import Config
 from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash, Flask
@@ -207,8 +208,40 @@ def profile(username):
     other_users.remove('test')
     random.shuffle(other_users)
 
+    ##############
+    if on_dev:
+        s3 = boto3.resource('s3')  # comment out when on local
+    # LOCAL
+    else:
+        # insert your profile name
+        session = boto3.Session(profile_name='msds603')
+        s3 = session.resource('s3')
+
+    try:
+        objects = [s3.Object('midi-file-upload', u.orig_filename)
+                   for u in uploads]
+
+        # binary_body = object.get()['Body'].read()
+        # return render_template('test_playback.html', midi_binary=binary_body)
+
+        # make directory and save files there
+        file_dir_path = './static/tmp'
+
+        if not os.path.exists(file_dir_path):
+            os.mkdir(file_dir_path)
+
+        for o in range(len(objects)):
+            objects[o].download_file(f'./static/tmp/'
+                                     f'{uploads[o].orig_filename}.mid')
+
+        user_file = True
+    except Exception as e:
+        # Flag used in template to direct file to be
+        # loaded from tmp or samples directory
+        user_file = False
+
     return render_template('profile.html', uploads=uploads,
-                           username=username,
+                           username=username, objects=objects,
                            other_users=other_users[:3])
 
 
@@ -305,6 +338,8 @@ def about():
 
 @application.route('/buy', methods=['GET', 'POST'])
 def buy():
+    """ Return page with information on purchasing our product
+    """
     if current_user.is_authenticated:
         username = current_user.username
     else:
@@ -316,10 +351,9 @@ def buy():
 @application.route('/drums/<filename>', methods=['GET', 'POST'])
 @login_required
 def drums(filename):
-    # uncomment the next 2 lines when on local
-
-    # session = boto3.Session(profile_name='msds603') insert your profile name
-    # s3 = session.resource('s3')
+    """
+    Render drums page with uploaded or selected files from drums upload page
+    """
     if on_dev:
         s3 = boto3.resource('s3')  # comment out when on local
     # LOCAL
@@ -367,6 +401,8 @@ def drums(filename):
 
 @application.errorhandler(401)
 def re_route(e):
+    """ Handle 401 errors and redirect non-logged in users to login page.
+    """
     return redirect(url_for('login'))
 
 
@@ -452,6 +488,9 @@ def drums_upload():
 @application.route('/vae-upload', methods=['GET', 'POST'])
 @login_required
 def vae_upload():
+    """ Page to upload two files for use in music interpolation
+    using the MusicVAE
+    """
     file = UploadMultipleForm()
 
     if file.validate_on_submit():
@@ -532,7 +571,8 @@ def vae_upload():
 @application.route('/vae', methods=['GET', 'POST'])
 @login_required
 def vae():
-    """Interpolate between 2 files"""
+    """Interpolate between 2 files using MusicVAE using the two uploaded files
+    """
 
     filename1 = request.args.get('filename1')
     filename2 = request.args.get('filename2')
@@ -562,9 +602,11 @@ def vae():
                            midi_file2=filename2 + '.mid')
 
 
-
 @application.route('/save', methods=['GET', 'POST'])
 def save():
+    """
+
+    """
     try:
         jsonData = request.get_json()
         print(jsonData)
@@ -632,9 +674,11 @@ def slugify(value, allow_unicode=False):
     if allow_unicode:
         value = unicodedata.normalize('NFKC', value)
     else:
-        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = unicodedata.normalize('NFKD', value).\
+            encode('ascii', 'ignore').decode('ascii')
     value = re.sub(r'[^\w\s-]', '', value.lower()).strip()
     return re.sub(r'[-\s]+', '-', value)
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
