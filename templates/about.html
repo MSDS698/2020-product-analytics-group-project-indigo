@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
+
     <meta charset="utf-8">
 
     <title>Indigo- About</title>
@@ -24,18 +35,24 @@
 
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
-        <a href="index" class="active">INDIGO</a>
+        <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
-          <a href="buy">BUY</a>
-          <a href="login">Login</a>
-          <a href="create">Create</a>
-          <a href="my_songs">My Songs</a>
-          <a href="about">About</a>
-          <a href="logout">Logout</a>
+          <a href="buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+          {% if not authenticated %}
+            <a href="login"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'login_nav_bar', 'value':1});">Login</a>
+          {% endif %}
+          {% if authenticated %}
+            <a href="profile/{{username}}"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+          {% endif %}
+          <a href="about"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+          {% if authenticated %}
+          <a href="logout"  onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+          {% endif %}
+
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
           <i class="fa fa-bars"></i>
         </a>
       </div>
@@ -44,6 +61,21 @@
 
       <div class="about">
         <h3>Inspired by Google's <a href="https://magenta.tensorflow.org/">Magenta</a>, we created Indigo. <br> We aim to provide a tool for musicians to create new music <br> and augment the creative process.</h3>
+
+        <h3>- We hope you enjoy Indigo and its many features. Here is what we currently offer to our users:</h3>
+
+        <h3>- Breakdown of tracks into its component instruments</h3>
+
+        <h3>- Generation of a drumline to add to user's existing tracks</h3>
+
+        <h3>- Interpolation between tracks</h3>
+
+        <div class="filler">
+
+        </div>
+
+        <h2>Our Team:</h2>
+
       </div>
 
       <div class="filler"></div>
@@ -54,7 +86,7 @@
         <img src="static/Rushil.png" alt="Rushil Headshot" height = "300px">
         <h3>Rushil Sheth</h3>
         <h4>Fullstack Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:rjsheth2@usfca.edu';">Contact</button>
       </div>
 
@@ -62,7 +94,7 @@
         <img src="static/Jacob.png" alt="Jacob Headshot" height = "300px">
         <h3>Jacob Goffin</h3>
         <h4>Product Manager</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:jgoffin@usfca.edu';">Contact</button>
       </div>
 
@@ -70,7 +102,7 @@
         <img src="static/Lori.png" alt="Lori Headshot" height = "300px">
         <h3>Lori Sheng</h3>
         <h4>Backend Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:lsheng@usfca.edu';">Contact</button>
       </div>
 
@@ -78,7 +110,7 @@
         <img src="static/Ash.png" alt="Ash Headshot" height = "300px">
         <h3>Ash Jha</h3>
         <h4>Fullstack Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:akjha@usfca.edu';">Contact</button>
       </div>
 
@@ -86,7 +118,7 @@
         <img src="static/Hannah.png" alt="Hannah Headshot" height = "300px">
         <h3>Hannah Lyon</h3>
         <h4>Front End Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:hlyon@usfca.edu';">Contact</button>
       </div>
 
@@ -94,7 +126,7 @@
         <img src="static/Alan.png" alt="Alan Headshot" height = "300px">
         <h3>Alan Flint</h3>
         <h4>Data Scientist</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:aflint2@usfca.edu';">Contact</button>
       </div>
 
@@ -102,7 +134,7 @@
         <img src="static/Kirsten.png" alt="Kirsten Headshot" height = "300px">
         <h3>Kirsten Tsai</h3>
         <h4>Backend Engineer</h4>
-        <p>Description</p>
+        <!-- <p>Description</p> -->
         <button onclick="location.href='mailto:mtsai@usfca.edu';">Contact</button>
       </div>
 

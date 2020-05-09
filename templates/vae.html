@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
+
+    <meta charset="utf-8">
+    <title>INDIGO- Upload</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- In <head> -->
+    <link href="../static/style/nouislider.css" rel="stylesheet">
+      <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="shortcut icon" type="image/jpg" href="../static/favicon.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../static/script/nav_script.js"></script>
+    <script src='../static/script/vae.js'></script>
+    <style>
+        #save, #btnDownload {
+            display:inline-block;
+        }
+        #btnPlaySample, #btnPlayDrums, #btnPlayInstrument {
+            height: 40px;
+            width: 75px;
+            position: absolute;
+            top: 10px;
+            left: 5px;
+        }
+        #sample{
+            margin: 40px;
+            position: relative;
+        }
+    </style>
+  </head>
+  <body onload="init(midi1='../static/tmp/{{midi_file1}}', midi2='../static/tmp/{{midi_file2}}')">
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+         <ul class="flashes">
+            {% for message in messages %}
+             <div class="message_flash">{{ message }}</div>
+            {% endfor %}
+        </ul>
+      {% endif %}
+     {% endwith %}
+
+     <!-- Code from W3 schools Top Navigation Menu -->
+     <div class="topnav">
+
+       {% if current_user.is_authenticated %}
+
+       <a href="profile/{{current_user.username}}" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+       {% else %}
+
+       <a href="../index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+       {% endif %}
+
+           <!-- Navigation links (hidden by default) -->
+           <div id="myLinks">
+             <a href="/buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+             <a href="/profile/{{username}}" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+             <a href="/about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+             <a href="/logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+           </div>
+       <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+       <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
+         <i class="fa fa-bars"></i>
+       </a>
+       </div>
+
+
+    <div class="container">
+
+
+		<figure>
+        <h1 id="loading">Loading...</h1>
+
+		<div style="overflow:scroll; display:none; text-align:center" id="sample">
+            <h2>Music Interpolation</h2>
+            <div style="text-align:center; padding-bottom: 30px;">
+                <label for="instruments" style="text-align: center;">Change Instrument</label>
+                <div id="instrumentsDiv">
+                    <select id="instruments" onchange="modifyInstrument(this);" style="width:200px;">
+                        <option value="0">Piano</option>
+                        <option value="26">Guitar</option>
+                        <option value="33">Bass Guitar</option>
+                        <option value="65">Saxaphone</option>
+                        <option value="52">Choir</option>
+                    </select>
+                </div>
+            </div>
+            <button id="btnPlaySample" class="button-circle" aria-label="play" onclick="start_stop();">
+                  <svg id="playSample" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                  </svg>
+                  <svg id="stopSample" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M6 6h12v12H6z"/>
+                  </svg>
+            </button>
+            <div id="slider" style="width:2880px;"></div>
+            <svg id='vaeViz'></svg>
+        </div>
+
+        <div class="filler"></div>
+
+        <div id="saveDiv" style="display:none; text-align:center">
+            <div style="text-align:center">
+                <label for="save_name" id="saveLabel" style="vertical-align:middle">Give your output a name:</label>
+                <input type="text" id="save_name" style="float:none; width:250px; vertical-align:middle; margin:0px;">
+            </div>
+            <button type="button" id="save" onclick="save()">Save Output</button>
+            <button type="button" id="btnDownload" onclick="download()">Download</button>
+        </div>
+
+    </div>
+
+    <!-- In <body> -->
+    <script src="../static/script/nouislider.js"></script>
+    <script>
+        var slider = document.getElementById('slider');
+
+        noUiSlider.create(slider, {
+            start: [1, 99],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 100
+            }
+        });
+    </script>
+  </body>
+</html>

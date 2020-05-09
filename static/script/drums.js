@@ -38,6 +38,13 @@ let program_notes;
 // models
 let music_rnn;
 
+//download
+let output_midi;
+let output_file;
+//saving
+let output_filename;
+let json_data;
+
 init();
 
 function init(){
@@ -68,14 +75,54 @@ function init(){
         run: function(note){
             drumsViz.redraw(note, true);
             sampleViz.redraw(note, true);
-            instrumentViz.redraw(note, true);
+            //instrumentViz.redraw(note, true); // Only add later below if know multiple instruments are in midi file
             },
         stop: () => {}
     };
 
 }
 
+function prepare_note_seq(note_seq_var){
+    quantized_note_seq = mm.sequences.quantizeNoteSequence(note_seq_var, 4);
+    $("#sample").show();
+    sample_tempo = note_seq_var['tempos'];
+    sampleViz = new mm.PianoRollSVGVisualizer(
+                            note_seq_var,
+                            document.getElementById('sampleViz'),
+                            config
+                            );
+
+    // Find the programs/instruments that exist in the MIDI file
+    programs = [...new Set(quantized_note_seq['notes'].map(note => note.program))];
+    // Create an array of arrays, one array for each program/instrument's notes
+    program_notes = programs.map(program => notes_filter(program));
+    // Create array of Magenta note_sequence objects, one fore each program/instrument
+    separated_sequences =  program_notes.map(obj => replace_notes_in_sequence(quantized_note_seq, obj));
+
+
+    if (separated_sequences.length > 1) {
+        // call function to load list showing option for track separately
+        create_instrument_list(separated_sequences);
+        $("#instrumentList").show();
+        // Add instrumentViz redraw if multiple instruments exist
+        combinedPlayer.callbackObject = {
+            run: function(note){
+                drumsViz.redraw(note, true);
+                sampleViz.redraw(note, true);
+                instrumentViz.redraw(note, true);
+                },
+            stop: () => {}
+        };
+    }
+    else {
+         alert("Only one instrument found in MIDI file, click ok to continue");
+         instrument_seq = quantized_note_seq;
+    }
+
+}
+
 // Event Listeners
+/*
 $('#samples').on('change', function () {
     mm.urlToNoteSequence('/static/guitar_bass_samples/'+this.value)
     .then(ns_val => note_seq = ns_val)
@@ -109,8 +156,9 @@ $('#samples').on('change', function () {
         }
 
     })
-
 });
+*/
+
 
 $('#instruments').on('change', function () {
     console.log(this.value)
@@ -122,6 +170,7 @@ $('#instruments').on('change', function () {
                                 config
                                 );
     $("#instrument").show();
+    $(window).scrollTop($('#instrument').offset().top)
 });
 
 $("#drums_rnn").click(function(){
@@ -133,6 +182,7 @@ $("#drums_rnn").click(function(){
     .then(function(sample) {
         generated_seq = sample;
         generated_seq['tempos'] = sample_tempo;
+        generated_seq['notes'].forEach(note => note['program']=9)
         $("#drums").show();
         generated_unquantized = mm.sequences.unquantizeSequence(generated_seq);
         drumsViz = new mm.PianoRollSVGVisualizer(
@@ -144,6 +194,8 @@ $("#drums_rnn").click(function(){
         combined_seq['notes'].push(...generated_seq['notes']);
 
         $("#combined").show();
+        $("#saveDiv").show();
+        $(window).scrollTop($('#drums').offset().top)
     })
 });
 
@@ -159,6 +211,54 @@ $("#stopCombined").click(function(){
 $("#btnPlaySample").click( (e) => play(samplePlayer, note_seq));
 $("#btnPlayDrums").click( (e) => play(drumsPlayer, generated_seq));
 $("#btnPlayInstrument").click( (e) => play(instrumentPlayer, instrument_seq));
+
+
+$("#save").click(function(){
+    output_filename = $("#save_name").val();
+    if(output_filename==''){
+        alert("Filename can't be empty, please enter a valid filename");
+        return
+    }
+    json_data = {"noteSequence": mm.sequences.unquantizeSequence(combined_seq),
+                 "output_filename":output_filename,
+                 "model": "rnn"
+                }
+    $.ajax({
+        url: "/save",
+        method: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(json_data),
+        success: function(result){
+            alert(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert("Error: "+errorThrown);
+        }
+    });
+});
+
+
+// Credit to: https://codepen.io/iansimon/embed/Bxgbgz
+$("#btnDownload").click(function(){
+  output_midi = mm.sequenceProtoToMidi(combined_seq); // produces a byteArray
+  output_file = new Blob([output_midi], {type: 'audio/midi'});
+  output_filename = $("#save_name").val();
+
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(file, 'output.mid');
+  } else { // Others
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(output_file);
+    a.href = url;
+    a.download = output_filename+'.mid';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+});
 
 
 function play(player, n_seq){

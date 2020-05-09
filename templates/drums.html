@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165125544-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-165125544-1');
+    </script>
     <meta charset="UTF-8">
     <title>INDIGO- DrumsRNN</title>
     <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.2.3"></script>
@@ -55,35 +64,29 @@
 
   <!-- Code from W3 schools Top Navigation Menu -->
   <div class="topnav">
-    <a href="index" class="active">INDIGO</a>
+    {% if current_user.is_authenticated %}
+
+    <a href="../profile/{{current_user.username}}" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+    {% else %}
+
+    <a href="../index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+    {% endif %}
     <!-- Navigation links (hidden by default) -->
     <div id="myLinks">
-      <a href="buy">BUY</a>
-      <a href="login">Login</a>
-      <a href="create">Create</a>
-      <a href="my_songs">My Songs</a>
-      <a href="about">About</a>
-      <a href="logout">Logout</a>
-
+        <a href="/buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+        <a href="/profile/{{username}}" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+        <a href="/about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+        <a href="/logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
     </div>
     <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <a href="javascript:void(0);" class="icon" onclick="myFunction();gtag('event','click',{'event_category':'button', 'event_label':'nav_bar', 'value':1});">
       <i class="fa fa-bars"></i>
     </a>
   </div>
-
-    <label>Select from your files:</label>
-    <div id="div1">
-        <select id="samples">
-            <option disabled selected value="">--select--</option>
-            <option value="bass_4bars.mid">Bass Sample (4 Bars)</option>
-            <option value="chuck_berry_8bars.mid">Chuck Berry (Guitar 8 Bars)</option>
-            <option value="all_around_the_world.mid">All Around the World</option>
-            <option value="nirvana.mid">Where Did You Sleep Last Night?</option>
-            <option value="drive.mid">Drive</option>
-        </select>
-    </div>
     <div style="overflow:scroll; display:none" id="sample">
+        <h3>Original Midi File</h3>
         <button id="btnPlaySample" class="button-circle" aria-label="play">
               <svg id="playSample" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -103,6 +106,7 @@
         </select>
     </div>
     <div style="overflow:scroll; display:none" id="instrument">
+        <h3>Selected Instrument</h3>
         <button id="btnPlayInstrument" class="button-circle" aria-label="play">
               <svg id="playInstrument" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -115,14 +119,15 @@
         </button>
         <svg id='instrumentViz'></svg>
     </div>
-    <div id="drum_rnn" style="display:none">
-        <button type="button" id="drums_rnn">Generate Drum Beat (RNN)</button>
+    <div id="drum_rnn" style="display:none; padding-top: 30px; padding-bottom: 30px;">
+        <button type="button" id="drums_rnn" onclick="gtag('event','click',{'event_category':'button', 'event_label':'generate_drum', 'value':10});">Generate Drum Beat (RNN)</button>
         <div style="text-align:center">
             <label for="rnn_temp" id="rnnLabel">Model Temperature (Higher = More Experimental Output):</label>
             <input type="number" id="rnn_temp" max="5.0" min="0.0" value="1.4" step=0.01>
         </div>
     </div>
     <div style="overflow:scroll; display:none" id="drums">
+        <h3>Generated Drums</h3>
         <button id="btnPlayDrums" class="button-circle" aria-label="play">
               <svg id="playDrums" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
@@ -136,14 +141,46 @@
         <svg id='drumsViz'></svg>
     </div>
     <div id="combined" class="buttonContainer" style="display:none">
-        <button type="button" id="btnPlayCombined">Play Sample with Generated Drum Track</button>
+        <button type="button" id="btnPlayCombined" onclick="gtag('event','click',{'event_category':'button', 'event_label':'play_drum', 'value':10});">Play Sample with Generated Drum Track</button>
         <button type="button" id="stopCombined" style="display:none">Stop Music</button>
     </div>
-
+    <div id="saveDiv" style="display:none; text-align:center">
+        <div style="text-align:center">
+            <label for="save_name" id="saveLabel" style="vertical-align:middle">Give your output a name:</label>
+            <input type="text" id="save_name" style="float:none; width:250px; vertical-align:middle; margin:0px;">
+        </div>
+        <button type="button" id="save" style="display:inline-block;">Save Output</button>
+        <button type="button" id="btnDownload" style="display:inline-block;">Download</button>
+    </div>
     <p id='footer'>Made with <a href="https://magenta.tensorflow.org/">Google Magenta</a> </p>
 
 
 </body>
-<script type="text/javascript" src="static/mappings.js"></script>
-<script src='static/script/drums.js'></script>
+<script type="text/javascript" src="/static/mappings.js"></script>
+<script src='/static/script/drums.js'></script>
+<script>
+    console.log('{{midi_file}}');
+    console.log('{{user_file}}');
+    console.log('{{model_file}}');
+    {% if user_file %}
+        {% if model_file %}
+            received_data = '{{data}}';
+            json_data = received_data.replace(/&#34;/g, "\"");
+            note_seq = JSON.parse(json_data);
+            prepare_note_seq(note_seq);
+        {% else %}
+            mm.urlToNoteSequence('/static/tmp/{{midi_file}}')
+            .then(function(url_note_seq){
+                note_seq = url_note_seq;
+                prepare_note_seq(note_seq);
+            });
+        {% endif %}
+    {% else %}
+        mm.urlToNoteSequence('/static/guitar_bass_samples/{{midi_file}}')
+        .then(function(url_note_seq){
+            note_seq = url_note_seq;
+            prepare_note_seq(note_seq);
+        });
+    {% endif %}
+</script>
 </html>

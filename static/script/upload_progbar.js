@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	$('form').on('submit', function(event) {
 
-		event.preventDefault();
+		//event.preventDefault();
 
 		var formData = new FormData($('form')[0]);
 

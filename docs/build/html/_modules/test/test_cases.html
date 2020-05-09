@@ -148,9 +148,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for test.test_cases</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">import</span> <span class="nn">pytest</span>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
 <span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">application</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">Customer</span><span class="p">,</span> <span class="n">Files</span>
 
 <span class="n">TEST_USER</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s1">&#39;TEST_USER&#39;</span><span class="p">,</span>
@@ -229,9 +230,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tests that user not logged in cannot access the music page</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/music&#39;</span><span class="p">)</span>
-    <span class="c1"># 401 is unauthorized status code</span>
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span></div>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/profile/&#39;</span> <span class="o">+</span> <span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span>
+    <span class="c1"># 302 is redirected status code</span>
+    <span class="c1"># page redirect to login</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">302</span></div>
 
 
 <div class="viewcode-block" id="test_register_test_user"><a class="viewcode-back" href="../../api.html#test.test_cases.test_register_test_user">[docs]</a><span class="k">def</span> <span class="nf">test_register_test_user</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
@@ -240,8 +242,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/register&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">],</span>
                                                   <span class="n">email</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">],</span>
-                                                  <span class="n">password</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span>
-                                                  <span class="n">confirm</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span>
+                                                  <span class="n">password</span><span class="o">=</span><span class="n">TEST_USER</span>
+                                                  <span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span>
+                                                  <span class="n">confirm</span><span class="o">=</span><span class="n">TEST_USER</span>
+                                                  <span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span>
                                                   <span class="n">accept_tos</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">),</span>
                            <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
@@ -256,8 +260,8 @@
                                                <span class="n">password</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]),</span>
                            <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;INDIGO- Make Music&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
-    <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;DrumsRNN&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span></div>
+    <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;Discover Users:&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;Drums&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="test_login_username_failure"><a class="viewcode-back" href="../../api.html#test.test_cases.test_login_username_failure">[docs]</a><span class="k">def</span> <span class="nf">test_login_username_failure</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">init_database</span><span class="p">):</span>
@@ -330,28 +334,37 @@
 <span class="sd">    Tests that a logged in user can upload a file.</span>
 <span class="sd">    Try/except to catch errors with s3 access</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Delete files from our user already in DB, in case one exists</span>
+    <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
     <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">],</span>
                                     <span class="n">password</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]),</span>
                 <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">file_selector</span><span class="o">=</span>
-                                                    <span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;test string&quot;</span><span class="p">),</span>
-                                                     <span class="s1">&#39;Queen_test.mid&#39;</span><span class="p">)),</span>
-                               <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                               <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;multipart/form-data&#39;</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;Select from uploads&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
-        <span class="k">assert</span> <span class="n">FileFromDB</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orig_filename</span> <span class="o">==</span> <span class="s1">&#39;Queen_test&#39;</span>
-        <span class="c1"># Deletes the uploaded test file from s3</span>
-        <span class="n">s3_file_name</span> <span class="o">=</span> <span class="n">FileFromDB</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">our_filename</span>
-        <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
-        <span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">s3_file_name</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-        <span class="c1"># Deletes the uploaded test file entry from postgres</span>
-        <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-    <span class="c1"># Catch any exception, bad practice--but will catch any possible s3 error</span>
-    <span class="c1"># that users get, while also allowing us to test properly in the try clause</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="kc">True</span></div>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">file_selector</span><span class="o">=</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;test string&quot;</span><span class="p">),</span> <span class="s1">&#39;Queen_test.mid&#39;</span><span class="p">)),</span>
+                           <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;multipart/form-data&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;Discover Users:&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">assert</span> <span class="n">FileFromDB</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">orig_filename</span> <span class="o">==</span> <span class="s1">&#39;Queen_test&#39;</span>
+    <span class="k">assert</span> <span class="n">FileFromDB</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">our_filename</span><span class="o">.</span>\
+        <span class="n">startswith</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span>
+    <span class="c1"># Deletes the uploaded test file entry from postgres</span>
+    <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="test_drums_VAE_pages"><a class="viewcode-back" href="../../api.html#test.test_cases.test_drums_VAE_pages">[docs]</a><span class="k">def</span> <span class="nf">test_drums_VAE_pages</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">init_database</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests that a logged in user can upload a file.</span>
+<span class="sd">    Try/except to catch errors with s3 access</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">],</span>
+                                    <span class="n">password</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]),</span>
+                <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/drums-upload&#39;</span><span class="p">)</span>
+    <span class="n">response1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/vae-upload&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">response1</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
 
 
 <div class="viewcode-block" id="test_logout_logged_in_user"><a class="viewcode-back" href="../../api.html#test.test_cases.test_logout_logged_in_user">[docs]</a><span class="k">def</span> <span class="nf">test_logout_logged_in_user</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">init_database</span><span class="p">):</span>
@@ -371,8 +384,8 @@
 <span class="sd">    Tests that a user not logged in cannot log out</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/logout&#39;</span><span class="p">)</span>
-    <span class="c1"># 401 is unauthorized status code</span>
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span></div>
+    <span class="c1"># 302 is redirected status code</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">302</span></div>
 
 
 <div class="viewcode-block" id="test_remove_test_user"><a class="viewcode-back" href="../../api.html#test.test_cases.test_remove_test_user">[docs]</a><span class="k">def</span> <span class="nf">test_remove_test_user</span><span class="p">(</span><span class="n">init_database</span><span class="p">):</span>
@@ -382,6 +395,20 @@
     <span class="n">Customer</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
     <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
     <span class="k">assert</span> <span class="n">UserFromDB</span><span class="p">(</span><span class="n">TEST_USER</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="test_pep8"><a class="viewcode-back" href="../../api.html#test.test_cases.test_pep8">[docs]</a><span class="k">def</span> <span class="nf">test_pep8</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests that all .py files in the main directory follow PEP8 style guidelines</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/pep8.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">pep8_main</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="n">pep8_test</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="s1">&#39;pycodestyle &#39;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span>
+                                        <span class="s1">&#39;/test_cases.py&#39;</span><span class="p">,</span>
+                                        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s1">&#39;E&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pep8_main</span> <span class="o">+</span> <span class="n">pep8_test</span></div>
 </pre></div>
 
            </div>

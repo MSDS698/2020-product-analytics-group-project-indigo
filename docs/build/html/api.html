@@ -303,6 +303,23 @@
 
 </dd></dl>
 
+<dl class="class">
+<dt id="application.UploadMultipleForm">
+<em class="property">class </em><code class="sig-prename descclassname">application.</code><code class="sig-name descname">UploadMultipleForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#UploadMultipleForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.UploadMultipleForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for uploading multiple files. Note that the FileAllowed validator
+does not work for MultipleFileField.</p>
+<dl class="attribute">
+<dt id="application.UploadMultipleForm.files">
+<code class="sig-name descname">files</code><em class="property"> = &lt;UnboundField(MultipleFileField, ('Files',), {})&gt;</em><a class="headerlink" href="#application.UploadMultipleForm.files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="application.UploadMultipleForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Submit',), {})&gt;</em><a class="headerlink" href="#application.UploadMultipleForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="application.about">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.about" title="Permalink to this definition">¶</a></dt>
@@ -318,23 +335,21 @@
 <dl class="function">
 <dt id="application.buy">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">buy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#buy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.buy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="application.create">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="application.demo">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">demo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#demo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.demo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load demo page showing Magenta</p>
+<dd><p>Return page with information on purchasing our product</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="application.drums">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">drums</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#drums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.drums" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">drums</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#drums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.drums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render drums page with uploaded or selected files from drums upload page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.drums_upload">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">drums_upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#drums_upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.drums_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a file from a client machine to
+s3 and file properties to Database</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="application.index">
@@ -362,14 +377,15 @@ from the user ID stored in the session.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="application.music">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">music</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#music"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.music" title="Permalink to this definition">¶</a></dt>
+<dt id="application.profile">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">profile</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.profile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="application.my_music">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">my_music</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#my_music"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.my_music" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="application.re_route">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">re_route</code><span class="sig-paren">(</span><em class="sig-param">e</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#re_route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.re_route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle 401 errors and redirect non-logged in users to login page.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="application.register">
@@ -378,20 +394,36 @@ from the user ID stored in the session.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="application.start">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.start" title="Permalink to this definition">¶</a></dt>
+<dt id="application.save">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="application.test_playback">
-<code class="sig-prename descclassname">application.</code><code class="sig-name descname">test_playback</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#test_playback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.test_playback" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="application.slugify">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">slugify</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">allow_unicode=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#slugify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.slugify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to ASCII if ‘allow_unicode’ is False. Convert spaces to hyphens.
+Remove characters that aren’t alphanumerics, underscores, or hyphens.
+Convert to lowercase. Also strip leading and trailing whitespace.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="application.upload">
 <code class="sig-prename descclassname">application.</code><code class="sig-name descname">upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a file from a client machine to
 s3 and file properties to Database</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.vae">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">vae</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#vae"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.vae" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate between 2 files using MusicVAE using the two uploaded files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="application.vae_upload">
+<code class="sig-prename descclassname">application.</code><code class="sig-name descname">vae_upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#vae_upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.vae_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Page to upload two files for use in music interpolation
+using the MusicVAE</p>
 </dd></dl>
 
 <span class="target" id="module-test.test_cases"></span><dl class="function">
@@ -430,6 +462,13 @@ App needs better error messaging for the user</p>
 <code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">register_duplicate_username</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#register_duplicate_username"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.register_duplicate_username" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests that a duplicate username cannot register
 App needs better error messaging for the user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_drums_VAE_pages">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_drums_VAE_pages</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">init_database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_drums_VAE_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_drums_VAE_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that a logged in user can upload a file.
+Try/except to catch errors with s3 access</p>
 </dd></dl>
 
 <dl class="function">
@@ -495,6 +534,12 @@ App needs an error message for users</p>
 <dt id="test.test_cases.test_music_not_logged_in">
 <code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_music_not_logged_in</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_music_not_logged_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_music_not_logged_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests that user not logged in cannot access the music page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_cases.test_pep8">
+<code class="sig-prename descclassname">test.test_cases.</code><code class="sig-name descname">test_pep8</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/test_cases.html#test_pep8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.test_cases.test_pep8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that all .py files in the main directory follow PEP8 style guidelines</p>
 </dd></dl>
 
 <dl class="function">

@@ -148,24 +148,29 @@
            <div itemprop="articleBody">
             
   <h1>Source code for application</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span></span><span class="kn">import</span> <span class="nn">boto3</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
 
 <span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">Flask</span>
 <span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">LoginManager</span><span class="p">,</span> <span class="n">UserMixin</span><span class="p">,</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">login_user</span><span class="p">,</span> \
     <span class="n">login_required</span><span class="p">,</span> <span class="n">logout_user</span>
 <span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
 <span class="kn">from</span> <span class="nn">flask_wtf</span> <span class="kn">import</span> <span class="n">FlaskForm</span>
 <span class="kn">from</span> <span class="nn">flask_wtf.file</span> <span class="kn">import</span> <span class="n">FileField</span><span class="p">,</span> <span class="n">FileRequired</span>
+<span class="c1"># from flask_bootstrap import Bootstrap</span>
 <span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">DateField</span><span class="p">,</span> <span class="n">IntegerField</span><span class="p">,</span> <span class="n">SelectField</span><span class="p">,</span> \
-    <span class="n">SubmitField</span><span class="p">,</span> <span class="n">PasswordField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span><span class="p">,</span> <span class="n">Form</span>
+    <span class="n">SubmitField</span><span class="p">,</span> <span class="n">PasswordField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span><span class="p">,</span> <span class="n">Form</span><span class="p">,</span> \
+    <span class="n">MultipleFileField</span>
 <span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">DataRequired</span>
 <span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">check_password_hash</span><span class="p">,</span> <span class="n">generate_password_hash</span>
 
-<span class="kn">import</span> <span class="nn">boto3</span>
 
 <span class="n">ALLOWED_EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;midi&#39;</span><span class="p">,</span> <span class="s1">&#39;mid&#39;</span><span class="p">}</span>
 
@@ -181,6 +186,8 @@
 <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
 <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
+<span class="c1"># bootstrap = Bootstrap(application)</span>
+
 <span class="c1"># login_manager needs to be initiated before running the app</span>
 <span class="n">login_manager</span> <span class="o">=</span> <span class="n">LoginManager</span><span class="p">()</span>
 <span class="n">login_manager</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">application</span><span class="p">)</span>
@@ -189,6 +196,15 @@
 <div class="viewcode-block" id="UploadFileForm"><a class="viewcode-back" href="../api.html#application.UploadFileForm">[docs]</a><span class="k">class</span> <span class="nc">UploadFileForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class for uploading file when submitted&quot;&quot;&quot;</span>
     <span class="n">file_selector</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">FileRequired</span><span class="p">()])</span>
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s1">&#39;Submit&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UploadMultipleForm"><a class="viewcode-back" href="../api.html#application.UploadMultipleForm">[docs]</a><span class="k">class</span> <span class="nc">UploadMultipleForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for uploading multiple files. Note that the FileAllowed validator</span>
+<span class="sd">    does not work for MultipleFileField.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">MultipleFileField</span><span class="p">(</span><span class="s1">&#39;Files&#39;</span><span class="p">)</span>
     <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s1">&#39;Submit&#39;</span><span class="p">)</span></div>
 
 
@@ -276,7 +292,12 @@
 <span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Index Page : Renders index.html with author names.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">))</span></div>
+    <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                           <span class="n">authenticated</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="register"><a class="viewcode-back" href="../api.html#application.register">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/register&#39;</span><span class="p">,</span>  <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
@@ -313,7 +334,7 @@
         <span class="c1"># Login and validate the user.</span>
         <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
             <span class="n">login_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Incorrect Password&#39;</span><span class="p">)</span>
 
@@ -327,10 +348,52 @@
     <span class="n">logout_user</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="start"><a class="viewcode-back" href="../api.html#application.start">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="profile"><a class="viewcode-back" href="../api.html#application.profile">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/profile/&lt;username&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">start</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;create.html&#39;</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="n">uploads</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">other_users</span> <span class="o">=</span> <span class="n">Customer</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">other_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">username</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">other_users</span><span class="p">]</span>
+    <span class="n">other_users</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">other_users</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">other_users</span><span class="p">)</span>
+
+    <span class="c1">##############</span>
+    <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>  <span class="c1"># comment out when on local</span>
+    <span class="c1"># LOCAL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># insert your profile name</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="p">[</span><span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">orig_filename</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">uploads</span><span class="p">]</span>
+
+        <span class="c1"># binary_body = object.get()[&#39;Body&#39;].read()</span>
+        <span class="c1"># return render_template(&#39;test_playback.html&#39;, midi_binary=binary_body)</span>
+
+        <span class="c1"># make directory and save files there</span>
+        <span class="n">file_dir_path</span> <span class="o">=</span> <span class="s1">&#39;./static/tmp&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">)):</span>
+            <span class="n">objects</span><span class="p">[</span><span class="n">o</span><span class="p">]</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/&#39;</span>
+                                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">uploads</span><span class="p">[</span><span class="n">o</span><span class="p">]</span><span class="o">.</span><span class="n">orig_filename</span><span class="si">}</span><span class="s1">.mid&#39;</span><span class="p">)</span>
+
+        <span class="n">user_file</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Flag used in template to direct file to be</span>
+        <span class="c1"># loaded from tmp or samples directory</span>
+        <span class="n">user_file</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;profile.html&#39;</span><span class="p">,</span> <span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">,</span>
+                           <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">objects</span><span class="o">=</span><span class="n">objects</span><span class="p">,</span>
+                           <span class="n">other_users</span><span class="o">=</span><span class="n">other_users</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="upload"><a class="viewcode-back" href="../api.html#application.upload">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
@@ -342,7 +405,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">file</span> <span class="o">=</span> <span class="n">UploadFileForm</span><span class="p">()</span>  <span class="c1"># file : UploadFileForm class instance</span>
     <span class="n">uploads</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    
+
     <span class="c1"># Check if it is a POST request and if it is valid.</span>
     <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_selector</span><span class="o">.</span><span class="n">data</span>  <span class="c1"># f : Data of FileField</span>
@@ -364,6 +427,169 @@
 
         <span class="n">f</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
+        <span class="n">user_name</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">orig_filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">model_used</span> <span class="o">=</span> <span class="s1">&#39;user_upload&#39;</span>
+
+        <span class="c1"># get num of files user has uploaded thus far</span>
+        <span class="n">num_user_files</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">user_name</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">our_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">num_user_files</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">file_upload_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c1"># check for duplicates file</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">orig_filename</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">user_name</span> <span class="o">==</span> <span class="n">user_name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">orig_filename</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;You have already uploaded a file with this name, </span><span class="se">\</span>
+<span class="s1">                  please upload a new file or rename this one to upload.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;upload&#39;</span><span class="p">))</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="n">Files</span><span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">orig_filename</span><span class="p">,</span> <span class="n">file_type</span><span class="p">,</span>
+                     <span class="n">model_used</span><span class="p">,</span> <span class="n">our_filename</span><span class="p">,</span> <span class="n">file_upload_timestamp</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="c1"># TAKES CARE OF DEV OR local</span>
+        <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
+            <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+            <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                       <span class="n">our_filename</span><span class="p">)</span>
+
+        <span class="c1"># USE FOR REMOTE - msds603 is my alias in ./aws credentials file using</span>
+        <span class="c1"># secret key from iam on jacobs account</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span>
+                                                  <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                                  <span class="n">our_filename</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -rf </span><span class="si">{</span><span class="n">file_dir_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Redirect to /profile/&lt;username&gt; page.</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;upload.html&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">,</span>
+                           <span class="n">username</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="about"><a class="viewcode-back" href="../api.html#application.about">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/about&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">about</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load About page&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;about.html&#39;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                           <span class="n">authenticated</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="buy"><a class="viewcode-back" href="../api.html#application.buy">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/buy&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">buy</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Return page with information on purchasing our product</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;buy.html&#39;</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                           <span class="n">authenticated</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="drums"><a class="viewcode-back" href="../api.html#application.drums">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/drums/&lt;filename&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">drums</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render drums page with uploaded or selected files from drums upload page</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>  <span class="c1"># comment out when on local</span>
+    <span class="c1"># LOCAL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># insert your profile name</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">object</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># binary_body = object.get()[&#39;Body&#39;].read()</span>
+        <span class="c1"># return render_template(&#39;test_playback.html&#39;, midi_binary=binary_body)</span>
+
+        <span class="c1"># make directory and save files there</span>
+        <span class="n">file_dir_path</span> <span class="o">=</span> <span class="s1">&#39;./static/tmp&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">)</span>
+        <span class="c1"># Determine if file from model output (noteSequence object)</span>
+        <span class="c1"># or existing user-upload (midi file)</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">model_used</span><span class="p">)</span><span class="o">.</span>\
+            <span class="nb">filter</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">our_filename</span> <span class="o">==</span> <span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">file_type</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># If a model file, then need to parse json note sequence object,</span>
+        <span class="c1"># not midi file</span>
+        <span class="k">if</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rnn&#39;</span><span class="p">,</span> <span class="s1">&#39;vae&#39;</span><span class="p">]:</span>
+            <span class="n">model_file</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="nb">object</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_file</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="nb">object</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.mid&#39;</span><span class="p">)</span>
+
+        <span class="n">user_file</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Flag used in template to direct file to be</span>
+        <span class="c1"># loaded from tmp or samples directory</span>
+        <span class="n">user_file</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">model_file</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;drums.html&#39;</span><span class="p">,</span> <span class="n">midi_file</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.mid&#39;</span><span class="p">,</span>
+                               <span class="n">user_file</span><span class="o">=</span><span class="n">user_file</span><span class="p">,</span> <span class="n">model_file</span><span class="o">=</span><span class="n">model_file</span><span class="p">,</span>
+                               <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="re_route"><a class="viewcode-back" href="../api.html#application.re_route">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">errorhandler</span><span class="p">(</span><span class="mi">401</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">re_route</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Handle 401 errors and redirect non-logged in users to login page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;login&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="drums_upload"><a class="viewcode-back" href="../api.html#application.drums_upload">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/drums-upload&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">drums_upload</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upload a file from a client machine to</span>
+<span class="sd">    s3 and file properties to Database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">UploadFileForm</span><span class="p">()</span>  <span class="c1"># file : UploadFileForm class instance</span>
+    <span class="n">uploads</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Check if it is a POST request and if it is valid.</span>
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_selector</span><span class="o">.</span><span class="n">data</span>  <span class="c1"># f : Data of FileField</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">filename</span>
+        <span class="c1"># filename : filename of FileField</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">allowed_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Incorrect File Type: Please upload a MIDI file&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;drums-upload&#39;</span><span class="p">)</span>
+        <span class="c1"># make directory and save files there</span>
+        <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+        <span class="n">file_dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;files&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
         <span class="n">user_name</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
         <span class="n">orig_filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -375,6 +601,17 @@
         <span class="n">our_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">num_user_files</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="n">file_upload_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
+        <span class="c1"># check for duplicates file</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">orig_filename</span><span class="p">)</span><span class="o">.</span>\
+            <span class="nb">filter</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">user_name</span> <span class="o">==</span> <span class="n">user_name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">orig_filename</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span>
+                <span class="s1">&#39;You have already uploaded a file with this name, &#39;</span>
+                <span class="s1">&#39;please upload a new file or rename this one to upload.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;drums-upload&#39;</span><span class="p">)</span>
+
         <span class="n">file</span> <span class="o">=</span> <span class="n">Files</span><span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">orig_filename</span><span class="p">,</span> <span class="n">file_type</span><span class="p">,</span>
                      <span class="n">model_used</span><span class="p">,</span> <span class="n">our_filename</span><span class="p">,</span> <span class="n">file_upload_timestamp</span><span class="p">)</span>
         <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
@@ -383,76 +620,128 @@
         <span class="c1"># TAKES CARE OF DEV OR local</span>
         <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
             <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
-            <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">our_filename</span><span class="p">)</span>
+            <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                       <span class="n">our_filename</span><span class="p">)</span>
 
         <span class="c1"># USE FOR REMOTE - msds603 is my alias in ./aws credentials file using</span>
         <span class="c1"># secret key from iam on jacobs account</span>
         <span class="k">else</span><span class="p">:</span>
-           <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span> 
-           <span class="n">dev_s3_client</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
-           <span class="n">dev_s3_client</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-
+            <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span>
+                                                  <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                                  <span class="n">our_filename</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -rf </span><span class="si">{</span><span class="n">file_dir_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            
-        
 
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;music&#39;</span><span class="p">))</span>  <span class="c1"># Redirect to / (/index) page.</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/drums/</span><span class="si">{</span><span class="n">our_filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># Redirect to drums page.</span>
 
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;upload.html&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;drums-upload.html&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="demo"><a class="viewcode-back" href="../api.html#application.demo">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/demo&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; Load demo page showing Magenta &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;demo.html&#39;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="about"><a class="viewcode-back" href="../api.html#application.about">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/about&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">about</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Load About page&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;about.html&#39;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="music"><a class="viewcode-back" href="../api.html#application.music">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/music&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="vae_upload"><a class="viewcode-back" href="../api.html#application.vae_upload">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/vae-upload&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
 <span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">music</span><span class="p">():</span>
-    <span class="n">uploads</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">current_user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;music.html&#39;</span><span class="p">,</span> <span class="n">uploads</span><span class="o">=</span><span class="n">uploads</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">vae_upload</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Page to upload two files for use in music interpolation</span>
+<span class="sd">    using the MusicVAE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">UploadMultipleForm</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
+        <span class="n">ls_files</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s1">&#39;midi_files&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="n">ls_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ls_files</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">filename1</span><span class="p">,</span> <span class="n">filename2</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">f2</span><span class="o">.</span><span class="n">filename</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">allowed_file</span><span class="p">(</span><span class="n">filename1</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">allowed_file</span><span class="p">(</span><span class="n">filename1</span><span class="p">)):</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Incorrect File Type: Please upload MIDI files - .mid &#39;</span>
+                      <span class="s1">&#39;or .midi extensions&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;vae-upload&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># write locally. Will be deleted later.</span>
+                <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+                <span class="n">file_dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;files&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">)</span>
+                <span class="n">file_path1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">,</span> <span class="n">filename1</span><span class="p">)</span>
+                <span class="n">file_path2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">,</span> <span class="n">filename2</span><span class="p">)</span>
+                <span class="n">f1</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path1</span><span class="p">)</span>
+                <span class="n">f2</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path2</span><span class="p">)</span>
+
+                <span class="n">model_used</span> <span class="o">=</span> <span class="s1">&#39;user_upload&#39;</span>
+                <span class="n">user_name</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+
+                <span class="n">orig_filename1</span> <span class="o">=</span> <span class="n">filename1</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">file_type1</span> <span class="o">=</span> <span class="n">filename1</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">num_user_files1</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">user_name</span><span class="p">)</span><span class="o">.</span>\
+                    <span class="n">count</span><span class="p">()</span>
+                <span class="n">our_filename1</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">num_user_files1</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">file_upload_timestamp1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="n">file1</span> <span class="o">=</span> <span class="n">Files</span><span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">orig_filename1</span><span class="p">,</span> <span class="n">file_type1</span><span class="p">,</span>
+                              <span class="n">model_used</span><span class="p">,</span> <span class="n">our_filename1</span><span class="p">,</span>
+                              <span class="n">file_upload_timestamp1</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">file1</span><span class="p">)</span>
+
+                <span class="n">orig_filename2</span> <span class="o">=</span> <span class="n">filename2</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">file_type2</span> <span class="o">=</span> <span class="n">filename2</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">num_user_files2</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">user_name</span><span class="p">)</span><span class="o">.</span>\
+                    <span class="n">count</span><span class="p">()</span>
+                <span class="n">our_filename2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">num_user_files2</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">file_upload_timestamp2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="n">file2</span> <span class="o">=</span> <span class="n">Files</span><span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">orig_filename2</span><span class="p">,</span> <span class="n">file_type2</span><span class="p">,</span>
+                              <span class="n">model_used</span><span class="p">,</span> <span class="n">our_filename2</span><span class="p">,</span>
+                              <span class="n">file_upload_timestamp2</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
+
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
+                    <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+
+                <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path1</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                           <span class="n">our_filename1</span><span class="p">)</span>
+                <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path2</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                           <span class="n">our_filename2</span><span class="p">)</span>
+
+                <span class="c1"># remove the locally written files</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -rf </span><span class="si">{</span><span class="n">file_dir_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># redirect to vae url with file arguments</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">&#39;vae&#39;</span><span class="p">,</span> <span class="n">filename1</span><span class="o">=</span><span class="n">our_filename1</span><span class="p">,</span>
+                                        <span class="n">filename2</span><span class="o">=</span><span class="n">our_filename2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s1">&#39;Please upload exactly 2 MIDI files&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;vae-upload&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;vae-upload.html&#39;</span><span class="p">,</span>
+                           <span class="n">form</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create"><a class="viewcode-back" href="../api.html#application.create">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">create</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;create.html&#39;</span><span class="p">)</span></div>
+<span class="c1"># @application.route(&#39;/vae/&lt;filename1&gt;/&lt;filename2&gt;&#39;,</span>
+<span class="c1"># methods=[&#39;GET&#39;, &#39;POST&#39;]) # not working</span>
+<div class="viewcode-block" id="vae"><a class="viewcode-back" href="../api.html#application.vae">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/vae&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">vae</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Interpolate between 2 files using MusicVAE using the two uploaded files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="buy"><a class="viewcode-back" href="../api.html#application.buy">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/buy&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">buy</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;buy.html&#39;</span><span class="p">)</span></div>
+    <span class="n">filename1</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;filename1&#39;</span><span class="p">)</span>
+    <span class="n">filename2</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;filename2&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="my_music"><a class="viewcode-back" href="../api.html#application.my_music">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/my_music&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">my_music</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;my_music.html&#39;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="test_playback"><a class="viewcode-back" href="../api.html#application.test_playback">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/test_playback/&lt;filename&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">test_playback</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="c1"># uncomment the next 2 lines when on local</span>
-
-    <span class="c1"># session = boto3.Session(profile_name=&#39;msds603&#39;) # insert your profile name</span>
-    <span class="c1"># s3 = session.resource(&#39;s3&#39;)</span>
     <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
-        <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span> <span class="c1"># comment out when on local</span>
-    <span class="c1">#LOCAL</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>  <span class="c1"># comment out when on local</span>
+    <span class="c1"># LOCAL</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span> <span class="c1"># insert your profile name</span>
+        <span class="c1"># insert your profile name</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
         <span class="n">s3</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
 
-    <span class="nb">object</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-
-    <span class="c1">#binary_body = object.get()[&#39;Body&#39;].read()</span>
-    <span class="c1">#return render_template(&#39;test_playback.html&#39;, midi_binary=binary_body)</span>
+    <span class="n">object1</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">filename1</span><span class="p">)</span>
+    <span class="n">object2</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span> <span class="n">filename2</span><span class="p">)</span>
 
     <span class="c1"># make directory and save files there</span>
     <span class="n">file_dir_path</span> <span class="o">=</span> <span class="s1">&#39;./static/tmp&#39;</span>
@@ -460,14 +749,91 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file_dir_path</span><span class="p">)</span>
 
-    <span class="nb">object</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.mid&#39;</span><span class="p">)</span>
+    <span class="n">object1</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename1</span><span class="si">}</span><span class="s1">.mid&#39;</span><span class="p">)</span>
+    <span class="n">object2</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;./static/tmp/</span><span class="si">{</span><span class="n">filename2</span><span class="si">}</span><span class="s1">.mid&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;test_playback.html&#39;</span><span class="p">,</span> <span class="n">midi_file</span><span class="o">=</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.mid&#39;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;vae.html&#39;</span><span class="p">,</span>
+                           <span class="n">midi_file1</span><span class="o">=</span><span class="n">filename1</span> <span class="o">+</span> <span class="s1">&#39;.mid&#39;</span><span class="p">,</span>
+                           <span class="n">midi_file2</span><span class="o">=</span><span class="n">filename2</span> <span class="o">+</span> <span class="s1">&#39;.mid&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="drums"><a class="viewcode-back" href="../api.html#application.drums">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/drums&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">drums</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;drums.html&#39;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="save"><a class="viewcode-back" href="../api.html#application.save">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/save&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">save</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">jsonData</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">jsonData</span><span class="p">)</span>
+        <span class="n">model_used</span> <span class="o">=</span> <span class="n">jsonData</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+        <span class="n">newFilename</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">jsonData</span><span class="p">[</span><span class="s2">&quot;output_filename&quot;</span><span class="p">])</span>
+        <span class="n">noteSequence</span> <span class="o">=</span> <span class="n">jsonData</span><span class="p">[</span><span class="s1">&#39;noteSequence&#39;</span><span class="p">]</span>  <span class="c1"># Output should be a dict</span>
+        <span class="n">fileData</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">noteSequence</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;static/tmp/</span><span class="si">{</span><span class="n">newFilename</span><span class="si">}</span><span class="s1">.json&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fileData</span><span class="p">)</span>
+
+        <span class="n">user_name</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">orig_filename</span> <span class="o">=</span> <span class="n">newFilename</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">orig_filename</span><span class="p">)</span>
+
+        <span class="c1"># get num of files user has uploaded thus far</span>
+        <span class="n">num_user_files</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="n">user_name</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">our_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">num_user_files</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">model_used</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">file_upload_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c1"># check for duplicates file</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">orig_filename</span><span class="p">)</span><span class="o">.</span> \
+            <span class="nb">filter</span><span class="p">(</span><span class="n">Files</span><span class="o">.</span><span class="n">user_name</span> <span class="o">==</span> <span class="n">user_name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">user_file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">orig_filename</span> <span class="ow">in</span> <span class="n">user_file_list</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span>
+                <span class="s1">&#39;You have already uploaded a file with this name, &#39;</span>
+                <span class="s1">&#39;please rename this one to save.&#39;</span><span class="p">)</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="n">Files</span><span class="p">(</span><span class="n">user_name</span><span class="p">,</span> <span class="n">orig_filename</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+                     <span class="n">model_used</span><span class="p">,</span> <span class="n">our_filename</span><span class="p">,</span> <span class="n">file_upload_timestamp</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="c1"># TAKES CARE OF DEV OR local</span>
+        <span class="k">if</span> <span class="n">on_dev</span><span class="p">:</span>
+            <span class="n">s3</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+            <span class="n">s3</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                       <span class="n">our_filename</span><span class="p">)</span>
+
+        <span class="c1"># USE FOR REMOTE - msds603 is my alias in ./aws credentials file using</span>
+        <span class="c1"># secret key from iam on jacobs account</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;msds603&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
+            <span class="n">dev_s3_client</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span>
+                                                  <span class="s1">&#39;midi-file-upload&#39;</span><span class="p">,</span>
+                                                  <span class="n">our_filename</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;File saved!&quot;</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Error occurred, try again: </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../api.html#application.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert to ASCII if &#39;allow_unicode&#39; is False. Convert spaces to hyphens.</span>
+<span class="sd">    Remove characters that aren&#39;t alphanumerics, underscores, or hyphens.</span>
+<span class="sd">    Convert to lowercase. Also strip leading and trailing whitespace.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">allow_unicode</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKC&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span>\
+            <span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s-]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[-\s]+&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">application</span><span class="o">.</span><span class="n">jinja_env</span><span class="o">.</span><span class="n">auto_reload</span> <span class="o">=</span> <span class="kc">True</span>
