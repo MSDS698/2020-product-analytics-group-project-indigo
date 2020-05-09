@@ -134,8 +134,8 @@ function modifyInstrument(obj){
 
 function trim(){
     concatenated = mm.sequences.trim(concatenated,64,128);
-    concatenated['totalTime'] = 12;
     unquantized = mm.sequences.unquantizeSequence(concatenated);
+    unquantized['totalTime'] = 12;
     vaeViz = new mm.PianoRollSVGVisualizer(
                             unquantized,
                             document.getElementById('vaeViz'),
