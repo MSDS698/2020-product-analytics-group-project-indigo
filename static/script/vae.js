@@ -135,7 +135,7 @@ function modifyInstrument(obj){
 function trim(){
     concatenated = mm.sequences.trim(concatenated,64,128);
     unquantized = mm.sequences.unquantizeSequence(concatenated);
-    unquantized = mm.sequences.trim(concatenated,0,12);
+    unquantized = mm.sequences.trim(unquantized,0,12);
     vaeViz = new mm.PianoRollSVGVisualizer(
                             unquantized,
                             document.getElementById('vaeViz'),
