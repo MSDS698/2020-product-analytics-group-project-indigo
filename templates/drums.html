@@ -66,7 +66,7 @@
   <div class="topnav">
     {% if current_user.is_authenticated %}
 
-    <a href="profile/{{current_user.username}}" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+    <a href="../profile/{{current_user.username}}" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
 
     {% else %}
 
