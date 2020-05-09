@@ -1,7 +1,8 @@
 import boto3
 import os
 import random
-import unicodedata, re
+import re
+import unicodedata
 import json
 
 
@@ -373,11 +374,14 @@ def drums(filename):
 
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
-        # Determine if file from model output (noteSequence object) or existing user-upload (midi file)
-        file_type = db.session.query(Files.model_used).filter(Files.our_filename == filename).all()[0][0]
+        # Determine if file from model output (noteSequence object)
+        # or existing user-upload (midi file)
+        file_type = db.session.query(Files.model_used).\
+            filter(Files.our_filename == filename).all()[0][0]
         print(file_type)
         data = None
-        # If a model file, then need to parse json note sequence object, not midi file
+        # If a model file, then need to parse json note sequence object,
+        # not midi file
         if file_type in ['rnn', 'vae']:
             model_file = True
             object.download_file(f'./static/tmp/{filename}.json')
@@ -396,7 +400,8 @@ def drums(filename):
 
     finally:
         return render_template('drums.html', midi_file=filename + '.mid',
-                               user_file=user_file, model_file=model_file, data=data)
+                               user_file=user_file, model_file=model_file,
+                               data=data)
 
 
 @application.errorhandler(401)
@@ -612,7 +617,7 @@ def save():
         print(jsonData)
         model_used = jsonData['model']
         newFilename = slugify(jsonData["output_filename"])
-        noteSequence = jsonData['noteSequence'] # Output should be a dictionary
+        noteSequence = jsonData['noteSequence']  # Output should be a dict
         fileData = json.dumps(noteSequence)
 
         file_path = f'static/tmp/{newFilename}.json'
