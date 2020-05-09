@@ -6,7 +6,7 @@ music_vae.initialize().then(() => {
 });
 
 // Create a player to play the sampled sequence.
-const vaePlayer = new mm.Player();
+const vaePlayer = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
 const vae_temperature = 1.5
 
 let upload1_quant;
@@ -35,6 +35,8 @@ function interpolate(midi1, midi2) {
                       .interpolate([upload1_quant, upload2_quant], 4)
                       .then((sample) => {
                         concatenated = mm.sequences.concatenate(sample);
+                        concatenated['tempos'][0]['qpm'] = 100;
+                        concatenated['tempos'][0]['time'] = 0;
                         vaePlayer.start(concatenated);
                         $("#saveDiv").show();
                       }));
@@ -55,7 +57,7 @@ function save(){
         alert("Filename can't be empty, please enter a valid filename");
         return
     }
-    json_data = {"byteArray": mm.sequenceProtoToMidi(mm.sequences.unquantizeSequence(concatenated)),
+    json_data = {"noteSequence": mm.sequences.unquantizeSequence(concatenated),
                  "output_filename":output_filename,
                  "model": "vae"
                 }

@@ -203,6 +203,20 @@ def test_file_upload(client, init_database):
     db.session.commit()
 
 
+def test_drums_VAE_pages(client, init_database):
+    """
+    Tests that a logged in user can upload a file.
+    Try/except to catch errors with s3 access
+    """
+    client.post('/login', data=dict(username=TEST_USER['user'],
+                                    password=TEST_USER['password']),
+                follow_redirects=True)
+    response = client.get('/drums-upload')
+    response1 = client.get('/vae-upload')
+    assert response.status_code == 200
+    assert response1.status_code == 200
+
+
 def test_logout_logged_in_user(client, init_database):
     """
     Tests that a user can logout and is redirected to the home page
@@ -234,8 +248,10 @@ def test_remove_test_user(init_database):
 
 
 def test_pep8():
+    """
+    Tests that all .py files in the main directory follow PEP8 style guidelines
+    """
     path = os.path.dirname(os.path.abspath(__file__))
-    print(path)
     with open(path + '/pep8.sh', 'r') as f:
         script = f.read()
     pep8_output = subprocess.check_output(script, shell=True).decode("utf-8")
