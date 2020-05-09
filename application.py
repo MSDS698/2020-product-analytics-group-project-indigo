@@ -1,8 +1,9 @@
 import boto3
 import os
 import random
-import re
-import unicodedata
+import unicodedata, re
+import json
+
 
 from config import Config
 from datetime import datetime
@@ -372,17 +373,30 @@ def drums(filename):
 
         if not os.path.exists(file_dir_path):
             os.mkdir(file_dir_path)
+        # Determine if file from model output (noteSequence object) or existing user-upload (midi file)
+        file_type = db.session.query(Files.model_used).filter(Files.our_filename == filename).all()[0][0]
+        print(file_type)
+        data = None
+        # If a model file, then need to parse json note sequence object, not midi file
+        if file_type in ['rnn', 'vae']:
+            model_file = True
+            object.download_file(f'./static/tmp/{filename}.json')
+            with open(f'./static/tmp/{filename}.json', 'r') as f:
+                data = f.read()
+        else:
+            model_file = False
+            object.download_file(f'./static/tmp/{filename}.mid')
 
-        object.download_file(f'./static/tmp/{filename}.mid')
         user_file = True
     except Exception as e:
         # Flag used in template to direct file to be
         # loaded from tmp or samples directory
         user_file = False
+        model_file = False
 
     finally:
         return render_template('drums.html', midi_file=filename + '.mid',
-                               user_file=user_file)
+                               user_file=user_file, model_file=model_file, data=data)
 
 
 @application.errorhandler(401)
@@ -595,14 +609,15 @@ def save():
     """
     try:
         jsonData = request.get_json()
+        print(jsonData)
         model_used = jsonData['model']
         newFilename = slugify(jsonData["output_filename"])
-        IntArray = [int(val) for val in jsonData['byteArray'].values()]
-        newFileByteArray = bytearray(IntArray)
+        noteSequence = jsonData['noteSequence'] # Output should be a dictionary
+        fileData = json.dumps(noteSequence)
 
-        file_path = f'static/tmp/{newFilename}.mid'
-        with open(file_path, 'wb') as f:
-            f.write(newFileByteArray)
+        file_path = f'static/tmp/{newFilename}.json'
+        with open(file_path, 'w') as f:
+            f.write(fileData)
 
         user_name = current_user.username
         orig_filename = newFilename
@@ -623,7 +638,7 @@ def save():
                 'You have already uploaded a file with this name, '
                 'please rename this one to save.')
 
-        file = Files(user_name, orig_filename, 'mid',
+        file = Files(user_name, orig_filename, 'json',
                      model_used, our_filename, file_upload_timestamp)
         db.session.add(file)
         db.session.commit()
