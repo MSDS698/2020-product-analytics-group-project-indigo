@@ -86,7 +86,7 @@ function save(){
         alert("Filename can't be empty, please enter a valid filename");
         return
     }
-    json_data = {"noteSequence": mm.sequences.unquantizeSequence(concatenated),
+    json_data = {"noteSequence": unquantized,
                  "output_filename":output_filename,
                  "model": "vae"
                 }
@@ -135,7 +135,7 @@ function modifyInstrument(obj){
 function trim(){
     concatenated = mm.sequences.trim(concatenated,64,128);
     unquantized = mm.sequences.unquantizeSequence(concatenated);
-    unquantized['totalTime'] = 12;
+    unquantized = mm.sequences.trim(note_seq,0,12);
     vaeViz = new mm.PianoRollSVGVisualizer(
                             unquantized,
                             document.getElementById('vaeViz'),
