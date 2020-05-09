@@ -402,7 +402,7 @@ def drums(filename):
     finally:
         return render_template('drums.html', midi_file=filename + '.mid',
                                user_file=user_file, model_file=model_file,
-                               data=data)
+                               data=data, username=current_user.username)
 
 
 @application.errorhandler(401)
@@ -488,7 +488,8 @@ def drums_upload():
 
         return redirect(f'/drums/{our_filename}')  # Redirect to drums page.
 
-    return render_template('drums-upload.html', form=file, uploads=uploads)
+    return render_template('drums-upload.html', form=file, uploads=uploads,
+                           username=current_user.username)
 
 
 @application.route('/vae-upload', methods=['GET', 'POST'])
@@ -569,7 +570,7 @@ def vae_upload():
             return redirect('vae-upload')
 
     return render_template('vae-upload.html',
-                           form=file)
+                           form=file, username=current_user.username)
 
 
 # @application.route('/vae/<filename1>/<filename2>',
@@ -605,7 +606,8 @@ def vae():
 
     return render_template('vae.html',
                            midi_file1=filename1 + '.mid',
-                           midi_file2=filename2 + '.mid')
+                           midi_file2=filename2 + '.mid', 
+                           username=current_user.username)
 
 
 @application.route('/save', methods=['GET', 'POST'])

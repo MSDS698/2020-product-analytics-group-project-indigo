@@ -35,14 +35,30 @@
 
       <!-- Code from W3 schools Top Navigation Menu -->
       <div class="topnav">
-        <a href="index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+        {% if current_user.is_authenticated %}
+
+        <a href="profile/{{current_user.username}}" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+        {% else %}
+
+        <a href="../index" class="active" onclick="gtag('event','click',{'event_category':'button', 'event_label':'home_button', 'value':1});">INDIGO</a>
+
+        {% endif %}
+        
         <!-- Navigation links (hidden by default) -->
         <div id="myLinks">
-          <a href="buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
-          <a href="login" onclick="gtag('event','click',{'event_category':'button', 'event_label':'login_nav_bar', 'value':1});">Login</a>
-          <a href="profile" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
-          <a href="about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
-          <a href="logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+          <a href="../buy" onclick="gtag('event','click',{'event_category':'button', 'event_label':'buy_nav_bar', 'value':1});">BUY</a>
+          {% if not current_user.is_authenticated %}
+          <a href="../login" onclick="gtag('event','click',{'event_category':'button', 'event_label':'login_nav_bar', 'value':1});">Login</a>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <a href="/profile/{{current_user.username}}" onclick="gtag('event','click',{'event_category':'button', 'event_label':'profile_nav_bar', 'value':1});">My Songs</a>
+          {% endif %}
+          <a href="../about" onclick="gtag('event','click',{'event_category':'button', 'event_label':'about_nav_bar', 'value':1});">About</a>
+          {% if current_user.is_authenticated %}
+          <a href="../logout" onclick="gtag('event','click',{'event_category':'button', 'event_label':'logout_nav_bar', 'value':1});">Logout</a>
+          {% endif %}
 
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
