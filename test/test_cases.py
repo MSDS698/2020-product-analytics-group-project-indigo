@@ -254,5 +254,8 @@ def test_pep8():
     path = os.path.dirname(os.path.abspath(__file__))
     with open(path + '/pep8.sh', 'r') as f:
         script = f.read()
-    pep8_output = subprocess.check_output(script, shell=True).decode("utf-8")
-    assert 'E' not in pep8_output
+    pep8_main = subprocess.check_output(script, shell=True).decode("utf-8")
+    pep8_test = subprocess.check_output('pycodestyle ' + path +
+                                        '/test_cases.py',
+                                        shell=True).decode("utf-8")
+    assert 'E' not in pep8_main + pep8_test
