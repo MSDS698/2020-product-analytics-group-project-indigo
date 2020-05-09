@@ -182,6 +182,7 @@ $("#drums_rnn").click(function(){
     .then(function(sample) {
         generated_seq = sample;
         generated_seq['tempos'] = sample_tempo;
+        generated_seq['notes'].forEach(note => note['program']=9)
         $("#drums").show();
         generated_unquantized = mm.sequences.unquantizeSequence(generated_seq);
         drumsViz = new mm.PianoRollSVGVisualizer(
@@ -218,7 +219,7 @@ $("#save").click(function(){
         alert("Filename can't be empty, please enter a valid filename");
         return
     }
-    json_data = {"byteArray": mm.sequenceProtoToMidi(mm.sequences.unquantizeSequence(combined_seq)),
+    json_data = {"noteSequence": mm.sequences.unquantizeSequence(combined_seq),
                  "output_filename":output_filename,
                  "model": "rnn"
                 }
