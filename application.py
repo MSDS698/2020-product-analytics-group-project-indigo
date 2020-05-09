@@ -397,6 +397,7 @@ def drums(filename):
         # loaded from tmp or samples directory
         user_file = False
         model_file = False
+        data = None
 
     finally:
         return render_template('drums.html', midi_file=filename + '.mid',
