@@ -26,8 +26,8 @@ def upload_to_aws(local_file, bucket, s3_file):
         return False
 
 
-ACCESS_KEY = 'AKIAQ3AQGNZZELL53NGR'
-SECRET_KEY = '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'
+ACCESS_KEY = ''
+SECRET_KEY = ''
 
 # Michael_Jackson_Billie_Jean
 filename_Michael_Jackson_Billie_Jean = "Michael_Jackson_Billie_Jean.mid"
