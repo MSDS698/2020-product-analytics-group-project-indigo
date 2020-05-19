@@ -2,10 +2,10 @@
     "pipeline": {
         "name": "indigo_pipeline",
         "version": 1,
-        "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west2-MSDS603-Week1",
+        "roleArn": "",
         "artifactStore": {
             "type": "S3",
-            "location": "codepipeline-msds603-week1"
+            "location": ""
         },
         "stages": [
             {
@@ -31,7 +31,7 @@
                             "Repo": "2020-product-analytics-group-project-indigo",
                             "PollForSourceChanges": "true",
                             "Branch": "master",
-                            "OAuthToken": "c3c27dad9a70943050115e3332912ac4a4de1cc5"
+                            "OAuthToken": ""
                         }
                     }
                 ]
