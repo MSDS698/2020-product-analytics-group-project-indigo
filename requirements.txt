@@ -32,7 +32,7 @@ idna==2.7
 imagesize==1.2.0
 importlib-metadata==1.5.1
 itsdangerous==1.1.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 jmespath==0.9.5
 jsonschema==3.2.0
 MarkupSafe==1.1.1
