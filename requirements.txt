@@ -42,7 +42,7 @@ paramiko==2.7.1
 pathspec==0.5.9
 pluggy==0.13.1
 psycopg2==2.8.5
-py==1.8.1
+py==1.10.0
 pyasn1==0.4.8
 pycparser==2.20
 Pygments==2.6.1
