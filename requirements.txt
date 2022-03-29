@@ -38,7 +38,7 @@ jsonschema==3.2.0
 MarkupSafe==1.1.1
 more-itertools==8.2.0
 packaging==20.3
-paramiko==2.7.1
+paramiko==2.10.1
 pathspec==0.5.9
 pluggy==0.13.1
 psycopg2==2.8.5
